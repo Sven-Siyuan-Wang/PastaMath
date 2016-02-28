@@ -2,24 +2,21 @@ package gameworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import gameobjects.Character;
 
 /**
  * Created by Hazel on 28/2/2016.
  */
 public class GameWorld {
+    private Character player1;
 
-    private Rectangle rect = new Rectangle(0,0,17,12);
+    public GameWorld(int midPointY) {
+        //initialize bird here
+        player1 = new Character(33, midPointY-5, 17, 12);
+    }
 
     public void update(float delta) {
-        Gdx.app.log("GameWorld", "update");
-        rect.x++;
-        if(rect.x>136) {
-            rect.x = 0;
-        }
-
+        player1.update(delta);
     }
 
-    public Rectangle getRect() {
-        return rect;
-    }
 }

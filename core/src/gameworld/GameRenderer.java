@@ -40,9 +40,22 @@ public class GameRenderer {
         shapeRenderer.setColor(87/255.0f, 109/255.0f, 120/255.0f, 1);
 
         //draws the rectangle from myWorld
-        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y, myWorld.getRect().width, myWorld.getRect().height);
+//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y, myWorld.getRect().width, myWorld.getRect().height);
 
         //tells shapeRenderer to finish rendering (IMPORTANT; must be done every time)
-        shapeRenderer.end(); 
+        shapeRenderer.end();
+
+        //3. draw the rectangle's outline
+        //tells shapeRenderer to draw outline
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        //choose colour
+        shapeRenderer.setColor(255/255.0f, 109/255.0f, 120/255.0f, 1);
+
+        //draws rectangle from myWorld
+//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y, myWorld.getRect().width, myWorld.getRect().height);
+
+        shapeRenderer.end();
+
     }
 }
