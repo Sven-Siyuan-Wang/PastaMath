@@ -7,6 +7,9 @@ import com.mygdx.game.MyGdxGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Pasta Math";
+		config.width = 272;
+		config.height = 408;
 		new LwjglApplication(new MyGdxGame(), config);
 	}
 }
