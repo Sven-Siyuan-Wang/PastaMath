@@ -1,12 +1,14 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import gamehelpers.AssetLoader;
+import gameobjects.PickUps;
 import gameobjects.Player;
 
 /**
@@ -49,6 +51,7 @@ public class GameRenderer {
 //        Gdx.app.log("GameRenderer", "render");
 
         Player player = myWorld.getPlayer();
+        PickUps speedUp = myWorld.getSpeedUp();
 
         //1. draw background to prevent flickering
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -64,14 +67,6 @@ public class GameRenderer {
         shapeRenderer.setColor(55/255.0f, 80/255.0f, 100/255.0f, 1);
         shapeRenderer.rect(0, 0, 136, midPointY + 66);
 
-        //draw grass
-//        shapeRenderer.setColor(111/255.0f, 186/255.0f, 45/255.0f,1);
-//        shapeRenderer.rect(0, midPointY + 66, 136, 11);
-
-        //draw dirt
-//        shapeRenderer.setColor(147/255.0f, 80/255.0f, 27/255.0f, 1);
-//        shapeRenderer.rect(0, midPointY + 77, 136, 52);
-
         //tells shapeRenderer to finish rendering (IMPORTANT; must be done every time)
         shapeRenderer.end();
 
@@ -84,6 +79,8 @@ public class GameRenderer {
         //enable transparency for objects WITH transparency
         batcher.enableBlending();
         batcher.draw(AssetLoader.playerAnimation.getKeyFrame(runTime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+
+        batcher.draw(AssetLoader.speedUp, speedUp.getX(), speedUp.getY(), speedUp.getWidth(), speedUp.getHeight());
 
         //end spritebatch
         batcher.end();

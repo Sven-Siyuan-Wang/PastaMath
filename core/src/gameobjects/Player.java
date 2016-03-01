@@ -1,6 +1,8 @@
 package gameobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -25,13 +27,20 @@ public class Player {
     private Boolean left = false;
     private Boolean right = false;
 
+    private Circle boundingCircle;
+    private boolean speedUp;
+    float speedUpCounter = 0;
+
+
+
     //constructor for Player class
     public Player(float x, float y, int width, int height) {
 
-        position = new Vector2(50, 50);
+        position = new Vector2(x, y);
 
         this.width = width;
         this.height = height;
+        this.boundingCircle = new Circle();
 
         velocity = 25;
     }
@@ -49,10 +58,51 @@ public class Player {
             position.x -= velocity*delta;
         }
 
+        if(speedUp) {
+            if(speedUpCounter>5) {
+                this.speedUpCounter = 0;
+                this.speedDown();
+            } else {
+                this.speedUpCounter += 1*delta;
+//                Gdx.app.log("Player", "speedUpCounter is " + this.speedUpCounter + " and delta is " + delta);
+
+            }
+        }
+
+        boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
+
+
+
     }
 
     public void onClick() {
         Gdx.app.log("Player", "clicked");
+    }
+
+    public void speedUp() {
+        if(!speedUp) {
+            speedUp = true;
+            Gdx.app.log("Player", "sped up");
+            this.velocity += 10;
+
+        }
+    }
+
+    public void speedDown() {
+        if(speedUp) {
+            this.velocity -= 10;
+            Gdx.app.log("Player", "sped down");
+            speedUp = false;
+        }
+    }
+
+    public boolean collides(PickUps pickup) {
+        if(position.x < (pickup.getX() + pickup.getWidth())) {
+//            Gdx.app.log("Player", "collided, and x is " + position.x + " and pickup's x is " + pickup.getX() + " and pickup's width is" + pickup.getWidth());
+            return (Intersector.overlaps(boundingCircle,pickup.getBoundingRect()));
+
+        }
+        return false;
     }
 
     public void setLeft(Boolean bool) {
@@ -88,5 +138,7 @@ public class Player {
     public float getRotation() {
         return this.rotation;
     }
+
+    public Circle getBoundingCircle() { return this.boundingCircle; }
 
 }

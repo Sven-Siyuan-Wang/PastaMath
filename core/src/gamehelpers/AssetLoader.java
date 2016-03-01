@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Created by Hazel on 29/2/2016.
  */
 public class AssetLoader {
-    public static Texture texture;
+    public static Texture texture, speedUp;
     public static TextureRegion bg, grass;
 
     public static Animation playerAnimation;
@@ -24,9 +24,6 @@ public class AssetLoader {
         bg = new TextureRegion(texture, 0,0,136, 43);
         //arguments: don't flip x, but flip y (since libGDX uses a Y Down coord system)
         bg.flip(false, true);
-
-        grass = new TextureRegion(texture, 0,43,143,11);
-        grass.flip(false, true);
 
         playerDown = new TextureRegion(texture, 136, 0, 17, 12);
         playerDown.flip(false, true);
@@ -50,6 +47,10 @@ public class AssetLoader {
 
         bar = new TextureRegion(texture, 136, 16, 22,3);
         bar.flip(false, true);
+
+        speedUp = new Texture(Gdx.files.internal("data/speedup.png"));
+
+
 
     }
 
