@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.util.ArrayList;
+
 import gamehelpers.AssetLoader;
 import gameobjects.PickUps;
 import gameobjects.Player;
@@ -80,10 +82,20 @@ public class GameRenderer {
         batcher.enableBlending();
         batcher.draw(AssetLoader.playerAnimation.getKeyFrame(runTime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
-        batcher.draw(AssetLoader.speedUp, speedUp.getX(), speedUp.getY(), speedUp.getWidth(), speedUp.getHeight());
+        renderObjects(myWorld.getObjects());
 
         //end spritebatch
         batcher.end();
 
     }
+
+    public void renderObjects(ArrayList<GameObject> list) {
+        int count = 0;
+        for(GameObject i: list) {
+            batcher.draw(AssetLoader.textures.get(count), i.getX(), i.getY(), i.getWidth(), i.getHeight());
+            count +=1;
+        }
+    }
+
+
 }

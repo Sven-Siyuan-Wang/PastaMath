@@ -3,12 +3,15 @@ package gameobjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import gameworld.GameObject;
 
 /**
  * Created by Hazel on 28/2/2016.
  */
-public class Player {
+public class Player implements GameObject {
     /*Vector2 --> object that can hold 2 values: the x component and y component
      * thus, position.x refers to x-coord, and position.y the y-coord
      * velocity.x and velocity.y would correspond to the speed in either direction
@@ -96,13 +99,17 @@ public class Player {
         }
     }
 
-    public boolean collides(PickUps pickup) {
-        if(position.x < (pickup.getX() + pickup.getWidth())) {
+    public boolean collides(GameObject a) {
+        if(position.x < (a.getX() + a.getWidth())) {
 //            Gdx.app.log("Player", "collided, and x is " + position.x + " and pickup's x is " + pickup.getX() + " and pickup's width is" + pickup.getWidth());
-            return (Intersector.overlaps(boundingCircle,pickup.getBoundingRect()));
+            return (Intersector.overlaps(boundingCircle, (Rectangle) a.getCollider()));
 
         }
         return false;
+    }
+
+    public void destroy() {
+
     }
 
     public void setLeft(Boolean bool) {
@@ -127,11 +134,11 @@ public class Player {
         return position.y;
     }
 
-    public float getWidth() {
+    public int getWidth() {
         return this.width;
     }
 
-    public float getHeight() {
+    public int getHeight() {
         return this.height;
     }
 
@@ -139,6 +146,6 @@ public class Player {
         return this.rotation;
     }
 
-    public Circle getBoundingCircle() { return this.boundingCircle; }
+    public Circle getCollider() { return this.boundingCircle; }
 
 }

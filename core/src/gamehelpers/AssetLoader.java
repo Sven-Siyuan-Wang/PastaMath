@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.ArrayList;
+
+import gameworld.GameObject;
+
 /**
  * Created by Hazel on 29/2/2016.
  */
@@ -16,6 +20,7 @@ public class AssetLoader {
     public static TextureRegion player, playerUp, playerDown;
 
     public static TextureRegion skullUp, skullDown, bar;
+    public static ArrayList<Texture> textures = new ArrayList<Texture>();
 
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
@@ -49,6 +54,7 @@ public class AssetLoader {
         bar.flip(false, true);
 
         speedUp = new Texture(Gdx.files.internal("data/speedup.png"));
+        textures.add(speedUp);
 
 
 
@@ -59,4 +65,6 @@ public class AssetLoader {
         texture.dispose();
 
     }
+
+
 }

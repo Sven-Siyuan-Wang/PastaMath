@@ -3,16 +3,19 @@ package gameobjects;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import gameworld.GameObject;
+import gameworld.GameWorld;
+
 /**
  * Created by Hazel on 29/2/2016.
  */
-public class PickUps {
+public class PickUps implements GameObject {
     private Vector2 position;
 
     private int width;
     private int height;
 
-    private int counter = 100;
+    private float destructionCounter = 10;
 
     private Rectangle boundingRect;
 
@@ -25,14 +28,15 @@ public class PickUps {
     }
 
     public void destroy() {
-        
+        boundingRect=null;
+        GameWorld.objectsCopy.remove(this);
 
     }
 
     public void update(float delta) {
-        counter -= (1*delta);
-        if(counter < 0) {
-
+        destructionCounter -= (1*delta);
+        if(destructionCounter < 0) {
+            this.destroy();
         }
 
     }
@@ -53,10 +57,9 @@ public class PickUps {
         return this.height;
     }
 
-    public Rectangle getBoundingRect() {
-        return this.boundingRect;
+    public Rectangle getCollider() {
+        return new Rectangle(this.boundingRect);
     }
-
 
 
 
