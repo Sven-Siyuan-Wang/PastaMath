@@ -3,7 +3,11 @@ package gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import gamehelpers.AssetLoader;
+import gameobjects.Player;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -13,49 +17,76 @@ public class GameRenderer {
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
 
-    public GameRenderer(GameWorld world) {
+    private SpriteBatch batcher;
+
+    private int midPointY;
+    private int gameHeight;
+
+    public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
         this.myWorld = world;
+
+        this.gameHeight = gameHeight;
+        this.midPointY = midPointY;
+
         cam = new OrthographicCamera();
 
         //arg 1: yes to ortho cam (to view things in 2D); arg 2: width of cam; arg 3: height of cam;
-        cam.setToOrtho(true, 136, 204);
+        cam.setToOrtho(true, 136, gameHeight);
+        cam.update();
+
+
+        batcher = new SpriteBatch();
+        //attach batcher to cam
+        batcher.setProjectionMatrix(cam.combined);
+
         shapeRenderer = new ShapeRenderer();
         //attach the shapeRenderer to our camera
         shapeRenderer.setProjectionMatrix(cam.combined);
 
     }
 
-    public void render() {
-        Gdx.app.log("GameRenderer", "render");
+    public void render(float runTime) {
+//        Gdx.app.log("GameRenderer", "render");
+
+        Player player = myWorld.getPlayer();
 
         //1. draw background to prevent flickering
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
 
         //2. draw the filled rectangle
         //tell shapeRenderer to begin drawing filled shapes
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        //choose RGB colour of 87, 109, 120 at full opacity
-        shapeRenderer.setColor(87/255.0f, 109/255.0f, 120/255.0f, 1);
+        //draw background colour
+        shapeRenderer.setColor(55/255.0f, 80/255.0f, 100/255.0f, 1);
+        shapeRenderer.rect(0, 0, 136, midPointY + 66);
 
-        //draws the rectangle from myWorld
-//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y, myWorld.getRect().width, myWorld.getRect().height);
+        //draw grass
+//        shapeRenderer.setColor(111/255.0f, 186/255.0f, 45/255.0f,1);
+//        shapeRenderer.rect(0, midPointY + 66, 136, 11);
+
+        //draw dirt
+//        shapeRenderer.setColor(147/255.0f, 80/255.0f, 27/255.0f, 1);
+//        shapeRenderer.rect(0, midPointY + 77, 136, 52);
 
         //tells shapeRenderer to finish rendering (IMPORTANT; must be done every time)
         shapeRenderer.end();
 
-        //3. draw the rectangle's outline
-        //tells shapeRenderer to draw outline
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        //begin SpriteBatch
+        batcher.begin();
+        //disable transparency; this is good for drawing images that do not require transparency
+//        batcher.disableBlending();
+//        batcher.draw(AssetLoader.bg, 0, midPointY +23, 136, 43);
 
-        //choose colour
-        shapeRenderer.setColor(255/255.0f, 109/255.0f, 120/255.0f, 1);
+        //enable transparency for objects WITH transparency
+        batcher.enableBlending();
+        batcher.draw(AssetLoader.playerAnimation.getKeyFrame(runTime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
 
-        //draws rectangle from myWorld
-//        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y, myWorld.getRect().width, myWorld.getRect().height);
-
-        shapeRenderer.end();
+        //end spritebatch
+        batcher.end();
 
     }
 }

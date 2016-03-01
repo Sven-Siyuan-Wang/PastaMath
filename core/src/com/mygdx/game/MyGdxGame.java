@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import gamehelpers.AssetLoader;
 import screens.GameScreen;
 
 public class MyGdxGame extends Game {
@@ -14,9 +15,16 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create () {
 		Gdx.app.log("PastaMath", "created");
+		AssetLoader.load();
 		setScreen(new GameScreen());
 
 
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		AssetLoader.dispose();
 	}
 
 }

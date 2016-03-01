@@ -3,7 +3,9 @@ package screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import gameobjects.Player;
 
+import gamehelpers.InputHandler;
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
 
@@ -13,6 +15,7 @@ import gameworld.GameWorld;
 public class GameScreen implements Screen {
     private GameWorld world;
     private GameRenderer renderer;
+    private float runTime;
 
     public GameScreen() {
         float screenWidth = Gdx.graphics.getWidth();
@@ -23,7 +26,8 @@ public class GameScreen implements Screen {
         int midPointY = (int) (gameHeight/2);
 
         world = new GameWorld(midPointY); //initialize world
-        renderer = new GameRenderer(world); //initialize renderer
+        renderer = new GameRenderer(world, (int) gameHeight, midPointY); //initialize renderer
+        Gdx.input.setInputProcessor(new InputHandler(world.getPlayer()));
         Gdx.app.log("GameScreen", "attached");
     }
 
@@ -40,10 +44,11 @@ public class GameScreen implements Screen {
         //fills screen with selected colour
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        runTime += delta;
         world.update(delta);
-        renderer.render();
+        renderer.render(runTime);
 
-        Gdx.app.log("GameScreen FPS", (1/delta)+"");
+//        Gdx.app.log("GameScreen FPS", (1/delta)+"");
 
     }
 
