@@ -34,6 +34,8 @@ public class Player implements GameObject {
     private boolean speedUp;
     float speedUpCounter = 0;
 
+    private int value;
+
 
 
     //constructor for Player class
@@ -46,6 +48,7 @@ public class Player implements GameObject {
         this.boundingCircle = new Circle();
 
         velocity = 25;
+        value = 0;
     }
 
     public void update(float delta) {
@@ -147,5 +150,14 @@ public class Player implements GameObject {
     }
 
     public Circle getCollider() { return this.boundingCircle; }
+
+    public void takeEffect(Item item){
+        String effect = item.getEffect();
+        String operation = effect.split(" ")[0];
+        int b = Integer.parseInt(effect.split(" ")[1]);
+        if(operation.equals("+")) value = value+b;
+        else if(operation.equals("*")) value = value*b;
+        else;
+    }
 
 }
