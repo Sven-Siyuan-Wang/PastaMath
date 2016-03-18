@@ -17,8 +17,6 @@ public class MyGdxGame extends Game {
 		Gdx.app.log("PastaMath", "created");
 		AssetLoader.load();
 		setScreen(new GameScreen());
-
-
 	}
 
 	@Override

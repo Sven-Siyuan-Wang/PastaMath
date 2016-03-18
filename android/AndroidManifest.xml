@@ -4,7 +4,7 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="23" />
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="23" />
 
     <application
         android:allowBackup="true"
@@ -21,6 +21,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--keith-->
+        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_id" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <!--//keith end-->
     </application>
 
+    <!--//keith-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--//keith end-->
+
+
 </manifest>
+<!--
+//81:8C:D5:F0:E3:FA:74:66:D6:BC:EF:F7:2D:23:EE:B6:28:6B:6D:F7
+//SHA1 FINGERPRINT
+-->
+
+<!--
+instructions to get this is from https://chandruscm.wordpress.com/2015/12/29/how-to-obtain-sha1-signing-certificate-fingerprint-from-android-studio/
+
+Variant: debugUnitTest
+Config: debug
+Store: /Users/Keith/.android/debug.keystore
+Alias: AndroidDebugKey
+MD5: 84:59:8D:0B:6D:0F:E4:A6:5D:16:74:FD:C4:24:F2:1E
+SHA1: 79:CC:36:0F:8F:46:CD:46:A7:97:D8:93:B0:0D:39:E5:B9:BA:32:B0
+Valid until: Wednesday, September 6, 2045
+-->
