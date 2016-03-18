@@ -22,6 +22,7 @@ public class GameWorld {
     private Player player1;
     private PickUps speedUp, shield;
 
+    //TODO: FIND PORTION OF CODE TO RUN THREADS
 
     public GameWorld(int midPointY) {
         //initialize player here
@@ -29,13 +30,16 @@ public class GameWorld {
         //initializing first speed up item
         speedUp = new PickUps(90,90, 17, 12);
         objects.add(speedUp);
-
+        //TODO: intiialize buffer of items and pickups here, and run threads.
     }
 
+    //todo: merge removeItem thread into this method?  (maybe it is unnecessary)
     public void update(float delta) {
         player1.update(delta);
         speedUp.update(delta);
         objectsCopy = new ArrayList<GameObject>(objects);
+
+        //todo: remove the object
         for(GameObject i: objects) {
             if (i instanceof PickUps) {
                 if (player1.collides(i)) {
@@ -44,6 +48,14 @@ public class GameWorld {
                 }
             }
         }
+
+
+        //todo: use timer to generate new item everytime (random timing) if not more than 10 items
+
+
+
+
+
         objects = new ArrayList<GameObject>(objectsCopy);
 
 
