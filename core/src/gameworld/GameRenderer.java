@@ -126,6 +126,13 @@ public class GameRenderer {
         }
     }
 
+    publiv void renderPlayers(ArrayList<Player> players){
+        for(Player player: players){
+            batcher.enableBlending();
+            batcher.draw();
+        }
+    }
+
 
 
 }
