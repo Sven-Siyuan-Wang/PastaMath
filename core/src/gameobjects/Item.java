@@ -28,20 +28,17 @@ public abstract class Item implements GameObject{
 
     private Vector2 position;
 
-    private int width;
-    private int height;
+    private int width= 125;
+    private int height= 125;
 
     private float destructionCounter = 10;
 
     private Rectangle boundingRect;
 
-    public Item(int width, int height){
+    public Item(){
         this.assign_random_coord();
         //this.position = new Vector2(x,y);
-        this.width = width;
-        this.height = height;
         boundingRect = new Rectangle(this.position.x, this.position.y, width, height);
-
         this.colour= "yellow";
     }
 

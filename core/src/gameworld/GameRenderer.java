@@ -63,6 +63,8 @@ public class GameRenderer {
         //Todo: keep getting Players and Items
         ArrayList<Player> players= myWorld.getPlayers();
         Simple_Item_Buffer simple_item_buffer= myWorld.getSimple_item_buffer();
+        //todo:use one hard-coded player for testing- remove later
+        players.add(player);
        ///////////////////////////////////////////////////////////////////
 
 
@@ -106,10 +108,9 @@ public class GameRenderer {
     //ORIGINAL:
     public void renderObjects(ArrayList<GameObject> list) {
         //TODO: Google how to draw items with strings printed on them
-        for(GameObject i: list) {
+        for (GameObject i: list) {
             batcher.enableBlending();
             //batcher.draw(AssetLoader.textures.get(i.getName()), i.getX()*GameConstants.SCALE_X, i.getY()*GameConstants.SCALE_Y, i.getWidth()*GameConstants.SCALE_X, i.getHeight()*GameConstants.SCALE_Y);
-
         }
     }
 

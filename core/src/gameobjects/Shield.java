@@ -6,7 +6,7 @@ package gameobjects;
 public class Shield extends PowerUps{
 
     public void update_player_situation(Player player){
-        player.setShielded();
+        player.setShielded(true);
     };
 
     public String getName(){

@@ -24,7 +24,6 @@ public class NumberAndOperand extends Item { //All these are a form of item
 
     //attributes for number_and_operand
     public NumberAndOperand(){
-        super(125, 125);
         Random random = new Random();
         value= random.nextInt(9);
         operand_chooser= random.nextInt(50);
