@@ -30,7 +30,6 @@ public class PickUps implements GameObject {
     public void destroy() {
         boundingRect=null;
         GameWorld.objectsCopy.remove(this);
-
     }
 
     public void update(float delta) {

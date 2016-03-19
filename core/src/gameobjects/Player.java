@@ -34,8 +34,9 @@ public class Player implements GameObject {
     private boolean speedUp;
     float speedUpCounter = 0;
 
-    private int value;
-
+    //todo: initialize booleans for other attributes(to change upon collision)
+    private boolean shielded= false; //its score won't be affected
+    private int currentValue= 0;
 
 
     //constructor for Player class
@@ -48,7 +49,6 @@ public class Player implements GameObject {
         this.boundingCircle = new Circle();
 
         velocity = 25;
-        value = 0;
     }
 
     public void update(float delta) {
@@ -77,6 +77,14 @@ public class Player implements GameObject {
 
         boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
 
+        //todo: if player is shielded, dont let its score change
+        if(shielded){
+            //do nothing;
+        }
+        else{
+            if (col)
+        }
+        //todo: if player collided into something, adjust effects accordingly- change score or speed
 
 
     }
@@ -110,6 +118,32 @@ public class Player implements GameObject {
         }
         return false;
     }
+
+
+    //TODO: methods FOR ITEMS to change player's situation attributes
+    public void setShielded(){
+        shielded= true;
+        //todo: need to set a timer?
+    }
+
+    public void setCurrentValue(int number, String operand){
+        if (operand.equals("plus")){
+            currentValue+= number;
+        }
+
+        if(operand.equals("multiply")){
+            currentValue*= number;
+        }
+    }
+
+    //TODO: if player collides into another player, change score
+    public boolean knock_into(Player other){
+        return true; //TODO: FIND HOW TO USE INTERSECTOR
+
+
+    }
+
+
 
     public void destroy() {
 

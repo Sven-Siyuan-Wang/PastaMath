@@ -92,6 +92,9 @@ public class GameRenderer {
 
     public void renderObjects(ArrayList<GameObject> list) {
         int count = 0;
+
+
+        //TODO: Google how to draw items with strings printed on them
         for(GameObject i: list) {
             batcher.enableBlending();
             batcher.draw(AssetLoader.textures.get(count), i.getX()*GameConstants.SCALE_X, i.getY()*GameConstants.SCALE_Y, i.getWidth()*GameConstants.SCALE_X, i.getHeight()*GameConstants.SCALE_Y);
