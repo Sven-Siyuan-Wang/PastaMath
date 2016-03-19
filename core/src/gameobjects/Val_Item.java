@@ -8,7 +8,7 @@ import gameworld.GameWorld;
  */
 
 //TODO: WAIT FOR SIYUAN'S CLASS
-public abstract class Item implements GameObject{
+public abstract class Val_Item implements GameObject{
 
     //public int lifespan; //todo: quite difficult to check for the time up
     //public boolean expired; //difficult
@@ -26,7 +26,7 @@ public abstract class Item implements GameObject{
 
 
 
-    public Item(){ //default constructor, example
+    public Val_Item(){ //default constructor, example
         //lifespan= 3;
         colour= "yellow";
         value= 6;
@@ -38,11 +38,11 @@ public abstract class Item implements GameObject{
     }
 
     //customized constructor
-    public Item(int value){
+    public Val_Item(int value){
         this.value= value;
     }
 
-    //TODO: ensure that this destroy method is implemented in Siyuan's Item class
+    //TODO: ensure that this destroy method is implemented in Siyuan's Val_Item class
     public void destroy() {
         GameWorld.objectsCopy.remove(this);
     }

@@ -1,13 +1,7 @@
 package gameworld;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.MathUtils;
-
 import java.util.ArrayList;
-import java.util.Random;
 
-import gameobjects.Item;
 import gameobjects.PickUps;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
@@ -29,8 +23,8 @@ public class GameWorld {
     private ArrayList<Player> players;
 
     //TODO: follow template above- make original and copy for buffer
-    //private static ArrayList<Item> game_items= new ArrayList<Item>();
-    //private static ArrayList<Item> game_items_copy= new ArrayList<Item>();
+    //private static ArrayList<Val_Item> game_items= new ArrayList<Val_Item>();
+    //private static ArrayList<Val_Item> game_items_copy= new ArrayList<Val_Item>();
     private static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
     private static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
