@@ -1,5 +1,7 @@
 package gameworld;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,6 +19,7 @@ public class GameWorld {
     public static ArrayList<GameObject> objectsCopy = new ArrayList<GameObject>();
     private Player player1;
 
+    private Stage stage;
     private PickUps speedUp, shield;
 
 
@@ -30,9 +33,9 @@ public class GameWorld {
     private static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
     private static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
-    public GameWorld(int midPointY) {
+    public GameWorld(Stage stage) {
         //initialize player here
-        player1 = new Player(33, midPointY-5, 17, 12);
+        player1 = new Player(200, 200, 150, 150);
 
         //TODO: initialize players as they connect to server
         //initializing first speed up item
@@ -43,6 +46,7 @@ public class GameWorld {
         simple_item_buffer= new Simple_Item_Buffer();
         //all the items are initialized inside the buffer already when it is constructed
 
+        this.stage = stage;
     }
 
     //TODO(Extra): consider doing thread version? (complicated)
@@ -88,6 +92,8 @@ public class GameWorld {
     public Player getPlayer() {
         return player1;
     }
+
+    public Stage getStage() {return this.stage; }
 
     public PickUps getSpeedUp() { return speedUp; }
 

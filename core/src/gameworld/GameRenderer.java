@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class GameRenderer {
     private int gameHeight;
     private int gameWidth;
     private float aspect_ratio;
+
 
 
     public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
@@ -83,10 +85,17 @@ public class GameRenderer {
 //        batcher.draw(AssetLoader.up, 100*GameConstants.SCALE_X, 180*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 //        batcher.draw(AssetLoader.left, 20*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 
-        renderObjects(myWorld.getObjects());
+
+
+//        renderObjects(myWorld.getObjects());
+
+        batcher.draw(AssetLoader.player, player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
 
         //end spritebatch
         batcher.end();
+
+        myWorld.getStage().act();
+        myWorld.getStage().draw();
 
     }
 

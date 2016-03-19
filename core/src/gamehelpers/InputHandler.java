@@ -1,8 +1,12 @@
 package gamehelpers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import gameobjects.Player;
 
@@ -13,13 +17,38 @@ public class InputHandler implements InputProcessor {
     private Player myPlayer;
     Touchpad touchpad;
     Touchpad.TouchpadStyle touchpadStyle;
+    Skin touchpadskin;
+    Drawable touchBackground;
+    Drawable touchKnob;
+    Stage stage;
 
 
-    public InputHandler(Player player) {
+    public InputHandler(Player player, Stage stage) {
         this.myPlayer = player;
+        touchpadskin = new Skin();
+        touchpadskin.add("touchBg", AssetLoader.touchBackground);
+        touchpadskin.add("touchKnob", AssetLoader.touchKnob);
+        touchpadStyle = new Touchpad.TouchpadStyle();
+        touchBackground = touchpadskin.getDrawable("touchBg");
+        touchKnob = touchpadskin.getDrawable("touchKnob");
+
+        touchpadStyle.background = touchBackground;
+        touchpadStyle.knob = touchKnob;
+
+        touchpad = new Touchpad(10, touchpadStyle);
+
+        touchpad.setBounds(138, 138, 235, 235);
+
+        this.stage = stage;
+        stage.addActor(touchpad);
+        Gdx.input.setInputProcessor(stage);
+
     }
 
-    
+    public void update() {
+        myPlayer.setX(myPlayer.getX() + touchpad.getKnobPercentX()*myPlayer.getVelocity());
+        myPlayer.setY(myPlayer.getY() + touchpad.getKnobPercentY()*myPlayer.getVelocity());
+    }
 
     @Override
     public boolean keyDown(int keycode) {

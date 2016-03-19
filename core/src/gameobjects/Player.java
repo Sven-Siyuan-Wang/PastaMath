@@ -48,21 +48,23 @@ public class Player implements GameObject {
         this.height = height;
         this.boundingCircle = new Circle();
 
-        velocity = 25;
+        velocity = 50;
     }
 
     public void update(float delta) {
 
-        if(up) {
-            position.y -= velocity*delta;
-        } else if(down) {
-            position.y += velocity*delta;
-        }
-        if(right) {
-            position.x += velocity*delta;
-        } else if(left) {
-            position.x -= velocity*delta;
-        }
+//        if(up) {
+//            position.y -= velocity*delta;
+//        } else if(down) {
+//            position.y += velocity*delta;
+//        }
+//        if(right) {
+//            position.x += velocity*delta;
+//        } else if(left) {
+//            position.x -= velocity*delta;
+//        }
+
+
 
         if(speedUp) {
             if(speedUpCounter>5) {
@@ -74,7 +76,7 @@ public class Player implements GameObject {
             }
         }
 
-        boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
+        boundingCircle.set(position.x, position.y, 75f);
 
         //todo: if player is shielded, dont let its score change
         if(shielded){
@@ -166,8 +168,20 @@ public class Player implements GameObject {
         return position.x;
     }
 
+    public void setX(float x) {
+        position.x = x;
+    }
+
     public float getY() {
         return position.y;
+    }
+
+    public void setY(float y) {
+        position.y = y;
+    }
+
+    public float getVelocity() {
+        return this.velocity;
     }
 
     public int getWidth() {

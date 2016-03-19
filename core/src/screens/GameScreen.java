@@ -33,9 +33,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         this.stage = new Stage(new StretchViewport(1280, 720));
-        world = new GameWorld(); //initialize world
+
+        world = new GameWorld(this.stage); //initialize world
         renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
-        Gdx.input.setInputProcessor(new InputHandler(world.getPlayer()));
+        Gdx.input.setInputProcessor(new InputHandler(world.getPlayer(), this.stage));
+
         Gdx.app.log("GameScreen", "attached");
     }
 
