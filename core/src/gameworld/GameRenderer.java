@@ -28,7 +28,6 @@ public class GameRenderer {
 
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
         this.myWorld = world;
-
         this.gameHeight = gameHeight;
         this.midPointY = midPointY;
 
@@ -91,6 +90,9 @@ public class GameRenderer {
 
     public void renderObjects(ArrayList<GameObject> list) {
         int count = 0;
+
+
+        //TODO: Google how to draw items with strings printed on them
         for(GameObject i: list) {
             batcher.draw(AssetLoader.textures.get(count), i.getX(), i.getY(), i.getWidth(), i.getHeight());
             count +=1;
