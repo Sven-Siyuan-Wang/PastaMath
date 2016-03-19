@@ -71,7 +71,6 @@ public class Player implements GameObject {
             } else {
                 this.speedUpCounter += 1*delta;
 //                Gdx.app.log("Player", "speedUpCounter is " + this.speedUpCounter + " and delta is " + delta);
-
             }
         }
 
@@ -82,7 +81,7 @@ public class Player implements GameObject {
             //do nothing;
         }
         else{
-            if (col)
+            //change score
         }
         //todo: if player collided into something, adjust effects accordingly- change score or speed
 
@@ -127,11 +126,11 @@ public class Player implements GameObject {
     }
 
     public void setCurrentValue(int number, String operand){
-        if (operand.equals("plus")){
+        if (operand.equals("+")){
             currentValue+= number;
         }
 
-        if(operand.equals("multiply")){
+        if(operand.equals("*")){
             currentValue*= number;
         }
     }
@@ -185,13 +184,6 @@ public class Player implements GameObject {
 
     public Circle getCollider() { return this.boundingCircle; }
 
-    public void takeEffect(Item item){
-        String effect = item.getEffect();
-        String operation = effect.split(" ")[0];
-        int b = Integer.parseInt(effect.split(" ")[1]);
-        if(operation.equals("+")) value = value+b;
-        else if(operation.equals("*")) value = value*b;
-        else;
-    }
+
 
 }
