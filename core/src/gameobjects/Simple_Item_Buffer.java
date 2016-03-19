@@ -11,11 +11,11 @@ public class Simple_Item_Buffer {
 
     private int game_width;
     private int game_height;
-    private static ArrayList<Val_Item> items_currently_appearing; //static ArrayList in buffer class
+    private static ArrayList<Item> items_currently_appearing; //static ArrayList in buffer class
     public static int max_items_capacity;
 
     public Simple_Item_Buffer() { //default constructor
-        items_currently_appearing = new ArrayList<Val_Item>();
+        items_currently_appearing = new ArrayList<Item>();
         max_items_capacity = 5; //
         for (int i = 0; i < max_items_capacity; i++) {
             generate_Items();
@@ -29,10 +29,9 @@ public class Simple_Item_Buffer {
     public void generate_Items() {
         //generates 3 number_n_operands + 1 power-ups
         //todo: assign random coords to a newly randomly generated item and add into the list
-        Val_Item item_without_coord = new NumberAndOperand();
-
-        assign_random_coord(item_without_coord);
-        items_currently_appearing.add(item_without_coord);
+        //Item item_without_coord = new NumberAndOperand();
+        //assign_random_coord(item_without_coord);
+        ///items_currently_appearing.add(item_without_coord);
     }
 
 
@@ -42,7 +41,7 @@ public class Simple_Item_Buffer {
 
 
     //TODO: consider if this should be put in Val_Item class directly
-    public void assign_random_coord(Val_Item item_to_assign_location) {
+    public void assign_random_coord(Item item_to_assign_location) {
         //generate a random number (use integer, easier to check for overlap)
         //todo: get game info - remember to minus off to leave space
         int game_width = 100 - 4;
@@ -53,8 +52,10 @@ public class Simple_Item_Buffer {
         int x = randomizer.nextInt(game_width + 2);
         int y = randomizer.nextInt(game_height + 2);
 
-        item_to_assign_location.x_coord = x;
-        item_to_assign_location.y_coord = y;
+        //item_to_assign_location.x_coord = x;
+        //item_to_assign_location.y_coord = y;
+
+        //item_to_assign_location.
     }
 
 }

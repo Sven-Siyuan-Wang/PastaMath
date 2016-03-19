@@ -56,7 +56,7 @@ public class GameWorld {
 
         //TODO: update Players and objects using for-loop
 
-        for(Player each_player: Pl)
+        //for(Player each_player: Pl)
 
 
         //todo: remove Players and objects accordingly
