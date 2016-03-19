@@ -106,8 +106,8 @@ public class GameRenderer {
         //end spritebatch
         batcher.end();
 
-        myWorld.getStage().act();
-        myWorld.getStage().draw();
+//        myWorld.getStage().act();
+//        myWorld.getStage().draw();
 
     }
 

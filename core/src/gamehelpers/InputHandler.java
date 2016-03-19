@@ -1,5 +1,6 @@
 package gamehelpers;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
+import gameconstants.GameConstants;
 import gameobjects.Player;
 
 /**
@@ -37,15 +39,14 @@ public class InputHandler implements InputProcessor {
 
         touchpad = new Touchpad(10, touchpadStyle);
 
-        touchpad.setBounds(138, 138, 235, 235);
+        touchpad.setBounds(20*GameConstants.SCALE_X, 20*GameConstants.SCALE_Y, 235* GameConstants.SCALE_X, 235*GameConstants.SCALE_Y);
 
         this.stage = stage;
         stage.addActor(touchpad);
         Gdx.input.setInputProcessor(stage);
-
     }
 
-    public void update() {
+    public void render() {
         myPlayer.setX(myPlayer.getX() + touchpad.getKnobPercentX()*myPlayer.getVelocity());
         myPlayer.setY(myPlayer.getY() + touchpad.getKnobPercentY()*myPlayer.getVelocity());
     }
@@ -104,17 +105,21 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        myPlayer.onClick();
+        myPlayer.onClick(screenX, screenY);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        Gdx.app.log("InputHandler", "not clicked anymore");
+        myPlayer.onNotClick();
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
+        myPlayer.onClick(screenX, screenY);
         return false;
     }
 

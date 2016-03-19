@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import gameconstants.GameConstants;
 import gameworld.GameObject;
 
 /**
@@ -54,16 +55,16 @@ public class Player implements GameObject {
 
     public void update(float delta) {
 
-//        if(up) {
-//            position.y -= velocity*delta;
-//        } else if(down) {
-//            position.y += velocity*delta;
-//        }
-//        if(right) {
-//            position.x += velocity*delta;
-//        } else if(left) {
-//            position.x -= velocity*delta;
-//        }
+        if(up) {
+            position.y -= velocity*delta;
+        } else if(down) {
+            position.y += velocity*delta;
+        }
+        if(right) {
+            position.x += velocity*delta;
+        } else if(left) {
+            position.x -= velocity*delta;
+        }
 
 
 
@@ -89,8 +90,38 @@ public class Player implements GameObject {
         //todo: if player collided into something, adjust effects accordingly- change score or speed
     }
 
-    public void onClick() {
-        Gdx.app.log("Player", "clicked");
+    public void onClick(int x, int y) {
+        Gdx.app.log("Player", "now at " + position.x + ", " + position.y);
+        Gdx.app.log("Player", "clicked, at positions " + x + " and " + y);
+        if(x < (position.x)) {
+//            Gdx.app.log("Player", "LEFT: now moving from " + position.x + " to... " + x);
+            left = true;
+            right = false;
+        } else if (x > (position.x+75)) {
+//            Gdx.app.log("Player", "RIGHT: now moving from " + position.x + " to... " + x);
+            right = true;
+            left = false;
+        }
+
+        if(y < (position.y)) {
+//            Gdx.app.log("Player", "UP: now moving from " + position.y + " to... " + y);
+            down = true;
+            up = false;
+        } else if(y > (position.y)) {
+//            Gdx.app.log("Player", "DOWN: now moving from " + position.y + " to... " + y);
+            up = true;
+            down = false;
+        }
+
+        Gdx.app.log("Player", "up is " + up + ", down is " + down + ", left is " + left + ", right is " + right);
+    }
+
+    public void onNotClick() {
+        Gdx.app.log("Player", "click lifted");
+        up = false;
+        down = false;
+        left = false;
+        right = false;
     }
 
     public void speedUp() {

@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-import gameobjects.Player;
-
 import gamehelpers.InputHandler;
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
