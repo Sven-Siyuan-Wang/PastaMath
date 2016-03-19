@@ -5,14 +5,9 @@ import gameworld.GameObject;
 /**
  * Created by valerie_tan on 3/19/2016.
  */
-public class PowerUps extends Item {
-    public PowerUps (float x, float y, int width, int height) {
-        super(x, y, width, height);
+public abstract class PowerUps extends Item {
+    public PowerUps () {
+        super(90, 90);
     }
-
-    public void update_player_situation(Player player){
-        player.setShielded();
-    };
-
-
+    //methods are implemented inside the rest
 }

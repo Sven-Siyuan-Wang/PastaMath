@@ -13,8 +13,10 @@ import java.util.ArrayList;
 
 import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
+import gameobjects.Item;
 import gameobjects.PickUps;
 import gameobjects.Player;
+import gameobjects.Simple_Item_Buffer;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -54,8 +56,16 @@ public class GameRenderer {
 //        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
+        //original
         Player player = myWorld.getPlayer();
         PickUps speedUp = myWorld.getSpeedUp();
+
+        //Todo: keep getting Players and Items
+        ArrayList<Player> players= myWorld.getPlayers();
+        Simple_Item_Buffer simple_item_buffer= myWorld.getSimple_item_buffer();
+       ///////////////////////////////////////////////////////////////////
+
+
 
         //1. draw background to prevent flickering
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -83,24 +93,35 @@ public class GameRenderer {
 //        batcher.draw(AssetLoader.up, 100*GameConstants.SCALE_X, 180*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 //        batcher.draw(AssetLoader.left, 20*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 
+        //ORIGINAL
         renderObjects(myWorld.getObjects());
+        //OURS
+        renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
 
         //end spritebatch
         batcher.end();
 
     }
 
+    //ORIGINAL:
     public void renderObjects(ArrayList<GameObject> list) {
-
-
-
         //TODO: Google how to draw items with strings printed on them
         for(GameObject i: list) {
             batcher.enableBlending();
-            batcher.draw(AssetLoader.textures.get(i.getName()), i.getX()*GameConstants.SCALE_X, i.getY()*GameConstants.SCALE_Y, i.getWidth()*GameConstants.SCALE_X, i.getHeight()*GameConstants.SCALE_Y);
+            //batcher.draw(AssetLoader.textures.get(i.getName()), i.getX()*GameConstants.SCALE_X, i.getY()*GameConstants.SCALE_Y, i.getWidth()*GameConstants.SCALE_X, i.getHeight()*GameConstants.SCALE_Y);
 
         }
     }
+
+    //OURS
+    //TODO: renderItems inside the item_buffer
+    public void renderItems(ArrayList<Item> list){
+        for(Item item: list){
+            batcher.enableBlending();
+            batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+        }
+    }
+
 
 
 }

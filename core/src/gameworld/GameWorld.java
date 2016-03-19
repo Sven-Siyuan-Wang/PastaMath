@@ -3,6 +3,7 @@ package gameworld;
 import java.util.ArrayList;
 import java.util.Random;
 
+import gameobjects.Item;
 import gameobjects.PickUps;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
@@ -19,29 +20,21 @@ public class GameWorld {
 
     private PickUps speedUp, shield;
 
-
-    //todo: initialize Simple_Item_Buffer
-    //TODO: initialize all players and game objects here
+    //TODO: initialize all players and game objects here- SERVER
     private ArrayList<Player> players;
 
     //TODO: follow template above- make original and copy for buffer
-    //private static ArrayList<Val_Item> game_items= new ArrayList<Val_Item>();
-    //private static ArrayList<Val_Item> game_items_copy= new ArrayList<Val_Item>();
-    private static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
-    private static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
+
+    public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
+    public static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
     public GameWorld(int midPointY) {
         //initialize player here
         player1 = new Player(33, midPointY-5, 17, 12);
-
         //TODO: initialize players as they connect to server
         //initializing first speed up item
         speedUp = new PickUps(400,400, 125,125);
         objects.add(speedUp);
-
-        //TODO: intiialize buffer of items and pickups
-        simple_item_buffer= new Simple_Item_Buffer();
-        //all the items are initialized inside the buffer already when it is constructed
 
     }
 
@@ -49,17 +42,51 @@ public class GameWorld {
 
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
+        //ORIGINAL
         player1.update(delta);
         speedUp.update(delta);
         objectsCopy = new ArrayList<GameObject>(objects);
 
 
-        //TODO: update Players and objects using for-loop
+        //all the items are initialized inside the buffer already when it is constructed
+        simple_item_buffer_copy.items_currently_appearing= new ArrayList<Item>(simple_item_buffer.items_currently_appearing);
 
-        //for(Player each_player: Pl)
+        //todo: use timer to generate new item everytime (random timing) if not more than 10 items
+        //TODO: add object if capacity haven't reached- add to copy or the original?
+        if(! (simple_item_buffer.items_currently_appearing.size()== Simple_Item_Buffer.max_items_capacity)){
+            //make new object every few seconds
+            simple_item_buffer.generate_random_Item();
+        }
+
+        for(Player each_player: players){
+            each_player.update(delta);
+            //todo: remove Players and objects accordingly
+            //TODO: PLAYER RESPONSES TO COLLISION
+            for(Item item: simple_item_buffer.items_currently_appearing){
+                if(each_player.collides(item)){
+                    item.destroy();
+                    item.update_player_situation(each_player);
+                    if(each_player.getShielded()) {
+                        each_player.update_collision_count();
+                    }
+                }
+            }
+            //todo: check if a player collided into another player
+            for(Player other_player: players){
+                if (!other_player.equals(each_player)){ //you can't knock into yourself
+                    if (each_player.knock_into(other_player)){
+                        each_player.decreaseScoreUponKnock();
+                    }
+                }
+            }
+        }
 
 
-        //todo: remove Players and objects accordingly
+        simple_item_buffer.items_currently_appearing= new ArrayList<Item>(simple_item_buffer_copy.items_currently_appearing);
+
+
+
+        //ORIGINAL
         for(GameObject i: objects) {
             if (i instanceof PickUps) {
                 if (player1.collides(i)) {
@@ -67,30 +94,28 @@ public class GameWorld {
                     player1.speedUp();
                 }
             }
-            //todo: wait for Siyuan item class(similar to PickUps) to be made
-            //todo: instead of using instanceOf- create a method for player to respond to collision to diff Items accordingly
-            if(player1.collides(i)){
-                i.destroy();
-
-            }
         }
-
-
-        //todo: use timer to generate new item everytime (random timing) if not more than 10 items
-
-
-
         objects = new ArrayList<GameObject>(objectsCopy);
-
 
     }
 
+
+    //TODO: implement methods to get all Player and Items
+    public ArrayList<Player> getPlayers(){
+        return players;
+    }
+
+    public Simple_Item_Buffer getSimple_item_buffer(){
+        return simple_item_buffer;
+    }
+    /////////////////////////////////////////////////////
+
+
+    //ORIGINAL
     public Player getPlayer() {
         return player1;
     }
-
     public PickUps getSpeedUp() { return speedUp; }
-
     public ArrayList<GameObject> getObjects() { return this.objects; }
 
 }
