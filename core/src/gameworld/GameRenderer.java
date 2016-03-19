@@ -77,9 +77,7 @@ public class GameRenderer {
         //begin SpriteBatch
         batcher.begin();
 
-        //enable transparency for objects WITH transparency
-        batcher.enableBlending();
-        batcher.draw(AssetLoader.playerAnimation.getKeyFrame(runTime), player.getX(), player.getY(), player.getWidth(), player.getHeight());
+
 
         renderObjects(myWorld.getObjects());
 
@@ -91,8 +89,7 @@ public class GameRenderer {
     public void renderObjects(ArrayList<GameObject> list) {
         int count = 0;
         for(GameObject i: list) {
-            float scale = this.gameWidth/i.getWidth();
-            System.out.println(scale);
+            batcher.enableBlending();
             batcher.draw(AssetLoader.textures.get(count), i.getX()*GameConstants.SCALE_X, i.getY()*GameConstants.SCALE_Y, i.getWidth()*GameConstants.SCALE_X, i.getHeight()*GameConstants.SCALE_Y);
             count +=1;
         }

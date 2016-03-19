@@ -25,9 +25,10 @@ public class GameWorld {
 
     public GameWorld() {
         //initialize player here
-        player1 = new Player(33, 33, 17, 12);
+        player1 = new Player(140, 110, 150,150);
+        objects.add(player1);
         //initializing first speed up item
-        speedUp = new PickUps(90,90, 17, 12);
+        speedUp = new PickUps(400,400, 125,125);
         objects.add(speedUp);
 
     }
