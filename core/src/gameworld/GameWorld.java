@@ -28,9 +28,12 @@ public class GameWorld {
     public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
     public static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
-    public GameWorld(int midPointY) {
+
+    public int generate_counter;
+
+    public GameWorld() {
         //initialize player here
-        player1 = new Player(33, midPointY-5, 17, 12);
+        player1 = new Player(33, 5, 17, 12);
         //TODO: initialize players as they connect to server
         //initializing first speed up item
         speedUp = new PickUps(400,400, 125,125);

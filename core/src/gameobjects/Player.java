@@ -116,11 +116,13 @@ public class Player implements GameObject {
         }
         return false;
     }
-    //TODO: if player collides into another player, change score
+
+    public boolean collides(Item item){
+       return(Intersector.overlaps(boundingCircle, item.getCollider()));
+    }
+
     public boolean knock_into(Player other){
-        return true; //TODO: FIND HOW TO USE INTERSECTOR
-
-
+        return (Intersector.overlaps(boundingCircle, other.boundingCircle));
     }
 
     public void decreaseScoreUponKnock(){
