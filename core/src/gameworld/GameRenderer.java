@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
 import gameobjects.PickUps;
 import gameobjects.Player;
@@ -17,40 +20,39 @@ import gameobjects.Player;
  * Created by Hazel on 28/2/2016.
  */
 public class GameRenderer {
+    //720*1280
     private GameWorld myWorld;
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
 
     private SpriteBatch batcher;
+    private Rectangle viewport;
 
-    private int midPointY;
     private int gameHeight;
+    private int gameWidth;
+    private float aspect_ratio;
 
-    public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
+
+    public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
         this.myWorld = world;
 
+        this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-        this.midPointY = midPointY;
+        this.aspect_ratio = (float)gameWidth/(float)gameHeight;
 
-        cam = new OrthographicCamera();
+        this.batcher = new SpriteBatch();
 
-        //arg 1: yes to ortho cam (to view things in 2D); arg 2: width of cam; arg 3: height of cam;
-        cam.setToOrtho(true, 136, gameHeight);
-        cam.update();
-
-
-        batcher = new SpriteBatch();
-        //attach batcher to cam
-        batcher.setProjectionMatrix(cam.combined);
-
+        this.cam = new OrthographicCamera();
+        this.cam.setToOrtho(true, 1280, 720);
+        this.cam.update();
         shapeRenderer = new ShapeRenderer();
-        //attach the shapeRenderer to our camera
         shapeRenderer.setProjectionMatrix(cam.combined);
 
     }
 
     public void render(float runTime) {
 //        Gdx.app.log("GameRenderer", "render");
+        Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
         Player player = myWorld.getPlayer();
         PickUps speedUp = myWorld.getSpeedUp();
@@ -67,16 +69,13 @@ public class GameRenderer {
 
         //draw background colour
         shapeRenderer.setColor(55/255.0f, 80/255.0f, 100/255.0f, 1);
-        shapeRenderer.rect(0, 0, 136, midPointY + 66);
+        shapeRenderer.rect(0, 0, this.gameWidth, this.gameHeight);
 
         //tells shapeRenderer to finish rendering (IMPORTANT; must be done every time)
         shapeRenderer.end();
 
         //begin SpriteBatch
         batcher.begin();
-        //disable transparency; this is good for drawing images that do not require transparency
-//        batcher.disableBlending();
-//        batcher.draw(AssetLoader.bg, 0, midPointY +23, 136, 43);
 
         //enable transparency for objects WITH transparency
         batcher.enableBlending();
@@ -92,7 +91,9 @@ public class GameRenderer {
     public void renderObjects(ArrayList<GameObject> list) {
         int count = 0;
         for(GameObject i: list) {
-            batcher.draw(AssetLoader.textures.get(count), i.getX(), i.getY(), i.getWidth(), i.getHeight());
+            float scale = this.gameWidth/i.getWidth();
+            System.out.println(scale);
+            batcher.draw(AssetLoader.textures.get(count), i.getX()*GameConstants.SCALE_X, i.getY()*GameConstants.SCALE_Y, i.getWidth()*GameConstants.SCALE_X, i.getHeight()*GameConstants.SCALE_Y);
             count +=1;
         }
     }

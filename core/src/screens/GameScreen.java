@@ -1,8 +1,12 @@
 package screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+
 import gameobjects.Player;
 
 import gamehelpers.InputHandler;
@@ -16,18 +20,21 @@ public class GameScreen implements Screen {
     private GameWorld world;
     private GameRenderer renderer;
     private float runTime;
+    private Game game;
+    private Stage stage;
 
-    public GameScreen() {
+    public GameScreen(Game game) {
+        this.game = game;
+
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
+
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
-        float gameWidth = 136;
-        float gameHeight = screenHeight/(screenWidth/gameWidth);
+        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        int midPointY = (int) (gameHeight/2);
-
-        world = new GameWorld(midPointY); //initialize world
-        renderer = new GameRenderer(world, (int) gameHeight, midPointY); //initialize renderer
+        this.stage = new Stage(new StretchViewport(1280, 720));
+        world = new GameWorld(); //initialize world
+        renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
         Gdx.input.setInputProcessor(new InputHandler(world.getPlayer()));
         Gdx.app.log("GameScreen", "attached");
     }
@@ -40,10 +47,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //sets a colour to fill the screen (in this case, RGB of 10,15,230, with opacity of 1)
-//        Gdx.gl.glClearColor(10 / 255.0f, 15 / 255.0f, 230 / 255.0f, 1f);
-        //fills screen with selected colour
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //Background Colour
+        Gdx.gl.glClearColor(229/255.0f, 214/255.0f, 136/255.0f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         runTime += delta;
         world.update(delta);

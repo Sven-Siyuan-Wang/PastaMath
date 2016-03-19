@@ -23,9 +23,9 @@ public class GameWorld {
     private PickUps speedUp, shield;
 
 
-    public GameWorld(int midPointY) {
+    public GameWorld() {
         //initialize player here
-        player1 = new Player(33, midPointY-5, 17, 12);
+        player1 = new Player(33, 33, 17, 12);
         //initializing first speed up item
         speedUp = new PickUps(90,90, 17, 12);
         objects.add(speedUp);
