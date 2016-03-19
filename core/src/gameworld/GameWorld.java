@@ -10,8 +10,6 @@ import gameobjects.PickUps;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
 
-
-
 /**
  * Created by Hazel on 28/2/2016.
  */
@@ -23,39 +21,30 @@ public class GameWorld {
     private Stage stage;
     private PickUps speedUp, shield;
 
-    //TODO: initialize all players and game objects here- SERVER
-    private ArrayList<Player> players;
 
-    //TODO: follow template above- make original and copy for buffer
-
-<<<<<<< HEAD
-    public GameWorld(Stage stage) {
-        //initialize player here
-        player1 = new Player(200, 200, 150, 150);
-=======
     public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
     public static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
-
+    //TODO: initialize all players and game objects here- SERVER
+    private ArrayList<Player> players;
     public int generate_counter;
->>>>>>> 8e45b887993c4947fabb38b2c961c6f1212d8e2f
 
-    public GameWorld() {
+    //TODO: follow template above- make original and copy for buffer
+
+    public GameWorld(Stage stage) {
         //initialize player here
-        player1 = new Player(33, 5, 17, 12);
+        player1 = new Player(200, 200, 150, 150);
+
         //TODO: initialize players as they connect to server
         //initializing first speed up item
-        speedUp = new PickUps(400,400, 125,125);
+        speedUp = new PickUps(400, 400, 125,125);
         objects.add(speedUp);
 
-<<<<<<< HEAD
         //TODO: intiialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         //all the items are initialized inside the buffer already when it is constructed
-
         this.stage = stage;
-=======
->>>>>>> 8e45b887993c4947fabb38b2c961c6f1212d8e2f
+
     }
 
     //TODO(Extra): consider doing thread version? (complicated)
@@ -104,9 +93,6 @@ public class GameWorld {
 
         simple_item_buffer.items_currently_appearing= new ArrayList<Item>(simple_item_buffer_copy.items_currently_appearing);
 
-
-
-        //ORIGINAL
         for(GameObject i: objects) {
             if (i instanceof PickUps) {
                 if (player1.collides(i)) {
@@ -128,19 +114,16 @@ public class GameWorld {
     public Simple_Item_Buffer getSimple_item_buffer(){
         return simple_item_buffer;
     }
-    /////////////////////////////////////////////////////
+
 
 
     //ORIGINAL
     public Player getPlayer() {
         return player1;
     }
-<<<<<<< HEAD
 
     public Stage getStage() {return this.stage; }
 
-=======
->>>>>>> 8e45b887993c4947fabb38b2c961c6f1212d8e2f
     public PickUps getSpeedUp() { return speedUp; }
     public ArrayList<GameObject> getObjects() { return this.objects; }
 

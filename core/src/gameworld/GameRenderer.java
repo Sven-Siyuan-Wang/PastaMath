@@ -97,18 +97,11 @@ public class GameRenderer {
 //        batcher.draw(AssetLoader.up, 100*GameConstants.SCALE_X, 180*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 //        batcher.draw(AssetLoader.left, 20*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 
-<<<<<<< HEAD
 
-
-//        renderObjects(myWorld.getObjects());
 
         batcher.draw(AssetLoader.player, player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
-=======
-        //ORIGINAL
-        renderObjects(myWorld.getObjects());
-        //OURS
+
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
->>>>>>> 8e45b887993c4947fabb38b2c961c6f1212d8e2f
 
         //end spritebatch
         batcher.end();
