@@ -34,6 +34,9 @@ public class Player implements GameObject {
     private boolean speedUp;
     float speedUpCounter = 0;
 
+    //todo: initialize booleans for other attributes(to change upon collision)
+    private boolean shielded= false; //its score won't be affected
+    private int currentValue= 0;
 
 
     //constructor for Player class
@@ -68,11 +71,19 @@ public class Player implements GameObject {
             } else {
                 this.speedUpCounter += 1*delta;
 //                Gdx.app.log("Player", "speedUpCounter is " + this.speedUpCounter + " and delta is " + delta);
-
             }
         }
 
         boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
+
+        //todo: if player is shielded, dont let its score change
+        if(shielded){
+            //do nothing;
+        }
+        else{
+            if (col)
+        }
+        //todo: if player collided into something, adjust effects accordingly- change score or speed
 
 
 
@@ -87,7 +98,6 @@ public class Player implements GameObject {
             speedUp = true;
             Gdx.app.log("Player", "sped up");
             this.velocity += 10;
-
         }
     }
 
@@ -103,10 +113,35 @@ public class Player implements GameObject {
         if(position.x < (a.getX() + a.getWidth())) {
 //            Gdx.app.log("Player", "collided, and x is " + position.x + " and pickup's x is " + pickup.getX() + " and pickup's width is" + pickup.getWidth());
             return (Intersector.overlaps(boundingCircle, (Rectangle) a.getCollider()));
-
         }
         return false;
     }
+
+
+    //TODO: methods FOR ITEMS to change player's situation attributes
+    public void setShielded(){
+        shielded= true;
+        //todo: need to set a timer?
+    }
+
+    public void setCurrentValue(int number, String operand){
+        if (operand.equals("plus")){
+            currentValue+= number;
+        }
+
+        if(operand.equals("multiply")){
+            currentValue*= number;
+        }
+    }
+
+    //TODO: if player collides into another player, change score
+    public boolean knock_into(Player other){
+        return true; //TODO: FIND HOW TO USE INTERSECTOR
+
+
+    }
+
+
 
     public void destroy() {
 

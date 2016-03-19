@@ -1,9 +1,14 @@
 package gameobjects;
 
+import gameworld.GameObject;
+import gameworld.GameWorld;
+
 /**
  * Created by valerie_tan on 3/18/2016.
  */
-public class Item {
+
+//TODO: WAIT FOR SIYUAN'S CLASS
+public abstract class Item implements GameObject{
 
     //public int lifespan; //todo: quite difficult to check for the time up
     //public boolean expired; //difficult
@@ -18,9 +23,7 @@ public class Item {
     //TODO: SIYUAN HAVE TO CODE THE EFFECT ATTRIBUTES SO THAT WHEN I PASS THEM TO GAMERENDERER AND DRAW THEM EASILY AND IMMEDIATELY
     //TODO: all calculations or whatever must be intiialized in this class alr so in gamerenderer can draw directly.
     public String colour;
-    public int value;
-    public String operation;
-    public String number_n_operand;
+
 
 
     public Item(){ //default constructor, example
@@ -38,4 +41,12 @@ public class Item {
     public Item(int value){
         this.value= value;
     }
+
+    //TODO: ensure that this destroy method is implemented in Siyuan's Item class
+    public void destroy() {
+        GameWorld.objectsCopy.remove(this);
+    }
+
+    //TODO: abstract method to be implemented in the different kind of items
+    public abstract void update_player_situation(Player player);
 }
