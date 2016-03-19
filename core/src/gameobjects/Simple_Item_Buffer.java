@@ -9,53 +9,49 @@ import java.util.Random;
 public class Simple_Item_Buffer {
     //THIS CLASS HANDLES ALL KINDS OF ITEMS: NUMBERS WITH OPERATIONS, BUFFS.
 
-    private int game_width;
-    private int game_height;
-    private static ArrayList<Item> items_currently_appearing; //static ArrayList in buffer class
+    public ArrayList<Item> items_currently_appearing; //static ArrayList in buffer class
     public static int max_items_capacity;
+    private int random_item_chooser;
 
     public Simple_Item_Buffer() { //default constructor
         items_currently_appearing = new ArrayList<Item>();
-        max_items_capacity = 5; //
-        for (int i = 0; i < max_items_capacity; i++) {
-            generate_Items();
-        }
+        max_items_capacity = 15;
+        generate_Items();
+
     }
-
-    //METHODS TO INTIIALIZE VARIOUS ITEMS
-
-    //todo: generate numbers and powerups that are extension of Items
 
     public void generate_Items() {
-        //generates 3 number_n_operands + 1 power-ups
+        //generates 2 number_n_operands + 1 power-ups
         //todo: assign random coords to a newly randomly generated item and add into the list
-        //Item item_without_coord = new NumberAndOperand();
-        //assign_random_coord(item_without_coord);
         ///items_currently_appearing.add(item_without_coord);
+        for (int i = 0; i < 8; i++) {
+            items_currently_appearing.add(new NumberAndOperand());
+        }
+        items_currently_appearing.add(new Shield());
+        items_currently_appearing.add(new SpeedUp());
+        items_currently_appearing.add(new SpeedUp());
+
     }
 
+    public ArrayList<Item> getItems_currently_appearing(){
+        return items_currently_appearing;
+    }
 
-    //TODO: create function to generate random coord within screen range
-    //when item calls for it, they are assigned coords
-    //USED BY PRODUCER
+    //TODO: implement a method to generate new items randomly
+    public void generate_random_Item(){
+        Random random = new Random();
+        random_item_chooser= random.nextInt(5);
 
+        if(random_item_chooser==1 || random_item_chooser== 3 || random_item_chooser== 5){
+            items_currently_appearing.add(new NumberAndOperand());
+        }
+        else if(random_item_chooser==4){
+            items_currently_appearing.add(new SpeedUp());
+        }
+        else{
+            items_currently_appearing.add(new Shield());
+        }
 
-    //TODO: consider if this should be put in Val_Item class directly
-    public void assign_random_coord(Item item_to_assign_location) {
-        //generate a random number (use integer, easier to check for overlap)
-        //todo: get game info - remember to minus off to leave space
-        int game_width = 100 - 4;
-        int game_height = 50 - 4;
-
-        Random randomizer = new Random();
-        //nextInt gives 0 to n-1
-        int x = randomizer.nextInt(game_width + 2);
-        int y = randomizer.nextInt(game_height + 2);
-
-        //item_to_assign_location.x_coord = x;
-        //item_to_assign_location.y_coord = y;
-
-        //item_to_assign_location.
     }
 
 }

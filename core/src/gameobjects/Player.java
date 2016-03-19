@@ -37,6 +37,7 @@ public class Player implements GameObject {
     //todo: initialize booleans for other attributes(to change upon collision)
     private boolean shielded= false; //its score won't be affected
     private int currentValue= 0;
+    private int collision_count=0; //after 3 collisions, the shield will not work anymore
 
 
     //constructor for Player class
@@ -86,8 +87,6 @@ public class Player implements GameObject {
             //change score
         }
         //todo: if player collided into something, adjust effects accordingly- change score or speed
-
-
     }
 
     public void onClick() {
@@ -120,11 +119,44 @@ public class Player implements GameObject {
         return false;
     }
 
+    public boolean collides(Item item){
+       return(Intersector.overlaps(boundingCircle, item.getCollider()));
+    }
+
+    public boolean knock_into(Player other){
+        return (Intersector.overlaps(boundingCircle, other.boundingCircle));
+    }
+
+    public void decreaseScoreUponKnock(){
+        if (currentValue<= 10){
+            currentValue= 0;
+        }
+        else {
+            currentValue -= 10;
+        }
+    }
 
     //TODO: methods FOR ITEMS to change player's situation attributes
-    public void setShielded(){
-        shielded= true;
-        //todo: need to set a timer?
+    public void setShielded(boolean shielded){
+        this.shielded= shielded;
+    }
+    public boolean getShielded(){
+        return this.shielded;
+    }
+    public int getCollision_count(){
+        return this.collision_count;
+    }
+    public void update_collision_count(){
+        if(collision_count==3){
+            resetCollision_count();
+            setShielded(false); //player loses shield after colliding for 3 times
+        }
+        else{
+            collision_count++; //will only start counting if the person has a shield
+        }
+    }
+    public void resetCollision_count(){
+        this.collision_count=0;
     }
 
     public void setCurrentValue(int number, String operand){
@@ -137,12 +169,6 @@ public class Player implements GameObject {
         }
     }
 
-    //TODO: if player collides into another player, change score
-    public boolean knock_into(Player other){
-        return true; //TODO: FIND HOW TO USE INTERSECTOR
-
-
-    }
 
 
 
