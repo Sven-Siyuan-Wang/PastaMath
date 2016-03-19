@@ -10,6 +10,8 @@ import gameobjects.PickUps;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
 
+
+
 /**
  * Created by Hazel on 28/2/2016.
  */
@@ -21,23 +23,27 @@ public class GameWorld {
     private Stage stage;
     private PickUps speedUp, shield;
 
+    //TODO: initialize all players and game objects here- SERVER
+    private ArrayList<Player> players;
+
+    //TODO: follow template above- make original and copy for buffer
 
     public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
     public static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
-    //TODO: initialize all players and game objects here- SERVER
-    private ArrayList<Player> players;
+
     public int generate_counter;
 
     //TODO: follow template above- make original and copy for buffer
 
     public GameWorld(Stage stage) {
         //initialize player here
-        player1 = new Player(200, 200, 150, 150);
-
+        players = new ArrayList<Player>();
+        player1 = new Player(33, 5, 17, 12);
+        players.add(player1);
         //TODO: initialize players as they connect to server
         //initializing first speed up item
-        speedUp = new PickUps(400, 400, 125,125);
+        speedUp = new PickUps(400,400, 125,125);
         objects.add(speedUp);
 
         //TODO: intiialize buffer of items and pickups
@@ -93,6 +99,9 @@ public class GameWorld {
 
         simple_item_buffer.items_currently_appearing= new ArrayList<Item>(simple_item_buffer_copy.items_currently_appearing);
 
+
+
+        //ORIGINAL
         for(GameObject i: objects) {
             if (i instanceof PickUps) {
                 if (player1.collides(i)) {
@@ -114,7 +123,7 @@ public class GameWorld {
     public Simple_Item_Buffer getSimple_item_buffer(){
         return simple_item_buffer;
     }
-
+    /////////////////////////////////////////////////////
 
 
     //ORIGINAL

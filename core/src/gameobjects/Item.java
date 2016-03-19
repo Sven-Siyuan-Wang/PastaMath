@@ -15,15 +15,11 @@ import gameworld.GameWorld;
  */
 public abstract class Item implements GameObject{
 
-    //TODO: obtain game width and height
-
-    //TODO: SIYUAN HAVE TO CODE THE EFFECT ATTRIBUTES SO THAT WHEN I PASS THEM TO GAMERENDERER AND DRAW THEM EASILY AND IMMEDIATELY
-    //TODO: all calculations or whatever must be intiialized in this class alr so in gamerenderer can draw directly.
     public String colour;
 
-    //TODO: abstract method to be implemented in the different kind of items
+
     public abstract void update_player_situation(Player player);
-    //TODO: implement getName method here
+
     public abstract String getName();
 
     private Vector2 position;
@@ -36,8 +32,9 @@ public abstract class Item implements GameObject{
     private Rectangle boundingRect;
 
     public Item(){
+        position = new Vector2();
         this.assign_random_coord();
-        //this.position = new Vector2(x,y);
+
         boundingRect = new Rectangle(this.position.x, this.position.y, width, height);
         this.colour= "yellow";
     }
@@ -86,9 +83,10 @@ public abstract class Item implements GameObject{
         float x = randomizer.nextFloat() * (Gdx.graphics.getWidth()- 4) + 2 ;
         float y = randomizer.nextFloat() * (Gdx.graphics.getHeight() - 4) + 2;
 
-        this.position.x= x;
-        this.position.y= y;
+        position.x= x;
+        position.y= y;
     }
+
 
 
 

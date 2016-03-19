@@ -37,6 +37,8 @@ public class AssetLoader {
         speedUp = new Texture(Gdx.files.internal("data/speedup.png"));
         textures.put("speedUp",speedUp);
 
+
+
         Texture mul2 = new Texture(Gdx.files.internal("data/NormalPickups/multiply2.png"));
         Texture mul3 = new Texture(Gdx.files.internal("data/NormalPickups/multiply3.png"));
         Texture plus1 = new Texture(Gdx.files.internal("data/NormalPickups/plus1.png"));

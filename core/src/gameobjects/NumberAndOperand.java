@@ -18,8 +18,6 @@ public class NumberAndOperand extends Item { //All these are a form of item
     private static int largest_number=9;
     private static int operand_chooser;
     private static int choose_2_or_3;
-    //TODO: SIYUAN INSERT CORRESPONDING TEXT IMAGE
-    private File image;
 
 
     //attributes for number_and_operand
@@ -28,13 +26,13 @@ public class NumberAndOperand extends Item { //All these are a form of item
         value= random.nextInt(9);
         operand_chooser= random.nextInt(50);
         if (operand_chooser<40){
-            operation= "+";
+            operation= "plus";
         }
         else{
-            operation= "*";
+            operation= "mul";
         }
         //overwrite value cos only need mul2 and mul3
-        if (operation.equals("*")){
+        if (operation.equals("mul")){
             choose_2_or_3= random.nextInt(30);
             if (choose_2_or_3<=15){
                 value=2;
@@ -48,7 +46,9 @@ public class NumberAndOperand extends Item { //All these are a form of item
 
     public void update_player_situation(Player player){
         player.setCurrentValue(value, operation);
-    };
+    }
+
+
 
     public String getName(){
         return number_n_operand;

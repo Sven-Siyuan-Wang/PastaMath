@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -36,7 +37,6 @@ public class GameRenderer {
     private float aspect_ratio;
 
 
-
     public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
         this.myWorld = world;
 
@@ -67,7 +67,6 @@ public class GameRenderer {
         Simple_Item_Buffer simple_item_buffer= myWorld.getSimple_item_buffer();
         //todo:use one hard-coded player for testing- remove later
         players.add(player);
-       ///////////////////////////////////////////////////////////////////
 
 
 
@@ -97,12 +96,10 @@ public class GameRenderer {
 //        batcher.draw(AssetLoader.up, 100*GameConstants.SCALE_X, 180*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 //        batcher.draw(AssetLoader.left, 20*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 
-
-
-        batcher.draw(AssetLoader.player, player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
-
+        //ORIGINAL
+        renderObjects(myWorld.getObjects());
+        //OURS
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
-
         //end spritebatch
         batcher.end();
 
@@ -125,7 +122,7 @@ public class GameRenderer {
     public void renderItems(ArrayList<Item> list){
         for(Item item: list){
             batcher.enableBlending();
-            batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+            batcher.draw(new Texture(Gdx.files.internal("data/Character/Character1.png")), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
         }
     }
 
