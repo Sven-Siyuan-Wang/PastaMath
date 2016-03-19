@@ -16,6 +16,9 @@ public class AssetLoader {
     public static Texture texture, speedUp, player;
     public static TextureRegion bg, grass;
 
+    public static Texture up, down, left, right;
+    public static Texture touchBackground, touchKnob;
+
     public static TextureRegion skullUp, skullDown, bar;
     public static ArrayList<Texture> textures = new ArrayList<Texture>();
 
@@ -32,6 +35,14 @@ public class AssetLoader {
 
         speedUp = new Texture(Gdx.files.internal("data/speedup.png"));
         textures.add(speedUp);
+
+        up = new Texture(Gdx.files.internal("data/Buttons/up.png"));
+        down = new Texture(Gdx.files.internal("data/Buttons/down.png"));
+        left = new Texture(Gdx.files.internal("data/Buttons/left.png"));
+        right = new Texture(Gdx.files.internal("data/Buttons/right.png"));
+
+        touchBackground = new Texture(Gdx.files.internal("data/Buttons/touchbackground.png"));
+        touchKnob = new Texture(Gdx.files.internal("data/Buttons/knob.png"));
 
 
 

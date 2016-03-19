@@ -2,6 +2,7 @@ package gamehelpers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 
 import gameobjects.Player;
 
@@ -10,21 +11,26 @@ import gameobjects.Player;
  */
 public class InputHandler implements InputProcessor {
     private Player myPlayer;
+    Touchpad touchpad;
+    Touchpad.TouchpadStyle touchpadStyle;
+
 
     public InputHandler(Player player) {
         this.myPlayer = player;
     }
+
+    
 
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case (Input.Keys.DOWN):
                 //down
-                myPlayer.setDown(true);
+                myPlayer.setUp(true);
                 break;
             case (Input.Keys.UP):
                 //up
-                myPlayer.setUp(true);
+                myPlayer.setDown(true);
                 break;
             case (Input.Keys.LEFT):
                 //left
@@ -43,11 +49,11 @@ public class InputHandler implements InputProcessor {
         switch (keycode) {
             case (Input.Keys.DOWN):
                 //down
-                myPlayer.setDown(false);
+                myPlayer.setUp(false);
                 break;
             case (Input.Keys.UP):
                 //up
-                myPlayer.setUp(false);
+                myPlayer.setDown(false);
                 break;
             case (Input.Keys.LEFT):
                 //left

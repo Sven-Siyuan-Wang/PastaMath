@@ -77,7 +77,11 @@ public class GameRenderer {
         //begin SpriteBatch
         batcher.begin();
 
-
+        batcher.enableBlending();
+//        batcher.draw(AssetLoader.down, 100 * GameConstants.SCALE_X, 20 * GameConstants.SCALE_Y, 75 * GameConstants.SCALE_X, 75 * GameConstants.SCALE_Y);
+//        batcher.draw(AssetLoader.right, 180*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
+//        batcher.draw(AssetLoader.up, 100*GameConstants.SCALE_X, 180*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
+//        batcher.draw(AssetLoader.left, 20*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 
         renderObjects(myWorld.getObjects());
 
