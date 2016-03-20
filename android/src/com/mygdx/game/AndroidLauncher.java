@@ -119,8 +119,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 	@Override
 	public void unlockAchievement()
 	{
-		Games.Achievements.unlock(gameHelper.getApiClient(),
-				getString(R.string.achievement_dum_dum));
+//		Games.Achievements.unlock(gameHelper.getApiClient(),
+//				getString(R.string.achievement_dum_dum));
 	}
 
 	@Override
@@ -128,8 +128,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 	{
 		if (isSignedIn() == true)
 		{
-			Games.Leaderboards.submitScore(gameHelper.getApiClient(),
-					getString(R.string.leaderboard_highest), highScore);
+//			Games.Leaderboards.submitScore(gameHelper.getApiClient(),
+//					getString(R.string.leaderboard_highest), highScore);
 		}
 	}
 
@@ -151,8 +151,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 	{
 		if (isSignedIn() == true)
 		{
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
-					getString(R.string.leaderboard_highest)), requestCode);
+//			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(),
+//					getString(R.string.leaderboard_highest)), requestCode);
 		}
 		else
 		{
