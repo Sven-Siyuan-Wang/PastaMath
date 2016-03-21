@@ -23,7 +23,7 @@ public class NumberAndOperand extends Item { //All these are a form of item
     //attributes for number_and_operand
     public NumberAndOperand(){
         Random random = new Random();
-        value= random.nextInt(9);
+        value= random.nextInt(8)+1;
         operand_chooser= random.nextInt(50);
         if (operand_chooser<40){
             operation= "plus";

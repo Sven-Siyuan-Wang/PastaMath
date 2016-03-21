@@ -10,6 +10,6 @@ public class SpeedUp extends PowerUps{
     };
 
     public String getName(){
-        return "speedup";
+        return "speedUp";
     }
 }

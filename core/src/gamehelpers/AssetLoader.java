@@ -14,7 +14,7 @@ import gameworld.GameObject;
  * Created by Hazel on 29/2/2016.
  */
 public class AssetLoader {
-    public static Texture texture, speedUp, player;
+    public static Texture texture, speedUp, player, shield;
     public static TextureRegion bg, grass;
 
     public static Texture up, down, left, right;
@@ -36,6 +36,11 @@ public class AssetLoader {
 
         speedUp = new Texture(Gdx.files.internal("data/speedup.png"));
         textures.put("speedUp",speedUp);
+
+        shield = new Texture(Gdx.files.internal("data/shield.png"));
+        textures.put("shield",shield);
+
+
 
 
 

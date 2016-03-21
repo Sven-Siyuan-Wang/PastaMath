@@ -97,6 +97,7 @@ public class GameRenderer {
 //        batcher.draw(AssetLoader.left, 20*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
+        renderPlayers(players);
         //end spritebatch
         batcher.end();
 
@@ -109,15 +110,17 @@ public class GameRenderer {
     public void renderItems(ArrayList<Item> list){
         for(Item item: list){
             batcher.enableBlending();
-            batcher.draw(new Texture(Gdx.files.internal("data/NormalPickups/plus1.png")), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+            System.out.println(item.getName());
+            batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
         }
     }
 
-    publiv void renderPlayers(ArrayList<Player> players){
+    public void renderPlayers(ArrayList<Player> players){
         for(Player player: players){
             batcher.enableBlending();
-            batcher.draw();
+            batcher.draw(AssetLoader.textures.get("player"), player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
         }
+
     }
 
 

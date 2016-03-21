@@ -191,11 +191,11 @@ public class Player implements GameObject {
     }
 
     public void setCurrentValue(int number, String operand){
-        if (operand.equals("+")){
+        if (operand.equals("plus")){
             currentValue+= number;
         }
 
-        if(operand.equals("*")){
+        if(operand.equals("mul")){
             currentValue*= number;
         }
     }
