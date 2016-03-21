@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -160,7 +161,6 @@ public class NetworkActivity extends AppCompatActivity implements
     @Override
     public void onP2PDisconnected(String participant) {
 
-
     }
 
     @Override
@@ -179,6 +179,8 @@ public class NetworkActivity extends AppCompatActivity implements
         Log.d(TAG, "UpdateRoom: "+room.getParticipants().size());
         mParticipants = room.getParticipants();
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     //RoomStatusUpdateListener stuff
     @Override
@@ -221,7 +223,7 @@ public class NetworkActivity extends AppCompatActivity implements
     }
     //end of RoomStatusUpdateListener stuff
 
-
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     //stuff for RoomUpdateListener
     final static int RC_WAITING_ROOM = 10002;
@@ -282,6 +284,14 @@ public class NetworkActivity extends AppCompatActivity implements
     }
 
     //end of stuff for RoomUpdateListener
+
+
+
+
+
+
+
+
 
     //new stuff
 
@@ -347,7 +357,7 @@ public class NetworkActivity extends AppCompatActivity implements
 //        startActivityForResult(intent, RC_SELECT_PLAYERS);
 
         Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, 2);
-        startActivityForResult(i, RC_WAITING_ROOM);
+        startActivityForResult(i, RC_WAITING_ROOM); //returns onActivityResult
 
         Log.d(TAG, "showWaitingRoom done");
     }
@@ -429,6 +439,13 @@ public class NetworkActivity extends AppCompatActivity implements
         if (request == RC_WAITING_ROOM) {
             if (response == Activity.RESULT_OK) {
                 // (start game)
+                Log.d(TAG, "waiting room result ok");
+                Intent intent = new Intent(this, AndroidLauncher.class);
+                //EditText editText = (EditText) findViewById(R.id.edit_message);
+                //String message = editText.getText().toString();
+                //intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+                Log.d(TAG, "waiting room result ok done");
             }
             else if (response == Activity.RESULT_CANCELED) {
                 // Waiting room was dismissed with the back button. The meaning of this
@@ -437,15 +454,31 @@ public class NetworkActivity extends AppCompatActivity implements
                 // continue to connect in the background.
 
                 // in this example, we take the simple approach and just leave the room:
-                Games.RealTimeMultiplayer.leave(mGoogleApiClient, null, mRoomId);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                Log.d(TAG, "waiting room result cancelled");
+                //Games.RealTimeMultiplayer.leave(mGoogleApiClient, null, mRoomId);
+                //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                if (mRoomId != null) {
+                    Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+                    mRoomId = null;
+                    Log.d(TAG, "waiting room result cancelled if");
+                    //finish();
+
+                } else {
+                    Log.d(TAG, "waiting room result cancelled else");
+                    //finish();
+                }
+                Log.d(TAG, "waiting room result cancelled done");
             }
             else if (response == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 // player wants to leave the room.
+                Log.d(TAG, "waiting room result left room");
                 Games.RealTimeMultiplayer.leave(mGoogleApiClient, null, mRoomId);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                Log.d(TAG, "waiting room result left room done");
             }
         }
 
     }
+
+
 }
