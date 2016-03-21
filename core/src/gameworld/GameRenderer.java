@@ -96,9 +96,6 @@ public class GameRenderer {
 //        batcher.draw(AssetLoader.up, 100*GameConstants.SCALE_X, 180*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 //        batcher.draw(AssetLoader.left, 20*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y, 75*GameConstants.SCALE_X,75*GameConstants.SCALE_Y);
 
-        //ORIGINAL
-        renderObjects(myWorld.getObjects());
-        //OURS
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
         //end spritebatch
         batcher.end();
@@ -108,21 +105,11 @@ public class GameRenderer {
 
     }
 
-    //ORIGINAL:
-    public void renderObjects(ArrayList<GameObject> list) {
-        //TODO: Google how to draw items with strings printed on them
-        for (GameObject i: list) {
-            batcher.enableBlending();
-            //batcher.draw(AssetLoader.textures.get(i.getName()), i.getX()*GameConstants.SCALE_X, i.getY()*GameConstants.SCALE_Y, i.getWidth()*GameConstants.SCALE_X, i.getHeight()*GameConstants.SCALE_Y);
-        }
-    }
-
-    //OURS
     //TODO: renderItems inside the item_buffer
     public void renderItems(ArrayList<Item> list){
         for(Item item: list){
             batcher.enableBlending();
-            batcher.draw(new Texture(Gdx.files.internal("data/Character/Character1.png")), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+            batcher.draw(new Texture(Gdx.files.internal("data/NormalPickups/plus1.png")), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
         }
     }
 
