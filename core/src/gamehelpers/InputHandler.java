@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -23,6 +24,9 @@ public class InputHandler implements InputProcessor {
     Drawable touchBackground;
     Drawable touchKnob;
     Stage stage;
+    int joyX;
+    int joyY;
+    boolean touched;
 
 
 
@@ -48,8 +52,8 @@ public class InputHandler implements InputProcessor {
     }
 
     public void render() {
-        myPlayer.setX(myPlayer.getX() + touchpad.getKnobPercentX()*myPlayer.getVelocity());
-        myPlayer.setY(myPlayer.getY() + touchpad.getKnobPercentY()*myPlayer.getVelocity());
+        //Render joystick here
+
     }
 
     @Override
@@ -105,22 +109,55 @@ public class InputHandler implements InputProcessor {
     }
 
     @Override
+    /* Initialize joystick
+     */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        myPlayer.onClick(screenX, screenY);
+//        myPlayer.onClick(screenX, screenY);
+        touched = true;
+        joyX = screenX;
+        joyY = screenY;
         return false;
     }
 
     @Override
+    /* Stop moving
+     */
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Gdx.app.log("InputHandler", "not clicked anymore");
         myPlayer.onNotClick();
+        touched = false;
         return false;
     }
 
     @Override
+    /* If screenX > joyX+50, move right
+       If screenx < joyX-50, move left
+       If screenY > joyY+50, move up
+       If screenY < joyY-50, move down
+     */
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
-        myPlayer.onClick(screenX, screenY);
+        if(screenX > joyX+50) {
+            myPlayer.setRight(true);
+            myPlayer.setLeft(false);
+        } else if(screenX < joyX-50) {
+            myPlayer.setLeft(true);
+            myPlayer.setRight(false);
+        } else {
+            myPlayer.setRight(false);
+            myPlayer.setLeft(false);
+        }
+        if(screenY > joyY +50) {
+            myPlayer.setUp(true);
+            myPlayer.setDown(false);
+        } else if(screenY <joyY-50) {
+            myPlayer.setDown(true);
+            myPlayer.setUp(false);
+        } else {
+            myPlayer.setUp(false);
+            myPlayer.setDown(false);
+        }
+
         return false;
     }
 

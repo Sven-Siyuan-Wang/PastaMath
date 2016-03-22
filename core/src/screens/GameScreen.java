@@ -20,6 +20,7 @@ public class GameScreen implements Screen {
     private float runTime;
     private Game game;
     private Stage stage;
+    private InputHandler myInput;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -34,7 +35,8 @@ public class GameScreen implements Screen {
 
         world = new GameWorld(this.stage); //initialize world
         renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
-        Gdx.input.setInputProcessor(new InputHandler(world.getPlayer(), this.stage));
+        myInput = new InputHandler(world.getPlayer(), this.stage);
+        Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameScreen", "attached");
     }
@@ -55,6 +57,7 @@ public class GameScreen implements Screen {
         runTime += delta;
         world.update(delta);
         renderer.render(runTime);
+        myInput.render();
 
 //        Gdx.app.log("GameScreen FPS", (1/delta)+"");
 
