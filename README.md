@@ -14,6 +14,27 @@ This will go on until one player reaches the desired number.
 
 ## Packages and Classes 
 
+## UI & Dimensions
+
+![Image of App Icon](https://github.com/Sven-Siyuan-Wang/PastaMath/blob/master/android/assets/data/exampleUI.png)
+
+Blue: Map dimensions 
+
+Green: Pickups 
+
+Pink: Characters 
+
+Purple: Shows if buff is activated or not 
+
+Bottom row: Shows scores and players within the game 
+
+Canvas size: 1280*720 px 
+
+Map size: 1280*620 px 
+
+Character size: 100*100 px 
+
+Pickups size: 75*75px 
 
 ## Contributors 
 Wang Siyuan 
