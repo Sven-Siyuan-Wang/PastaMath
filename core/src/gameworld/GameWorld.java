@@ -80,6 +80,8 @@ public class GameWorld {
             for(Item item: simple_item_buffer.items_currently_appearing){
                 if(each_player.collides(item)){
                     item.destroy();
+                    //todo: remove corresponding coords
+                    simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
                     item.update_player_situation(each_player);
                     if(each_player.getShielded()) {
                         each_player.update_collision_count();
