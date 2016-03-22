@@ -25,6 +25,7 @@ public class InputHandler implements InputProcessor {
     Stage stage;
 
 
+
     public InputHandler(Player player, Stage stage) {
         this.myPlayer = player;
         touchpadskin = new Skin();

@@ -50,7 +50,7 @@ public class Player implements GameObject {
         this.height = height;
         this.boundingCircle = new Circle();
 
-        velocity = 50;
+        velocity = 1;
     }
 
     public void update(float delta) {
@@ -97,18 +97,18 @@ public class Player implements GameObject {
 //            Gdx.app.log("Player", "LEFT: now moving from " + position.x + " to... " + x);
             left = true;
             right = false;
-        } else if (x > (position.x+75)) {
+        } else if (x > (position.x)) {
 //            Gdx.app.log("Player", "RIGHT: now moving from " + position.x + " to... " + x);
             right = true;
             left = false;
         }
 
-        if(y < (position.y)) {
-//            Gdx.app.log("Player", "UP: now moving from " + position.y + " to... " + y);
+        if(y > (position.y)) {
+            Gdx.app.log("Player", "UP: now moving from " + position.y + " to... " + y);
             down = true;
             up = false;
-        } else if(y > (position.y)) {
-//            Gdx.app.log("Player", "DOWN: now moving from " + position.y + " to... " + y);
+        } else if(y < (position.y)) {
+            Gdx.app.log("Player", "DOWN: now moving from " + position.y + " to... " + y);
             up = true;
             down = false;
         }
@@ -128,7 +128,7 @@ public class Player implements GameObject {
         if(!speedUp) {
             speedUp = true;
             Gdx.app.log("Player", "sped up");
-            this.velocity += 10;
+            this.velocity += 1;
 
         }
     }
@@ -151,7 +151,8 @@ public class Player implements GameObject {
     }
 
     public boolean collides(Item item){
-       return(Intersector.overlaps(boundingCircle, item.getCollider()));
+//       return(Intersector.overlaps(boundingCircle, item.getCollider()));
+        return false;
     }
 
     public boolean knock_into(Player other){
