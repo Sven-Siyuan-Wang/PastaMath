@@ -106,7 +106,7 @@ public class GameRenderer {
     public void renderItems(ArrayList<Item> list){
         for(Item item: list){
             batcher.enableBlending();
-            System.out.println(item.getName());
+            //System.out.println(item.getName());
             batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
         }
     }
