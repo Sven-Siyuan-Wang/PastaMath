@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
+import java.util.Vector;
 
 import gameworld.GameObject;
 import gameworld.GameRenderer;
@@ -33,7 +34,7 @@ public abstract class Item implements GameObject{
 
     public Item(){
         position = new Vector2();
-        this.assign_random_coord();
+        //this.assign_random_coord(); - to be done in Buffer
 
         boundingRect = new Rectangle(this.position.x, this.position.y, width, height);
         this.colour= "yellow";
@@ -70,14 +71,24 @@ public abstract class Item implements GameObject{
         return this.height;
     }
 
+    //todo: add get and set for items
+    public void setPosition(float x, float y){
+        this.position.x= x;
+        this.position.y= y;
+    }
+
+    public Vector2 getPosition(){
+        return position;
+    }
+
+
     public Rectangle getCollider() {
         return new Rectangle(this.boundingRect);
     }
 
+    /*
     public void assign_random_coord() {
         //generate a random number (use integer, easier to check for overlap)
-        //todo: get game info - remember to minus off to leave space
-
         Random randomizer = new Random();
         //nextInt gives 0 to n-1
         float x = randomizer.nextFloat() * (Gdx.graphics.getWidth()- 4) + 2 ;
@@ -86,7 +97,7 @@ public abstract class Item implements GameObject{
         position.x= x;
         position.y= y;
     }
-
+    */
 
 
 
