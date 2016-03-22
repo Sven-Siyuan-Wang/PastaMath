@@ -39,11 +39,11 @@ public class GameWorld {
     public GameWorld(Stage stage) {
         //initialize player here
         players = new ArrayList<Player>();
-        player1 = new Player(33, 5, 17, 12);
+        player1 = new Player(200, 200, 100, 100);
         players.add(player1);
         //TODO: initialize players as they connect to server
         //initializing first speed up item
-        speedUp = new PickUps(400,400, 125,125);
+        speedUp = new PickUps(400,400, 75,75);
         objects.add(speedUp);
 
         //TODO: intiialize buffer of items and pickups
@@ -100,8 +100,6 @@ public class GameWorld {
         simple_item_buffer.items_currently_appearing= new ArrayList<Item>(simple_item_buffer_copy.items_currently_appearing);
 
 
-
-        //ORIGINAL
         for(GameObject i: objects) {
             if (i instanceof PickUps) {
                 if (player1.collides(i)) {
@@ -123,10 +121,7 @@ public class GameWorld {
     public Simple_Item_Buffer getSimple_item_buffer(){
         return simple_item_buffer;
     }
-    /////////////////////////////////////////////////////
 
-
-    //ORIGINAL
     public Player getPlayer() {
         return player1;
     }
