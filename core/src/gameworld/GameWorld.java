@@ -59,7 +59,7 @@ public class GameWorld {
     public void update(float delta) {
         //ORIGINAL
         player1.update(delta);
-        speedUp.update(delta);
+//        speedUp.update(delta);
         objectsCopy = new ArrayList<GameObject>(objects);
 
 

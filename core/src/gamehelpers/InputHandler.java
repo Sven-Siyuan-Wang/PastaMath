@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -27,10 +28,11 @@ public class InputHandler implements InputProcessor {
     int joyX;
     int joyY;
     boolean touched;
-
+    SpriteBatch joyStickBatch;
 
 
     public InputHandler(Player player, Stage stage) {
+        joyStickBatch = new SpriteBatch();
         this.myPlayer = player;
         touchpadskin = new Skin();
         touchpadskin.add("touchBg", AssetLoader.touchBackground);
@@ -53,6 +55,14 @@ public class InputHandler implements InputProcessor {
 
     public void render() {
         //Render joystick here
+        if(touched) {
+            joyStickBatch.begin();
+            joyStickBatch.enableBlending();
+//            Gdx.app.log("render","y: " +  (joyY+100) * GameConstants.SCALE_Y);
+            joyStickBatch.draw(AssetLoader.touchBackground, (joyX-100) * GameConstants.SCALE_X, (720-joyY-100) * GameConstants.SCALE_Y, 200 * GameConstants.SCALE_X, 200 * GameConstants.SCALE_Y);
+            joyStickBatch.end();
+
+        }
 
     }
 
@@ -113,6 +123,8 @@ public class InputHandler implements InputProcessor {
      */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 //        myPlayer.onClick(screenX, screenY);
+        Gdx.app.log("InputHandler", "screenX is " + screenX + " and screenY is " + screenY);
+        Gdx.app.log("meow", "this is " + (screenY+100)*GameConstants.SCALE_Y);
         touched = true;
         joyX = screenX;
         joyY = screenY;
