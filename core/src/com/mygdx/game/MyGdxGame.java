@@ -23,9 +23,9 @@ public class MyGdxGame extends Game {
 		GameConstants.SCALE_Y = Gdx.graphics.getHeight()/720.0f;
 
 		AssetLoader.load();
+
 		myScreen = new GameScreen(this);
 		setScreen(myScreen);
-
 
 	}
 
