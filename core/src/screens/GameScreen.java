@@ -28,7 +28,7 @@ public class GameScreen implements Screen {
         float screenHeight = Gdx.graphics.getHeight();
 
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Gdx.gl.glViewport(0, 0, (int)screenWidth, (int)screenHeight);
 
         this.stage = new Stage(new StretchViewport(1280, 720));
 
