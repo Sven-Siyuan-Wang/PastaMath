@@ -21,25 +21,26 @@ public class Simple_Item_Buffer {
     public ArrayList<Vector2> existing_item_pos_vec= new ArrayList<Vector2>();
 
     //TODO: 2 ArrayList<float> values to choose x and y from to assign coords
-    public ArrayList<Float> x_choices; //float objects, to be converted back into float primitives
-    public ArrayList<Float> y_choices;
-    public float min_x= 150 ;
-    public float min_y= 150 ;
-    public float max_x= 1280 - 125;
-    public float max_y= 720 -125;
+    public ArrayList<Float> x_choices = new ArrayList<Float>(); //float objects, to be converted back into float primitives
+    public ArrayList<Float> y_choices = new ArrayList<Float>();
+    public float min_x= 150f ;
+    public float min_y= 150f ;
+    public float max_x= 1280f - 125f;
+    public float max_y= 720f -125f;
 
     public Simple_Item_Buffer() { //default constructor
         items_currently_appearing = new ArrayList<Item>();
-        max_items_capacity = 15;
-        generate_Items();
+        max_items_capacity = 8;
+
         //TODO: GENERATE X Y WITH GAPS OF item TO ENSURE GOT SPACE FOR RECTANGLE
         //todo: use intervals based on 125 by 125, and then use random.nextInt(#intervals) to find corresponding x and y
-        for(float x= min_x; x < max_x; x+=125){
+        for(float x= min_x; x < max_x; x+=125f){
             x_choices.add(new Float(x));
         }
-        for (float y= min_y; y< max_y; y+=125){
+        for (float y= min_y; y< max_y; y+=125f){
             y_choices.add(new Float(y));
         }
+        generate_Items();
     }
 
     public void generate_Items() {
@@ -95,8 +96,8 @@ public class Simple_Item_Buffer {
         //float x = randomizer.nextFloat() * (Gdx.graphics.getWidth()- 4) + 2 ;
         //float y = randomizer.nextFloat() * (Gdx.graphics.getHeight() - 4) + 2;
 
-        float x = x_choices.get(randomizer.nextInt(x_choices.size()-1));
-        float y= y_choices.get(randomizer.nextInt(y_choices.size()-1));
+        float x = x_choices.get(randomizer.nextInt(x_choices.size()));
+        float y= y_choices.get(randomizer.nextInt(y_choices.size()));
         //set position if it doesnt alr exist
 
         if (!check_if_vector_exist(new Vector2(x, y))) {

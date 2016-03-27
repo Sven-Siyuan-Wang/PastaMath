@@ -50,7 +50,7 @@ public class GameWorld {
         //TODO: intiialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         //all the items are initialized inside the buffer already when it is constructed
-        this.stage = stage;
+        //this.stage = stage;
 
     }
 
@@ -68,7 +68,7 @@ public class GameWorld {
 
         //todo: use timer to generate new item everytime (random timing) if not more than 10 items
         //TODO: add object if capacity haven't reached- add to copy or the original?
-        if(! (simple_item_buffer.items_currently_appearing.size()== Simple_Item_Buffer.max_items_capacity)){
+        if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
             //make new object every few seconds
             System.out.println("generate new item");
             simple_item_buffer.generate_random_Item();
@@ -82,16 +82,16 @@ public class GameWorld {
         for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
 
             Item item = iterator.next();
-            if(player1.collides(item)){
+            item.decreaseLife(delta);
+            if(item.expired()) iterator.remove();
+            else if(player1.collides(item)){
                 System.out.println("Collision");
                 iterator.remove();
-                //item.destroy();
                 //todo: remove corresponding coords
                 simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
                 item.update_player_situation(player1);
 
             }
-            //else System.out.println("no collision");
 
 //        for(Player each_player: players){
 //            each_player.update(delta);
