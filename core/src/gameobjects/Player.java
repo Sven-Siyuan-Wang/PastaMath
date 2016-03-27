@@ -50,7 +50,7 @@ public class Player implements GameObject {
         this.height = height;
         this.boundingCircle = new Circle();
 
-        velocity = 1;
+        velocity = 50;
     }
 
     public void update(float delta) {
@@ -88,7 +88,7 @@ public class Player implements GameObject {
             }
         }
 
-        boundingCircle.set(position.x, position.y, 75f);
+        boundingCircle.set(position.x, position.y, 50f);
 
         //todo: if player is shielded, dont let its score change
         if(shielded){
@@ -135,8 +135,9 @@ public class Player implements GameObject {
     }
 
     public boolean collides(Item item){
-//       return(Intersector.overlaps(boundingCircle, item.getCollider()));
-        return false;
+        boolean collision = Intersector.overlaps(boundingCircle, item.getCollider());
+        System.out.println("Collision: "+collision);
+        return collision;
     }
 
     public boolean knock_into(Player other){

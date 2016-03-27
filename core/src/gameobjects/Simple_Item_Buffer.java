@@ -31,7 +31,7 @@ public class Simple_Item_Buffer {
         //generates 2 number_n_operands + 1 power-ups
         //todo: assign random coords to a newly randomly generated item and add into the list
         ///items_currently_appearing.add(item_without_coord);
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 5; i++) {
             items_currently_appearing.add(new NumberAndOperand());
         }
         items_currently_appearing.add(new Shield());
@@ -52,16 +52,19 @@ public class Simple_Item_Buffer {
     public void generate_random_Item(){
         Random random = new Random();
         random_item_chooser= random.nextInt(5);
+        Item newItem;
 
         if(random_item_chooser==1 || random_item_chooser== 3 || random_item_chooser== 5){
-            items_currently_appearing.add(new NumberAndOperand());
+            newItem = new NumberAndOperand();
         }
         else if(random_item_chooser==4){
-            items_currently_appearing.add(new SpeedUp());
+            newItem = new SpeedUp();
         }
         else{
-            items_currently_appearing.add(new Shield());
+            newItem = new Shield();
         }
+        assign_random_coord(newItem);
+        items_currently_appearing.add(newItem);
 
     }
 
@@ -91,6 +94,8 @@ public class Simple_Item_Buffer {
         else{
             assign_random_coord(item); //recursive- keep generating random coord if it exist alr
         }
+
+        item.setBoundingRect();
     }
 
 

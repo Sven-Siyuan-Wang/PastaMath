@@ -36,15 +36,21 @@ public abstract class Item implements GameObject{
         position = new Vector2();
         //this.assign_random_coord(); - to be done in Buffer
 
-        boundingRect = new Rectangle(this.position.x, this.position.y, width, height);
+
         this.colour= "yellow";
     }
 
+    public void setBoundingRect(){
+        boundingRect = new Rectangle(this.position.x, this.position.y, width, height);
+    }
+
+
     public void destroy() {
-        boundingRect=null;
+        //boundingRect=null;
         //ORIGINAL
-        GameWorld.objectsCopy.remove(this);
+        //GameWorld.objectsCopy.remove(this);
         //NEW
+        Gdx.app.log("Debug","Item destroyed.");
         GameWorld.simple_item_buffer_copy.items_currently_appearing.remove(this);
     }
 
