@@ -13,54 +13,35 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import gameconstants.GameConstants;
 import gameobjects.Player;
+import gameworld.GameRenderer;
 
 /**
  * Created by Hazel on 28/2/2016.
  */
 public class InputHandler implements InputProcessor {
     private Player myPlayer;
-    Touchpad touchpad;
-    Touchpad.TouchpadStyle touchpadStyle;
-    Skin touchpadskin;
-    Drawable touchBackground;
-    Drawable touchKnob;
     Stage stage;
     int joyX;
     int joyY;
     boolean touched;
-    SpriteBatch joyStickBatch;
+    GameRenderer renderer;
 
 
-    public InputHandler(Player player, Stage stage) {
-        joyStickBatch = new SpriteBatch();
+
+    public InputHandler(Player player, Stage stage, GameRenderer renderer) {
         this.myPlayer = player;
-        touchpadskin = new Skin();
-        touchpadskin.add("touchBg", AssetLoader.touchBackground);
-        touchpadskin.add("touchKnob", AssetLoader.touchKnob);
-        touchpadStyle = new Touchpad.TouchpadStyle();
-        touchBackground = touchpadskin.getDrawable("touchBg");
-        touchKnob = touchpadskin.getDrawable("touchKnob");
+        this.renderer = renderer;
 
-        touchpadStyle.background = touchBackground;
-        touchpadStyle.knob = touchKnob;
-
-        touchpad = new Touchpad(10, touchpadStyle);
-
-        touchpad.setBounds(20*GameConstants.SCALE_X, 20*GameConstants.SCALE_Y, 235* GameConstants.SCALE_X, 235*GameConstants.SCALE_Y);
-
-        this.stage = stage;
-        stage.addActor(touchpad);
-        Gdx.input.setInputProcessor(stage);
     }
 
     public void render() {
         //Render joystick here
         if(touched) {
-            joyStickBatch.begin();
-            joyStickBatch.enableBlending();
+            renderer.batcher.begin();
+            renderer.batcher.enableBlending();
 //            Gdx.app.log("render","y: " +  (joyY+100) * GameConstants.SCALE_Y);
-            joyStickBatch.draw(AssetLoader.touchBackground, (joyX-100) * GameConstants.SCALE_X, (720-joyY-100) * GameConstants.SCALE_Y, 200 * GameConstants.SCALE_X, 200 * GameConstants.SCALE_Y);
-            joyStickBatch.end();
+            renderer.batcher.draw(AssetLoader.touchBackground, (joyX - 100) * GameConstants.SCALE_X, (720 - joyY - 100) * GameConstants.SCALE_Y, 200 * GameConstants.SCALE_X, 200 * GameConstants.SCALE_Y);
+            renderer.batcher.end();
 
         }
 
@@ -123,11 +104,13 @@ public class InputHandler implements InputProcessor {
      */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 //        myPlayer.onClick(screenX, screenY);
-        Gdx.app.log("InputHandler", "screenX is " + screenX + " and screenY is " + screenY);
-        Gdx.app.log("meow", "this is " + (screenY+100)*GameConstants.SCALE_Y);
-        touched = true;
-        joyX = screenX;
-        joyY = screenY;
+        if(screenX >= 1080 && screenY >= 520) {
+            Gdx.app.log("InputHandler", "screenX is " + screenX + " and screenY is " + screenY) ;
+            Gdx.app.log("meow", "this is " + (screenY + 100) * GameConstants.SCALE_Y);
+            touched = true;
+            joyX = screenX;
+            joyY = screenY;
+        }
         return false;
     }
 
@@ -148,28 +131,29 @@ public class InputHandler implements InputProcessor {
        If screenY < joyY-50, move down
      */
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
-        if(screenX > joyX+50) {
-            myPlayer.setRight(true);
-            myPlayer.setLeft(false);
-        } else if(screenX < joyX-50) {
-            myPlayer.setLeft(true);
-            myPlayer.setRight(false);
-        } else {
-            myPlayer.setRight(false);
-            myPlayer.setLeft(false);
+        if(touched) {
+            Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
+            if (screenX > joyX + 50) {
+                myPlayer.setRight(true);
+                myPlayer.setLeft(false);
+            } else if (screenX < joyX - 50) {
+                myPlayer.setLeft(true);
+                myPlayer.setRight(false);
+            } else {
+                myPlayer.setRight(false);
+                myPlayer.setLeft(false);
+            }
+            if (screenY > joyY + 50) {
+                myPlayer.setUp(true);
+                myPlayer.setDown(false);
+            } else if (screenY < joyY - 50) {
+                myPlayer.setDown(true);
+                myPlayer.setUp(false);
+            } else {
+                myPlayer.setUp(false);
+                myPlayer.setDown(false);
+            }
         }
-        if(screenY > joyY +50) {
-            myPlayer.setUp(true);
-            myPlayer.setDown(false);
-        } else if(screenY <joyY-50) {
-            myPlayer.setDown(true);
-            myPlayer.setUp(false);
-        } else {
-            myPlayer.setUp(false);
-            myPlayer.setDown(false);
-        }
-
         return false;
     }
 

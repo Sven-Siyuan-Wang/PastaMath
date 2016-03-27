@@ -29,7 +29,7 @@ public class GameRenderer {
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
 
-    private SpriteBatch batcher;
+    public SpriteBatch batcher;
     private Rectangle viewport;
 
     private int gameHeight;

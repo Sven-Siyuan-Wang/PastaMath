@@ -55,7 +55,7 @@ public class Player implements GameObject {
 
     public void update(float delta) {
 
-        Gdx.app.log("delta", Float.toString(delta));
+//        Gdx.app.log("delta", Float.toString(delta));
         if(up) {
             if(!(position.y <= 0)) {
                 position.y -= velocity*delta;
