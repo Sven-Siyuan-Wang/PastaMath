@@ -3,6 +3,7 @@ package gameworld;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import gameobjects.Item;
@@ -32,7 +33,7 @@ public class GameWorld {
     public static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
 
-    public int generate_counter;
+
 
     //TODO: follow template above- make original and copy for buffer
 
@@ -57,58 +58,75 @@ public class GameWorld {
 
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
-        player1.update(delta);
-        objectsCopy = new ArrayList<GameObject>(objects);
+
+
+
 
 
         //all the items are initialized inside the buffer already when it is constructed
-        simple_item_buffer_copy.items_currently_appearing= new ArrayList<Item>(simple_item_buffer.items_currently_appearing);
+        //simple_item_buffer_copy.items_currently_appearing= new ArrayList<Item>(simple_item_buffer.items_currently_appearing);
 
         //todo: use timer to generate new item everytime (random timing) if not more than 10 items
         //TODO: add object if capacity haven't reached- add to copy or the original?
         if(! (simple_item_buffer.items_currently_appearing.size()== Simple_Item_Buffer.max_items_capacity)){
             //make new object every few seconds
+            System.out.println("generate new item");
             simple_item_buffer.generate_random_Item();
         }
 
-        for(Player each_player: players){
-            each_player.update(delta);
-            //todo: remove Players and objects accordingly
-            //TODO: PLAYER RESPONSES TO COLLISION
-            for(Item item: simple_item_buffer.items_currently_appearing){
-                if(each_player.collides(item)){
-                    item.destroy();
-                    //todo: remove corresponding coords
-                    simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
-                    item.update_player_situation(each_player);
-                    if(each_player.getShielded()) {
-                        each_player.update_collision_count();
-                    }
-                }
+
+        player1.update(delta);
+        //todo: remove Players and objects accordingly
+        //TODO: PLAYER RESPONSES TO COLLISION
+        //int i = 0;
+        for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
+
+            Item item = iterator.next();
+            if(player1.collides(item)){
+                System.out.println("Collision");
+                iterator.remove();
+                //item.destroy();
+                //todo: remove corresponding coords
+                simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
+                item.update_player_situation(player1);
+
             }
+            //else System.out.println("no collision");
+
+//        for(Player each_player: players){
+//            each_player.update(delta);
+//            //todo: remove Players and objects accordingly
+//            //TODO: PLAYER RESPONSES TO COLLISION
+//            //int i = 0;
+//            for(Item item: simple_item_buffer.items_currently_appearing){
+//                //System.out.println("item"+i++);
+//                if(each_player.collides(item)){
+//
+//
+//                    item.destroy();
+//                    //todo: remove corresponding coords
+//                    simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
+//                    item.update_player_situation(each_player);
+//
+//
+//                }
+//            }
             //todo: check if a player collided into another player
-            for(Player other_player: players){
-                if (!other_player.equals(each_player)){ //you can't knock into yourself
-                    if (each_player.knock_into(other_player)){
-                        each_player.decreaseScoreUponKnock();
-                    }
-                }
-            }
+//            for(Player other_player: players){
+//                if (!other_player.equals(each_player)){ //you can't knock into yourself
+//                    if (each_player.knock_into(other_player)){
+//                        if(each_player.getShielded()) {
+//                            each_player.update_collision_count();
+//                        }
+//                        else
+//                            each_player.decreaseScoreUponKnock();
+//                    }
+//                }
+//            }
         }
 
 
-        simple_item_buffer.items_currently_appearing= new ArrayList<Item>(simple_item_buffer_copy.items_currently_appearing);
 
-
-        for(GameObject i: objects) {
-            if (i instanceof PickUps) {
-                if (player1.collides(i)) {
-                    i.destroy();
-                    player1.speedUp();
-                }
-            }
-        }
-        objects = new ArrayList<GameObject>(objectsCopy);
 
     }
 
