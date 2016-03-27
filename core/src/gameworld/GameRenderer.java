@@ -94,11 +94,11 @@ public class GameRenderer {
         batcher.begin();
 
         batcher.enableBlending();
-        this.font.draw(batcher, "meow", 100, 100);
-
 
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
+
+        this.font.draw(batcher, "Get 15 points!", 500, 700);
 
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
         renderPlayers(players);

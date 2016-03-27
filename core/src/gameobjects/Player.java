@@ -50,7 +50,7 @@ public class Player implements GameObject {
         this.height = height;
         this.boundingCircle = new Circle();
 
-        velocity = 50;
+        velocity = 100;
     }
 
     public void update(float delta) {
