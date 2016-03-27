@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'PastaMathKey'
             keyPassword '123456'
-            storeFile file('/Users/Keith/Desktop/PastaMath/android/keystorepath.jks')
+            storeFile file('keystorepath.jks')
             storePassword '123456'
         }
     }

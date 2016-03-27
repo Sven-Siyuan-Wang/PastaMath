@@ -67,7 +67,7 @@ public class Player implements GameObject {
             }
         }
         if(right) {
-            if(!(position.x >=1180)) {
+            if(!(position.x >=930)) {
                 position.x += velocity * delta;
             }
         } else if(left) {

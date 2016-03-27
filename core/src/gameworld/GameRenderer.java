@@ -93,7 +93,7 @@ public class GameRenderer {
         batcher.enableBlending();
 
         //render background!
-        batcher.draw(AssetLoader.gameBackground, 0, 0);
+        batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
         renderPlayers(players);
