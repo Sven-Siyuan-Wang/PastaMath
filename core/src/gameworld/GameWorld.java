@@ -57,9 +57,7 @@ public class GameWorld {
 
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
-        //ORIGINAL
         player1.update(delta);
-//        speedUp.update(delta);
         objectsCopy = new ArrayList<GameObject>(objects);
 
 

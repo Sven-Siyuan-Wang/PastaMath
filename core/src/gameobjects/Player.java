@@ -55,15 +55,25 @@ public class Player implements GameObject {
 
     public void update(float delta) {
 
+        Gdx.app.log("delta", Float.toString(delta));
         if(up) {
-            position.y -= velocity*delta;
+            if(!(position.y <= 0)) {
+                position.y -= velocity*delta;
+
+            }
         } else if(down) {
-            position.y += velocity*delta;
+            if(!(position.y >= 520)) {
+                position.y += velocity*delta;
+            }
         }
         if(right) {
-            position.x += velocity*delta;
+            if(!(position.x >=1180)) {
+                position.x += velocity * delta;
+            }
         } else if(left) {
-            position.x -= velocity*delta;
+            if(!(position.x<=0)) {
+                position.x -= velocity * delta;
+            }
         }
 
 
@@ -135,7 +145,7 @@ public class Player implements GameObject {
 
     public void speedDown() {
         if(speedUp) {
-            this.velocity -= 10;
+            this.velocity -= 1;
             Gdx.app.log("Player", "sped down");
             speedUp = false;
         }

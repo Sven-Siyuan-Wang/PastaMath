@@ -15,21 +15,16 @@ import gameworld.GameObject;
  */
 public class AssetLoader {
     public static Texture texture, speedUp, player, shield;
-    public static TextureRegion bg, grass;
+    public static Texture gameBackground;
 
     public static Texture up, down, left, right;
     public static Texture touchBackground, touchKnob;
 
-    public static TextureRegion skullUp, skullDown, bar;
     public static HashMap<String,Texture> textures = new HashMap();
 
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-
-        bg = new TextureRegion(texture, 0,0,136, 43);
-        //arguments: don't flip x, but flip y (since libGDX uses a Y Down coord system)
-        bg.flip(false, true);
 
         player = new Texture(Gdx.files.internal("data/Character/Character1.png"));
         textures.put("player",player);
@@ -75,6 +70,8 @@ public class AssetLoader {
 
         touchBackground = new Texture(Gdx.files.internal("data/Buttons/touchbackground.png"));
         touchKnob = new Texture(Gdx.files.internal("data/Buttons/knob.png"));
+
+        gameBackground = new Texture(Gdx.files.internal("data/Background/gamebg.png"));
 
 
 

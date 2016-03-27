@@ -92,6 +92,9 @@ public class GameRenderer {
 
         batcher.enableBlending();
 
+        //render background!
+        batcher.draw(AssetLoader.gameBackground, 0, 0);
+
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
         renderPlayers(players);
         //end spritebatch
@@ -116,6 +119,12 @@ public class GameRenderer {
             batcher.enableBlending();
             batcher.draw(AssetLoader.textures.get("player"), player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
         }
+
+    }
+
+    public void renderJoystick(int joyX, int joyY) {
+        batcher.enableBlending();
+        batcher.draw(AssetLoader.touchBackground, (joyX - 100) * GameConstants.SCALE_X, (720 - joyY - 100) * GameConstants.SCALE_Y, 200 * GameConstants.SCALE_X, 200 * GameConstants.SCALE_Y);
 
     }
 
