@@ -32,12 +32,21 @@ public abstract class Item implements GameObject{
 
     private Rectangle boundingRect;
 
+    private float lifeTime;
+
     public Item(){
         position = new Vector2();
         //this.assign_random_coord(); - to be done in Buffer
+        lifeTime = 5 + (new Random()).nextFloat()*10;
 
+    }
 
-        this.colour= "yellow";
+    public void decreaseLife(float delta){
+        lifeTime -= delta;
+    }
+
+    public boolean expired(){
+        return (lifeTime<=0);
     }
 
     public void setBoundingRect(){
