@@ -37,12 +37,7 @@ public class InputHandler implements InputProcessor {
     public void render() {
         //Render joystick here
         if(touched) {
-            renderer.batcher.begin();
-            renderer.batcher.enableBlending();
-//            Gdx.app.log("render","y: " +  (joyY+100) * GameConstants.SCALE_Y);
-            renderer.batcher.draw(AssetLoader.touchBackground, (joyX - 100) * GameConstants.SCALE_X, (720 - joyY - 100) * GameConstants.SCALE_Y, 200 * GameConstants.SCALE_X, 200 * GameConstants.SCALE_Y);
-            renderer.batcher.draw(AssetLoader.touchKnob, (joyX-25) * GameConstants.SCALE_X, (720 - joyY - 25) * GameConstants.SCALE_Y, 50 * GameConstants.SCALE_X, 50 * GameConstants.SCALE_Y);
-            renderer.batcher.end();
+            renderer.renderJoystick(joyX, joyY);
 
         }
 
