@@ -78,7 +78,6 @@ public class GameWorld {
             item.decreaseLife(delta);
             if(item.expired()) iterator.remove();
             else if(player1.collides(item)){
-                System.out.println("Collision");
                 iterator.remove();
                 //todo: remove corresponding coords
                 simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());

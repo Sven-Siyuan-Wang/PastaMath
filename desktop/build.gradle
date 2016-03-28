@@ -38,5 +38,5 @@ task afterEclipseImport(description: "Post processing after project generation",
     }
 }
 dependencies {
-    compile project(':gdx-stb-truetype-natives')
+
 }

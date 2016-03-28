@@ -25,8 +25,8 @@ public abstract class Item implements GameObject{
 
     private Vector2 position;
 
-    private int width= 125;
-    private int height= 125;
+    private int width= 75;
+    private int height= 75;
 
     private float destructionCounter = 10;
 
@@ -37,7 +37,7 @@ public abstract class Item implements GameObject{
     public Item(){
         position = new Vector2();
         //this.assign_random_coord(); - to be done in Buffer
-        lifeTime = 5 + (new Random()).nextFloat()*10;
+        lifeTime = 10 + (new Random()).nextFloat()*10;
 
     }
 
@@ -50,7 +50,7 @@ public abstract class Item implements GameObject{
     }
 
     public void setBoundingRect(){
-        boundingRect = new Rectangle(this.position.x, this.position.y, width, height);
+        boundingRect = new Rectangle(this.position.x-width/2, this.position.y-height/2, width, height); // DUNNO why x,y have to be shifted by half the dimension
     }
 
 

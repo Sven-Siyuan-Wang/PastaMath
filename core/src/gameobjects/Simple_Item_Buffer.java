@@ -27,10 +27,12 @@ public class Simple_Item_Buffer {
     public float min_y= 150f ;
     public float max_x= 1280f - 125f;
     public float max_y= 720f -125f;
+    private Random randomizer;
 
     public Simple_Item_Buffer() { //default constructor
         items_currently_appearing = new ArrayList<Item>();
         max_items_capacity = 8;
+        randomizer = new Random();
 
         //TODO: GENERATE X Y WITH GAPS OF item TO ENSURE GOT SPACE FOR RECTANGLE
         //todo: use intervals based on 125 by 125, and then use random.nextInt(#intervals) to find corresponding x and y
@@ -90,7 +92,7 @@ public class Simple_Item_Buffer {
         //generate a random number (use integer, easier to check for overlap)
         //todo: get game info - remember to minus off to leave space
 
-        Random randomizer = new Random();
+
         //nextInt gives 0 to n-1
         //todo: CALCULATE BORDERS TO ENSURE ITEMS WITHIN SCREEN
         //float x = randomizer.nextFloat() * (Gdx.graphics.getWidth()- 4) + 2 ;

@@ -52,7 +52,7 @@ public class Player implements GameObject {
         this.height = height;
         this.boundingCircle = new Circle();
 
-        velocity = 100;
+        velocity = 200;
 
         this.currentValue = 0;
     }
@@ -140,7 +140,6 @@ public class Player implements GameObject {
 
     public boolean collides(Item item){
         boolean collision = Intersector.overlaps(boundingCircle, item.getCollider());
-        System.out.println("Collision: "+collision);
         return collision;
     }
 

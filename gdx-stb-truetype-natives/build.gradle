@@ -1,2 +1,0 @@
-configurations.create("default")
-artifacts.add("default", file('gdx-stb-truetype-natives.jar'))
