@@ -20,7 +20,7 @@ public class NetworkWorld {
 
     public NetworkWorld(int midPointY) {
         //initialize player here
-        player1 = new Player(33, midPointY-5, 17, 12);
+//        player1 = new Player(33, midPointY-5, 17, 12);
         //initializing first speed up item
         speedUp = new PickUps(90,90, 17, 12);
         objects.add(speedUp);

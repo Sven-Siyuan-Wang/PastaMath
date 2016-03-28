@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import gameconstants.GameConstants;
 import gameworld.GameObject;
+import gameworld.GameRenderer;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -33,11 +34,12 @@ public class Player implements GameObject {
 
     private Circle boundingCircle;
     private boolean speedUp;
+
     float speedUpCounter = 0;
 
     //todo: initialize booleans for other attributes(to change upon collision)
     private boolean shielded= false; //its score won't be affected
-    private int currentValue= 0;
+    private int currentValue;
     private int collision_count=0; //after 3 collisions, the shield will not work anymore
 
 
@@ -51,6 +53,8 @@ public class Player implements GameObject {
         this.boundingCircle = new Circle();
 
         velocity = 100;
+
+        this.currentValue = 0;
     }
 
     public void update(float delta) {
@@ -240,6 +244,8 @@ public class Player implements GameObject {
     }
 
     public Circle getCollider() { return this.boundingCircle; }
+
+    public int getCurrentValue() { return this.currentValue; }
 
 
 

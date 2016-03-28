@@ -102,6 +102,7 @@ public class GameRenderer {
 
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
         renderPlayers(players);
+        renderSideBar(players);
         //end spritebatch
         batcher.end();
 
@@ -125,6 +126,15 @@ public class GameRenderer {
             batcher.draw(AssetLoader.textures.get("player"), player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
         }
 
+    }
+
+    public void renderSideBar(ArrayList<Player> players) {
+        int count = 1;
+        for(Player player: players) {
+            batcher.enableBlending();
+            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1050*GameConstants.SCALE_X, (720-150*count)*GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.textures.get("player"), 1130*GameConstants.SCALE_X, (720-220)*count*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
+        }
     }
 
     public void renderJoystick(int joyX, int joyY) {

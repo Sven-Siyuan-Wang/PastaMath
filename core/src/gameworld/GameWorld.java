@@ -34,10 +34,9 @@ public class GameWorld {
 
 
 
-
     //TODO: follow template above- make original and copy for buffer
 
-    public GameWorld(Stage stage) {
+    public GameWorld() {
         //initialize player here
         players = new ArrayList<Player>();
         player1 = new Player(200, 200, 100, 100);
@@ -50,7 +49,6 @@ public class GameWorld {
         //TODO: intiialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         //all the items are initialized inside the buffer already when it is constructed
-        //this.stage = stage;
 
     }
 
@@ -58,11 +56,6 @@ public class GameWorld {
 
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
-
-
-
-
-
         //all the items are initialized inside the buffer already when it is constructed
         //simple_item_buffer_copy.items_currently_appearing= new ArrayList<Item>(simple_item_buffer.items_currently_appearing);
 
