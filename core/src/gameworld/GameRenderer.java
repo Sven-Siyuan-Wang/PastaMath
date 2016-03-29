@@ -96,7 +96,7 @@ public class GameRenderer {
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
-        this.font.draw(batcher, "Get 15 points!", 500, 700);
+        this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500, 700);
 
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
         renderPlayers(players);

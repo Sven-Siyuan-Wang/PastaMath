@@ -32,6 +32,8 @@ public class GameWorld {
     public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
     public static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
 
+    public static int endScore;
+
 
 
     //TODO: follow template above- make original and copy for buffer
@@ -49,6 +51,8 @@ public class GameWorld {
         //TODO: intiialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         //all the items are initialized inside the buffer already when it is constructed
+
+        endScore = new Random().nextInt(100) + 1;
 
     }
 
