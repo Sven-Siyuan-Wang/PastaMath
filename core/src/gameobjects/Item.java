@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.Random;
 import java.util.Vector;
 
+import gameconstants.GameConstants;
 import gameworld.GameObject;
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
@@ -16,7 +17,7 @@ import gameworld.GameWorld;
  */
 public abstract class Item implements GameObject{
 
-    public String colour;
+
 
 
     public abstract void update_player_situation(Player player);
@@ -25,8 +26,8 @@ public abstract class Item implements GameObject{
 
     private Vector2 position;
 
-    private int width= 75;
-    private int height= 75;
+    private int width= (int) (75*GameConstants.SCALE_X);
+    private int height= (int) (75*GameConstants.SCALE_Y);
 
     private float destructionCounter = 10;
 

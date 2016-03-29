@@ -25,7 +25,7 @@ public class Simple_Item_Buffer {
     public ArrayList<Float> y_choices = new ArrayList<Float>();
     public float min_x= 150f ;
     public float min_y= 150f ;
-    public float max_x= 1280f - 125f;
+    public float max_x= 1050f - 125f;
     public float max_y= 720f -125f;
     private Random randomizer;
 

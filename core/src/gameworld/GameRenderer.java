@@ -63,11 +63,9 @@ public class GameRenderer {
 
         //original
         Player player = myWorld.getPlayer();
-        PickUps speedUp = myWorld.getSpeedUp();
 
         //Todo: keep getting Players and Items
         ArrayList<Player> players= myWorld.getPlayers();
-        Simple_Item_Buffer simple_item_buffer= myWorld.getSimple_item_buffer();
         //todo:use one hard-coded player for testing- remove later
         players.add(player);
 
