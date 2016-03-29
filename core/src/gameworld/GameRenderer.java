@@ -101,6 +101,11 @@ public class GameRenderer {
         renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
         renderPlayers(players);
         renderSideBar(players);
+
+        if(myWorld.win) {
+            this.font.draw(batcher, "Game over!", 350, 360);
+        }
+
         //end spritebatch
         batcher.end();
 

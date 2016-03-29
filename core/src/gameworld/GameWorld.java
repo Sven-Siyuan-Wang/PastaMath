@@ -1,5 +1,6 @@
 package gameworld;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class GameWorld {
 
     public static int endScore;
 
+    public static boolean win;
+
 
 
     //TODO: follow template above- make original and copy for buffer
@@ -62,6 +65,13 @@ public class GameWorld {
     public void update(float delta) {
         //all the items are initialized inside the buffer already when it is constructed
         //simple_item_buffer_copy.items_currently_appearing= new ArrayList<Item>(simple_item_buffer.items_currently_appearing);
+
+        for(Player player: players) {
+            if(player.getCurrentValue()==this.endScore) {
+                Gdx.app.log("World", "someone has won");
+                win = true;
+            }
+        }
 
         //todo: use timer to generate new item everytime (random timing) if not more than 10 items
         //TODO: add object if capacity haven't reached- add to copy or the original?
