@@ -9,11 +9,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
+import gameobjects.Player;
 import javafx.stage.Screen;
 import screens.GameScreen;
 
 public class MyGdxGame extends Game {
 	GameScreen myScreen;
+
+	public static PlayServices playServices;
+
+	public MyGdxGame(PlayServices playServices){
+		this.playServices = playServices;
+	}
 
 	@Override
 	public void create () {

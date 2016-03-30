@@ -3,30 +3,62 @@ package com.mygdx.game;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.multiplayer.Participant;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
+import com.google.android.gms.games.multiplayer.realtime.Room;
+import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
+import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
+import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
+import com.google.example.games.basegameutils.BaseGameUtils;
 import com.google.example.games.basegameutils.GameHelper;
-import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.network.PlayServices;
 
-public class AndroidLauncher extends AndroidApplication implements PlayServices {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import gameobjects.Item;
+import gameobjects.NumberAndOperand;
+import gameobjects.Player;
+import gameobjects.Shield;
+import gameobjects.SpeedUp;
+import gameworld.GameWorld;
+
+public class AndroidLauncher extends AndroidApplication implements PlayServices, RealTimeMessageReceivedListener,
+		RoomUpdateListener, RoomStatusUpdateListener {
 
 	//keith network
 	private GameHelper gameHelper;
 	private final static int requestCode = 1;
+	private String mRoomId = null;
+	// The participants in the currently active game
+	ArrayList<Participant> mParticipants = null;
+
+	String myId = null;
+	String ownerId = null;
+	final static int RC_WAITING_ROOM = 10002;
+	final static String TAG="AndroidLauncher";
+	public static boolean isOwner;
+    private static HashMap<String,Integer> playerMap = new HashMap<>();
+	private  static HashMap<String, Item> itemMap = new HashMap<>();
 
 	//keith network end
-
-
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new MyGdxGame(), config);
+		initialize(new MyGdxGame(this), config); // updated by siyuan
+
+		startQuickGame();
 
 		//keith network
 		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
@@ -43,6 +75,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
 		gameHelper.setup(gameHelperListener);
 		//keith network and
+
+
 
 
 	} //end of onCreate
@@ -166,4 +200,208 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 		return gameHelper.isSignedIn();
 	}
 
+	@Override
+	public void startQuickGame() {
+		final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 2;
+		Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
+				MAX_OPPONENTS, 0);
+		RoomConfig.Builder roomConfigBuilder = RoomConfig.builder(this);
+		roomConfigBuilder.setMessageReceivedListener(this);
+		roomConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
+		RoomConfig roomConfig= roomConfigBuilder.build();
+
+		//create room:
+		Games.RealTimeMultiplayer.create(gameHelper.getApiClient(), roomConfig);
+
+		//NEXT: onRoomCreated
+
+	}
+
+	@Override
+	public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
+        String msg = new String(realTimeMessage.getMessageData());
+        String[] words = msg.split(" ");
+
+        //general message
+        if(words[0].equals("INIT")){
+            String id = words[1];
+            Player player = new Player(id);
+            playerMap.put(id,GameWorld.players.size());
+            GameWorld.players.add(player);
+        }
+
+        //sent to both player and server
+        else if(words[0].equals("PLAYER")){
+            String id = words[1];
+            float x = Float.parseFloat(words[2]);
+            float y = Float.parseFloat(words[3]);
+            Player player = GameWorld.players.get(playerMap.get(id));
+            player.setX(x);
+            player.setY(y);
+        }
+
+        //TODO: ONE MORE CASE
+        //ITEM ID X Y TYPE
+		//TYPE: SHIELD, SPEEDUP, PLUS1, MUL2
+        //ITEM ID RM
+		else if(words[0].equals("ITEM")){
+			String id = words[1];
+			if(words[2].equals("RM")){
+				Item toRemove = itemMap.get(id);
+				itemMap.remove(id);
+				toRemove.destroy();
+			}
+			else{
+				float x = Float.parseFloat(words[2]);
+				float y = Float.parseFloat(words[3]);
+				String type = words[4];
+				Item toAdd;
+				if(type.equals("SHIELD")) toAdd = new Shield(x,y);
+				else if(type.equals("SPEEDUP")) toAdd =new SpeedUp(x,y);
+				else {
+					String operation = type.substring(0,type.length()-1);
+					int value = Character.getNumericValue(type.charAt(type.length() - 1));
+					toAdd = new NumberAndOperand(operation,value,x,y);
+				}
+				GameWorld.items.add(toAdd);
+
+
+			}
+
+
+		}
+
+
+
+
+
+
+
+
+	}
+
+	@Override
+	public void onRoomConnecting(Room room) {
+
+	}
+
+	@Override
+	public void onRoomAutoMatching(Room room) {
+
+	}
+
+	@Override
+	public void onPeerInvitedToRoom(Room room, List<String> list) {
+
+	}
+
+	@Override
+	public void onPeerDeclined(Room room, List<String> list) {
+
+	}
+
+	@Override
+	public void onPeerJoined(Room room, List<String> list) {
+
+	}
+
+	@Override
+	public void onPeerLeft(Room room, List<String> list) {
+
+	}
+
+	@Override
+	public void onConnectedToRoom(Room room) {
+		myId=room.getParticipantId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
+
+		if (mRoomId==null){
+			mRoomId=room.getRoomId();
+		}
+
+		// print out the list of participants (for debug purposes)
+		Log.d(TAG, "Room ID: " + mRoomId);
+		Log.d(TAG, "My ID " + myId);
+		Log.d(TAG, "<< CONNECTED TO ROOM>>");
+
+	}
+
+	@Override
+	public void onDisconnectedFromRoom(Room room) {
+
+	}
+
+	@Override
+	public void onPeersConnected(Room room, List<String> list) {
+
+	}
+
+	@Override
+	public void onPeersDisconnected(Room room, List<String> list) {
+
+	}
+
+	@Override
+	public void onP2PConnected(String s) {
+
+	}
+
+	@Override
+	public void onP2PDisconnected(String s) {
+
+	}
+
+	@Override
+	public void onRoomCreated(int statusCode, Room room) {
+		if(statusCode != GamesStatusCodes.STATUS_OK){
+			showGameError();
+			return;
+		}
+		mRoomId = room.getRoomId();
+		// show the waiting room UI
+		Intent i= Games.RealTimeMultiplayer.getWaitingRoomIntent(gameHelper.getApiClient(), room, Integer.MAX_VALUE);
+		startActivityForResult(i, RC_WAITING_ROOM);
+
+
+
+
+	}
+
+	@Override
+	public void onJoinedRoom(int statusCode, Room room) {
+		if (statusCode != GamesStatusCodes.STATUS_OK) {
+			showGameError();
+			return;
+		}
+
+		// show the waiting room UI
+		Intent i= Games.RealTimeMultiplayer.getWaitingRoomIntent(gameHelper.getApiClient(), room, Integer.MAX_VALUE);
+		startActivityForResult(i, RC_WAITING_ROOM);
+	}
+
+
+	@Override
+	public void onLeftRoom(int i, String s) {
+
+	}
+
+	@Override
+	public void onRoomConnected(int statusCode, Room room) {
+		if (statusCode != GamesStatusCodes.STATUS_OK) {
+			showGameError();
+			return;
+		}
+		mParticipants=room.getParticipants();
+		//myId=room.getParticipantId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
+		ownerId = room.getCreatorId();
+		isOwner = myId.equals(ownerId);
+        Player myself = new Player(myId);
+        GameWorld.players.add(myself);
+        playerMap.put(myId,new Integer(1));
+
+	}
+
+
+	void showGameError() {
+		BaseGameUtils.makeSimpleDialog(this, "error");
+	}
 }

@@ -1,14 +1,12 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 import gameobjects.Item;
-import gameobjects.PickUps;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
 
@@ -18,40 +16,26 @@ import gameobjects.Simple_Item_Buffer;
  * Created by Hazel on 28/2/2016.
  */
 public class GameWorld {
-    public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
-    public static ArrayList<GameObject> objectsCopy = new ArrayList<GameObject>();
     private Player player1;
 
-    private Stage stage;
-    private PickUps speedUp, shield;
-
     //TODO: initialize all players and game objects here- SERVER
-    private ArrayList<Player> players;
-
-    //TODO: follow template above- make original and copy for buffer
+    public static ArrayList<Player> players = new ArrayList<Player>();
 
     public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
-    public static Simple_Item_Buffer simple_item_buffer_copy= new Simple_Item_Buffer();
+
+    public static ArrayList<Item> items = simple_item_buffer.items_currently_appearing;  // items for server to update
 
     public static int endScore;
 
     public static boolean win;
 
 
-
-    //TODO: follow template above- make original and copy for buffer
-
     public GameWorld() {
         //initialize player here
-        players = new ArrayList<Player>();
         player1 = new Player(200, 200, 100, 100);
-        players.add(player1);
-        //TODO: initialize players as they connect to server
-        //initializing first speed up item
-        speedUp = new PickUps(400,400, 75,75);
-        objects.add(speedUp);
 
-        //TODO: intiialize buffer of items and pickups
+
+        //intialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         //all the items are initialized inside the buffer already when it is constructed
 
@@ -64,7 +48,6 @@ public class GameWorld {
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
         //all the items are initialized inside the buffer already when it is constructed
-        //simple_item_buffer_copy.items_currently_appearing= new ArrayList<Item>(simple_item_buffer.items_currently_appearing);
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
@@ -99,10 +82,12 @@ public class GameWorld {
 
             }
 
+
+
 //        for(Player each_player: players){
 //            each_player.update(delta);
-//            //todo: remove Players and objects accordingly
-//            //TODO: PLAYER RESPONSES TO COLLISION
+//            //: remove Players and objects accordingly
+//            //: PLAYER RESPONSES TO COLLISION
 //            //int i = 0;
 //            for(Item item: simple_item_buffer.items_currently_appearing){
 //                //System.out.println("item"+i++);
@@ -117,7 +102,7 @@ public class GameWorld {
 //
 //                }
 //            }
-            //todo: check if a player collided into another player
+            //: check if a player collided into another player
 //            for(Player other_player: players){
 //                if (!other_player.equals(each_player)){ //you can't knock into yourself
 //                    if (each_player.knock_into(other_player)){
@@ -137,22 +122,16 @@ public class GameWorld {
     }
 
 
-    //TODO: implement methods to get all Player and Items
-    public ArrayList<Player> getPlayers(){
-        return players;
-    }
-
     public Simple_Item_Buffer getSimple_item_buffer(){
         return simple_item_buffer;
     }
 
-    public Player getPlayer() {
-        return player1;
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
-    public Stage getStage() {return this.stage; }
-
-    public PickUps getSpeedUp() { return speedUp; }
-    public ArrayList<GameObject> getObjects() { return this.objects; }
+    public Player getPlayer(){ //TODO: modify to the first player in list.
+        return player1;
+    }
 
 }

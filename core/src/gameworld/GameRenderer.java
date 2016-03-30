@@ -1,15 +1,11 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -17,9 +13,7 @@ import java.util.ArrayList;
 import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
 import gameobjects.Item;
-import gameobjects.PickUps;
 import gameobjects.Player;
-import gameobjects.Simple_Item_Buffer;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -61,13 +55,12 @@ public class GameRenderer {
 //        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
-        //original
-        Player player = myWorld.getPlayer();
+
 
         //Todo: keep getting Players and Items
         ArrayList<Player> players= myWorld.getPlayers();
         //todo:use one hard-coded player for testing- remove later
-        players.add(player);
+
 
 
 
