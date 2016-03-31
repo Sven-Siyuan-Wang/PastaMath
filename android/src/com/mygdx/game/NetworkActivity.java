@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,6 +30,7 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NetworkActivity extends AppCompatActivity implements
@@ -38,36 +40,64 @@ public class NetworkActivity extends AppCompatActivity implements
 {
 
 
+
     final static String TAG = "PASTAMATH NETWORKING";
 
+    public static GoogleApiClient mGoogleApiClient;
 
-    private GoogleApiClient mGoogleApiClient;
+    public static Room room = null;
+
+    public static MyAppApplication myApp;
+
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_network);
+        try{
+            Log.d(TAG, "onCreate start");
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_network);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
-                .build();
+            myApp = ((MyAppApplication)getApplicationContext());
+
+            mGoogleApiClient = myApp.getClient();                                                   //REMOVE WHEN NECESSARY
+
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+                    .build();
+
+            myApp.setClient(mGoogleApiClient);
+
+            textView = (TextView) findViewById(R.id.textView);
+
+            Log.d(TAG, "onCreate ends");
+        }
+        catch(Exception e){
+            Log.d(TAG, "exception " + e.toString());
+        }
+
 
     }
 
     @Override
     protected void onStart() {
+        Log.d(TAG, "onStart start");
         super.onStart();
         mGoogleApiClient.connect();
+        //myApp.getClient().connect();                                                            //REMOVE WHEN NECESSARY
+        Log.d(TAG, "onStart ends");
     }
 
     @Override
     protected void onStop() {
+        Log.d(TAG, "onStop start");
         super.onStop();
-        mGoogleApiClient.disconnect();
+//        mGoogleApiClient.disconnect();
+//        Log.d(TAG, "onStop end, googleapiclient disconnect");
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,10 +123,14 @@ public class NetworkActivity extends AppCompatActivity implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        Log.d(TAG, "onConnected start");
         // The player is signed in. Hide the sign-in button and allow the
         // player to proceed.
-        Log.d(TAG, "connection success");
+        Log.d(TAG, "onConnected end");
     }
+
+
+
 
     private static int RC_SIGN_IN = 9001;
 
@@ -128,7 +162,6 @@ public class NetworkActivity extends AppCompatActivity implements
                 mResolvingConnectionFailure = false;
             }
         }
-
         // Put code here to display the sign-in button
     }
 
@@ -138,38 +171,45 @@ public class NetworkActivity extends AppCompatActivity implements
         mGoogleApiClient.connect();
     }
 
+
+
+
+
     private RoomConfig.Builder makeBasicRoomConfigBuilder() {
+        Log.d(TAG, "makeBasicRoomConfigBuilder start");
         RoomConfig.Builder builder = RoomConfig.builder(this);
         builder.setMessageReceivedListener(this);
         builder.setRoomStatusUpdateListener(this);
         //builder.setAutoMatchCriteria(this);
 
-        // ...add other listeners as needed...
+        myApp.setClient(mGoogleApiClient);                                                      //REMOVE WHEN NECESSARY
 
+        // ...add other listeners as needed...
+        Log.d(TAG, "makeBasicRoomConfigBuilder start");
         return builder;
     }
 
-    @Override
-    public void  onRealTimeMessageReceived (RealTimeMessage message){
 
-    }
 
-    @Override
+
+
+
+    @Override   //RoomStatusUpdateListener
     public void onPeerInvitedToRoom(Room room, List<String> arg1) {
         updateRoom(room);
     }
 
-    @Override
+    @Override   //RoomStatusUpdateListener
     public void onP2PDisconnected(String participant) {
 
     }
 
-    @Override
+    @Override   //RoomStatusUpdateListener
     public void onP2PConnected(String participant) {
 
     }
 
-    @Override
+    @Override   //RoomStatusUpdateListener
     public void onPeerJoined(Room room, List<String> arg1) {
         updateRoom(room);
     }
@@ -180,6 +220,11 @@ public class NetworkActivity extends AppCompatActivity implements
         Log.d(TAG, "UpdateRoom: "+room.getParticipants().size());
         mParticipants = room.getParticipants();
     }
+
+
+
+
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -226,55 +271,69 @@ public class NetworkActivity extends AppCompatActivity implements
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+
+
     //stuff for RoomUpdateListener
     final static int RC_WAITING_ROOM = 10002;
-    String mRoomId = null;
+    public static String mRoomId = null;
 
     @Override
     public void onRoomCreated(int statusCode, Room room) {
-        Log.d(TAG, "onRoomCreated(" + statusCode + ", " + room + ")");
+        Log.d(TAG, "onRoomCreated(statusCode: " + statusCode + ", room: " + room + ")");
+
+        this.room = room;
+        MyAppApplication.room = room;                                                               //REMOVE WHEN NECESSARY
+
         if (statusCode != GamesStatusCodes.STATUS_OK) {
             Log.d(TAG, "onRoomCreated Error");
-            // let screen go to sleep
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-            // show error message, return to main screen.
-
         }
-        Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, Integer.MAX_VALUE);
-        startActivityForResult(i, RC_WAITING_ROOM);
+
+
+        // show the waiting room UI
+//        Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, Integer.MAX_VALUE);   //REMOVE WHEN REQUIRED
+        //Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(myApp.getClient(), room, Integer.MAX_VALUE);
+
+
+        showWaitingRoom(room);
+//        startActivityForResult(i, RC_WAITING_ROOM);
 
         //mRoomId = room.getRoomId();
 
-        // show the waiting room UI
-        //showWaitingRoom(room);
     }
 
     @Override
     public void onJoinedRoom(int statusCode, Room room) {
+        Log.d(TAG, "onJoinedRoom(statusCode: " + statusCode + ", room: " + room + ")");
+
         if (statusCode != GamesStatusCodes.STATUS_OK) {
             Log.d(TAG, "onJoinedRoom Error");
-            // let screen go to sleep
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-            // show error message, return to main screen.
-
             return;
         }
-            Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, Integer.MAX_VALUE);
-            startActivityForResult(i, RC_WAITING_ROOM);
+
+        this.room = room;
+        MyAppApplication.room = room;                                                               //REMOVE WHEN NECESSARY
+        Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, Integer.MAX_VALUE);
+        startActivityForResult(i, RC_WAITING_ROOM);
         //updateRoom(room);
     }
 
     @Override
     public void onRoomConnected(int statusCode, Room room) {
+        Log.d(TAG, "onRoomConnected(statusCode: " + statusCode + ", room: " + room + ")");
+
         if (statusCode != GamesStatusCodes.STATUS_OK) {
             Log.d(TAG, "onRoomConnected Error");
-            // let screen go to sleep
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-            // show error message, return to main screen.
         }
+
+        this.room = room;
+        MyAppApplication.room = room;                                                               //REMOVE WHEN NECESSARY
         showWaitingRoom(room);
     }
     //for info about status codes https://developers.google.com/android/reference/com/google/android/gms/games/GamesStatusCodes#constant-summary
@@ -294,53 +353,37 @@ public class NetworkActivity extends AppCompatActivity implements
 
 
 
-    //new stuff
 
+    //quick game button behaviour
     public void startQuickGame(View view) {
         Log.d(TAG, "StartQuickGame Entered");
         // auto-match criteria to invite one random automatch opponent.
-        // You can also specify more opponents (up to 3).
         Bundle am = RoomConfig.createAutoMatchCriteria(1, 3, 0);
 
         // build the room config:
         RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
 
         roomConfigBuilder.setAutoMatchCriteria(am);
+        roomConfigBuilder.setMessageReceivedListener(this); //necessary for messaging
 
-        RoomConfig roomConfig = roomConfigBuilder.build(); //error
+        RoomConfig roomConfig = roomConfigBuilder.build();
 
         // create room:
-        Games.RealTimeMultiplayer.create(mGoogleApiClient, roomConfig);
+        Games.RealTimeMultiplayer.create(mGoogleApiClient, roomConfig);                           //REMOVE WHEN NECESSARY
+//        Games.RealTimeMultiplayer.create(myApp.getClient(), roomConfig);
 
         // prevent screen from sleeping during handshake
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Log.d(TAG, "StartQuickGame run till end");
-
-        // go to game screen
-        //Intent intent = new Intent(this, DisplayMessageActivity.class);
-
     }
 
-//    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        if (requestCode == RC_SIGN_IN) {
-//            mSignInClicked = false;
-//            mResolvingConnectionFailure = false;
-//            if (resultCode == RESULT_OK) {
-//                mGoogleApiClient.connect();
-//            } else {
-//                // Bring up an error dialog to alert the user that sign-in
-//                // failed. The R.string.signin_failure should reference an error
-//                // string in your strings.xml file that tells the user they
-//                // could not be signed in, such as "Unable to sign in."
-//                BaseGameUtils.showActivityResultError(this,
-//                        requestCode, resultCode, R.string.signin_failure);
-//            }
-//        }
-//    }
 
     // request code for the "select players" UI
     // can be any number as long as it's unique
     final static int RC_SELECT_PLAYERS = 10000;
+
+
+
     public void invitePlayers(View view){
         Log.d(TAG, "invitePlayers entered");
         Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
@@ -352,18 +395,20 @@ public class NetworkActivity extends AppCompatActivity implements
 
     void showWaitingRoom(Room room) {
         Log.d(TAG, "showWaitingRoom entered");
-        // launch the player selection screen
-        // minimum: 1 other player; maximum: 3 other players
 //        Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
 //        startActivityForResult(intent, RC_SELECT_PLAYERS);
 
-        Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, 2);
+        Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, 2);           //REMOVE WHEN REQUIRED
+//        Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(myApp.getClient(), room, 2);
         startActivityForResult(i, RC_WAITING_ROOM); //returns onActivityResult
 
         Log.d(TAG, "showWaitingRoom done");
     }
 
+
     final static int RC_INVITATION_INBOX = 10001;
+
+    //show invitations button
     public void showInvitations(View view){
         Log.d(TAG, "showInvitations entered");
         Intent intent = Games.Invitations.getInvitationInboxIntent(mGoogleApiClient);
@@ -372,9 +417,9 @@ public class NetworkActivity extends AppCompatActivity implements
     }
 
 
-
     @Override
     public void onActivityResult(int request, int response, Intent data) {
+        Log.d(TAG, "onActivityResult(request: " + request + ", response: " + response + ")");
         if (request == RC_INVITATION_INBOX) {
             Log.d(TAG, "OnActivityResult RC_INVITATION_INBOX");
             if (response != Activity.RESULT_OK) {
@@ -441,25 +486,37 @@ public class NetworkActivity extends AppCompatActivity implements
             if (response == Activity.RESULT_OK) {
                 // (start game)
                 Log.d(TAG, "waiting room result ok");
-                Intent intent = new Intent(this, AndroidLauncher.class);
+
+
+
+                Intent intent = new Intent(this, AndroidLauncher.class);              //NOTE: SWITCH THIS FOR ACTUAL GAME
+//                Intent intent = new Intent(this, AndroidLauncherTest2.class);           //REMOVE WHEN NECESSARY
+
+
                 //EditText editText = (EditText) findViewById(R.id.edit_message);
                 //String message = editText.getText().toString();
                 //intent.putExtra(EXTRA_MESSAGE, message);
+
+
+                myApp.setClient(mGoogleApiClient);
+                myApp.setRoom(room);
+                Log.d(TAG, "Room IS: " + room.getRoomId());
+                Log.d(TAG, "mGoogleApiClient IS: " + mGoogleApiClient);
+
                 startActivity(intent);
+
+
                 Log.d(TAG, "waiting room result ok done");
             }
             else if (response == Activity.RESULT_CANCELED) {
-                // Waiting room was dismissed with the back button. The meaning of this
-                // action is up to the game. You may choose to leave the room and cancel the
-                // match, or do something else like minimize the waiting room and
-                // continue to connect in the background.
+                // Waiting room was dismissed with the back button.
 
-                // in this example, we take the simple approach and just leave the room:
                 Log.d(TAG, "waiting room result cancelled");
                 //Games.RealTimeMultiplayer.leave(mGoogleApiClient, null, mRoomId);
                 //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 if (mRoomId != null) {
-                    Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+                    Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);                  //REMOVE WHEN NECESSARY
+//                    Games.RealTimeMultiplayer.leave(myApp.getClient(), this, mRoomId);
                     mRoomId = null;
                     Log.d(TAG, "waiting room result cancelled if");
                     //finish();
@@ -479,6 +536,47 @@ public class NetworkActivity extends AppCompatActivity implements
             }
         }
 
+    }
+
+    //network test button
+    public void testButton(View view) {
+        Log.d(TAG, "testButton Entered");
+        String str = "pressed";
+        byte[] message = str.getBytes();
+        for (Participant p : mParticipants) {
+            try {
+//                    Games.RealTimeMultiplayer.sendReliableMessage(NetworkActivity.myApp.getClient(), null, message,
+//                            NetworkActivity.mRoomId, p.getParticipantId());
+                Log.d(TAG, "sending message to " + p.getParticipantId());
+//                Games.RealTimeMultiplayer.sendReliableMessage(MyAppApplication.mGoogleApiClient, null, message,
+//                        MyAppApplication.room.getRoomId(), p.getParticipantId());
+                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
+                        room.getRoomId(), p.getParticipantId());
+                Log.d(TAG, "sent to " + p.getParticipantId());
+            } catch (Exception e) {
+                Log.d(TAG, "exception" + e.toString());
+
+            }
+        }
+        Log.d(TAG, "testButton run till end");
+    }
+
+    @Override
+    public void onRealTimeMessageReceived(RealTimeMessage message){
+        Log.d(TAG, "message received");
+        byte[] b = message.getMessageData();
+        String string = null;
+        try{
+            string = new String(b, "UTF-8");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        Log.d(TAG, "String Received: " + string);
+
+        if(string.equals("pressed")){
+            textView.setText("pressed");
+        }
     }
 
 

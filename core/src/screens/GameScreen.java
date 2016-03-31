@@ -23,7 +23,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private InputHandler myInput;
 
-    public GameScreen(Game game) {
+    public GameScreen(Game game) throws InterruptedException {
         this.game = game;
 
         float screenWidth = Gdx.graphics.getWidth();

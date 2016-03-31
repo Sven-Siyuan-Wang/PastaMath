@@ -133,14 +133,14 @@ public class Player implements GameObject {
         if(!speedUp) {
             speedUp = true;
             Gdx.app.log("Player", "sped up");
-            this.velocity += 1;
+            this.velocity *= 2;
 
         }
     }
 
     public void speedDown() {
         if(speedUp) {
-            this.velocity -= 1;
+            this.velocity /= 2;
             Gdx.app.log("Player", "sped down");
             speedUp = false;
         }

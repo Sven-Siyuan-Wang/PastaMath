@@ -31,7 +31,11 @@ public class MyGdxGame extends Game {
 
 		AssetLoader.load();
 
-		myScreen = new GameScreen(this);
+		try {
+			myScreen = new GameScreen(this);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		setScreen(myScreen);
 
 	}

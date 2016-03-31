@@ -9,6 +9,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.multiplayer.Participant;
@@ -46,21 +47,30 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	String ownerId = null;
 	final static int RC_WAITING_ROOM = 10002;
 	final static String TAG="AndroidLauncher";
-	public static boolean isOwner;
+
     private static HashMap<String,Integer> playerMap = new HashMap<>();
 	private  static HashMap<String, Item> itemMap = new HashMap<>();
+
+	public static GoogleApiClient mGoogleApiClient;
+
+	public static Room room = null;
+
+	public static MyAppApplication myApp;
 
 	//keith network end
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
+		Log.e(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new MyGdxGame(this), config); // updated by siyuan
 
-		startQuickGame();
+//		startQuickGame();
 
 		//keith network
+		Log.e(TAG, "onCreate ends");
 		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
 		gameHelper.enableDebugLog(false);
 
@@ -74,7 +84,14 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		};
 
 		gameHelper.setup(gameHelperListener);
+
+
+		MyAppApplication myApp = ((MyAppApplication)getApplicationContext());
+		mGoogleApiClient = myApp.getClient();
+		room = myApp.room;
 		//keith network and
+
+
 
 
 
@@ -88,6 +105,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	{
 		super.onStart();
 		gameHelper.onStart(this);
+		mGoogleApiClient.connect();
 	}
 
 	@Override
@@ -202,6 +220,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	@Override
 	public void startQuickGame() {
+		Log.e(TAG,"startQuickGame");
 		final int MIN_OPPONENTS = 1, MAX_OPPONENTS = 2;
 		Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_OPPONENTS,
 				MAX_OPPONENTS, 0);
@@ -386,6 +405,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	@Override
 	public void onRoomConnected(int statusCode, Room room) {
+		Log.e(TAG,"onRoomConnected");
 		if (statusCode != GamesStatusCodes.STATUS_OK) {
 			showGameError();
 			return;
@@ -393,10 +413,13 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		mParticipants=room.getParticipants();
 		//myId=room.getParticipantId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
 		ownerId = room.getCreatorId();
-		isOwner = myId.equals(ownerId);
-        Player myself = new Player(myId);
-        GameWorld.players.add(myself);
-        playerMap.put(myId,new Integer(1));
+		GameWorld.isOwner = myId.equals(ownerId);
+        GameWorld.myself = new Player(myId);
+        GameWorld.players.add(GameWorld.myself);
+
+        playerMap.put(myId, new Integer(1));
+
+
 
 	}
 
