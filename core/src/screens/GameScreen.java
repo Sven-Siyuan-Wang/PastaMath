@@ -36,8 +36,8 @@ public class GameScreen implements Screen {
 
         world = new GameWorld(); //initialize world
         renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
-        myInput = new InputHandler(world.getPlayer(), this.stage, renderer);
-        Gdx.input.setInputProcessor(myInput);
+        //myInput = new InputHandler(world.getPlayer(), this.stage, renderer);
+        //Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameScreen", "attached");
     }
@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
         runTime += delta;
         world.update(delta);
         renderer.render(runTime);
-        myInput.render();
+        //myInput.render();
         //Gdx.app.log("GameScreen FPS", (1/delta)+"");
 
     }

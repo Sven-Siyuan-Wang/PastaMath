@@ -13,4 +13,6 @@ public interface PlayServices{
         public void showScore();
         public boolean isSignedIn();
         public void startQuickGame();
+        public void sendToServer(String message);
+        public void sendToPlayer(String message);
 }

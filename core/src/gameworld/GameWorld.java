@@ -1,6 +1,7 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,53 +61,50 @@ public class GameWorld {
 
         if(isOwner){
             //Server code
-
-
-        }
-        //todo: use timer to generate new item everytime (random timing) if not more than 10 items
-        //TODO: add object if capacity haven't reached- add to copy or the original?
-        if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
-            //make new object every few seconds
-            System.out.println("generate new item");
-            simple_item_buffer.generate_random_Item();
-        }
-        //todo: remove Players and objects accordingly
-        //TODO: PLAYER RESPONSES TO COLLISION
-
-
-
-
-        for(Player each_player: players){
-            each_player.update(delta);
-            //: remove Players and objects accordingly
-            //: PLAYER RESPONSES TO COLLISION
-            //int i = 0;
-            for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
-
-                Item item = iterator.next();
-                item.decreaseLife(delta);
-                if(item.expired()) iterator.remove();
-                else if(each_player.collides(item)){
-                    iterator.remove();
-                    //todo: remove corresponding coords
-                    simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
-                    item.update_player_situation(each_player);
-
-                }
+            //todo: use timer to generate new item everytime (random timing) if not more than 10 items
+            //TODO: add object if capacity haven't reached- add to copy or the original?
+            if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
+                //make new object every few seconds
+                System.out.println("generate new item");
+                sendAddItem(simple_item_buffer.generate_random_Item());
             }
-            //check if a player collided into another player
-            for(Player other_player: players){
-                if (!other_player.equals(each_player)){ //you can't knock into yourself
-                    if (each_player.knock_into(other_player)){
-                        if(each_player.getShielded()) {
-                            each_player.update_collision_count();
+            //todo: remove Players and objects accordingly
+            //TODO: PLAYER RESPONSES TO COLLISION
+            for(Player each_player: players){
+                each_player.update(delta);
+                //: remove Players and objects accordingly
+                //: PLAYER RESPONSES TO COLLISION
+                //int i = 0;
+                for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
+
+                    Item item = iterator.next();
+                    item.decreaseLife(delta);
+                    if(item.expired()) iterator.remove();
+                    else if(each_player.collides(item)){
+                        iterator.remove();
+                        //todo: remove corresponding coords
+                        simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
+                        item.update_player_situation(each_player);
+
+                    }
+                }
+                //check if a player collided into another player
+                for(Player other_player: players){
+                    if (!other_player.equals(each_player)){ //you can't knock into yourself
+                        if (each_player.knock_into(other_player)){
+                            if(each_player.getShielded()) {
+                                each_player.update_collision_count();
+                            }
+                            else
+                                each_player.decreaseScoreUponKnock();
                         }
-                        else
-                            each_player.decreaseScoreUponKnock();
                     }
                 }
             }
+
+
         }
+
 
 
 
@@ -126,5 +124,11 @@ public class GameWorld {
         //Log.e("Myself","getPlayer");
         return players.get(0);
     } // the first player in list, which is myself.
+
+    public void sendAddItem(Item item){
+        MyGdxGame.playServices.sendToPlayer(item.getName() + " " + item.getID() + " " + item.getX() + " " + item.getY());
+
+
+    }
 
 }

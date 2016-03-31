@@ -283,20 +283,28 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 					toAdd = new NumberAndOperand(operation,value,x,y);
 				}
 				GameWorld.items.add(toAdd);
-
-
 			}
-
 
 		}
 
+	}
 
+	public void sendToServer(String message){
+		byte[] mMsgBuf = message.getBytes();
+		Games.RealTimeMultiplayer.sendUnreliableMessage(gameHelper.getApiClient(),mMsgBuf,mRoomId,
+				room.getCreatorId());
+	}
 
-
-
-
-
-
+	public void sendToPlayer(String message){
+		byte[] mMsgBuf = message.getBytes();
+		if (mParticipants!=null){
+			for (Participant p:mParticipants){
+				if (!p.getParticipantId().equals(myId)){
+					Games.RealTimeMultiplayer.sendUnreliableMessage(gameHelper.getApiClient(),mMsgBuf,mRoomId,
+							p.getParticipantId());
+				}
+			}
+		}
 	}
 
 	@Override
@@ -418,6 +426,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
         GameWorld.players.add(GameWorld.myself);
 
         playerMap.put(myId, new Integer(1));
+		Log.e(TAG,"Got isOwner");
 
 
 

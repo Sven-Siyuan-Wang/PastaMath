@@ -67,7 +67,7 @@ public class Simple_Item_Buffer {
     }
 
     //TODO: implement a method to generate new items randomly
-    public void generate_random_Item(){
+    public Item generate_random_Item(){
         Random random = new Random();
         random_item_chooser= random.nextInt(5);
         Item newItem;
@@ -83,6 +83,7 @@ public class Simple_Item_Buffer {
         }
         assign_random_coord(newItem);
         items_currently_appearing.add(newItem);
+        return newItem;
 
     }
 

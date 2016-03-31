@@ -33,12 +33,17 @@ public abstract class Item implements GameObject{
 
     private Rectangle boundingRect;
 
+    private String ID;
+
     float lifeTime;
+    public static int itemID=0;
 
     public Item(){
         position = new Vector2();
         //this.assign_random_coord(); - to be done in Buffer
         lifeTime = 10 + (new Random()).nextFloat()*10;
+        this.ID = String.valueOf(itemID++);
+
 
     }
 
@@ -46,6 +51,9 @@ public abstract class Item implements GameObject{
         position = new Vector2(x,y);
         setBoundingRect();
 
+    }
+    public String getID(){
+        return ID;
     }
 
     public void decreaseLife(float delta){
