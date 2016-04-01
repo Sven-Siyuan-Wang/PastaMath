@@ -37,14 +37,13 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		RoomUpdateListener, RoomStatusUpdateListener {
 
 	//keith network
-	private GameHelper gameHelper;
+	//private GameHelper gameHelper;
 	private final static int requestCode = 1;
 	private String mRoomId = null;
 	// The participants in the currently active game
 	ArrayList<Participant> mParticipants = null;
 
 	String myId = null;
-	String ownerId = null;
 	final static int RC_WAITING_ROOM = 10002;
 	final static String TAG="AndroidLauncher";
 
@@ -57,6 +56,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	public static MyAppApplication myApp;
 
+	public static Player myself;
+
 	//keith network end
 
 	@Override
@@ -64,31 +65,46 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		Log.e(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
+
+		MyAppApplication myApp = ((MyAppApplication)getApplicationContext());
+		mGoogleApiClient = myApp.getClient();
+		room = myApp.getRoom();
+		mRoomId = room.getRoomId();
+		mParticipants = room.getParticipants();
+
+//		GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener()
+//		{
+//			@Override
+//			public void onSignInFailed(){ }
+//
+//			@Override
+//			public void onSignInSucceeded(){ }
+//		};
+//		gameHelper.setup(gameHelperListener);
+
+
+		Intent i = getIntent();
+		myself = (Player)i.getSerializableExtra("myself");
+
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new MyGdxGame(this), config); // updated by siyuan
+		initialize(new MyGdxGame(this,myself), config); // updated by siyuan
+
+		myId=room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient()));
+		GameWorld.isOwner = isServer();
+		Log.e("isOwner:",String.valueOf(GameWorld.isOwner));
+		playerMap.put(myId, new Integer(1));
 
 //		startQuickGame();
 
 		//keith network
 		Log.e(TAG, "onCreate ends");
-		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
-		gameHelper.enableDebugLog(false);
-
-		GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener()
-		{
-			@Override
-			public void onSignInFailed(){ }
-
-			@Override
-			public void onSignInSucceeded(){ }
-		};
-
-		gameHelper.setup(gameHelperListener);
+		//gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
+		//gameHelper.enableDebugLog(false);
 
 
-		MyAppApplication myApp = ((MyAppApplication)getApplicationContext());
-		mGoogleApiClient = myApp.getClient();
-		room = myApp.room;
+
+
 		//keith network and
 
 
@@ -104,7 +120,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	protected void onStart()
 	{
 		super.onStart();
-		gameHelper.onStart(this);
+		//gameHelper.onStart(this);
 		mGoogleApiClient.connect();
 	}
 
@@ -112,14 +128,14 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	protected void onStop()
 	{
 		super.onStop();
-		gameHelper.onStop();
+		//gameHelper.onStop();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		gameHelper.onActivityResult(requestCode, resultCode, data);
+		//gameHelper.onActivityResult(requestCode, resultCode, data);
 	}
 	@Override
 	public void signIn()
@@ -131,7 +147,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 				@Override
 				public void run()
 				{
-					gameHelper.beginUserInitiatedSignIn();
+					//gameHelper.beginUserInitiatedSignIn();
 				}
 			});
 		}
@@ -151,7 +167,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 				@Override
 				public void run()
 				{
-					gameHelper.signOut();
+					//gameHelper.signOut();
 				}
 			});
 		}
@@ -190,7 +206,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	{
 		if (isSignedIn() == true)
 		{
-			startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), requestCode); //, getString(R.string.achievement_dum_dum)
+			startActivityForResult(Games.Achievements.getAchievementsIntent(myApp.getClient()), requestCode); //, getString(R.string.achievement_dum_dum)
 		}
 		else
 		{
@@ -215,7 +231,9 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	@Override
 	public boolean isSignedIn()
 	{
-		return gameHelper.isSignedIn();
+		//return gameHelper.isSignedIn();
+		Log.e("AndroidLauncher", "isSignedIn");
+		return true;
 	}
 
 	@Override
@@ -230,7 +248,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		RoomConfig roomConfig= roomConfigBuilder.build();
 
 		//create room:
-		Games.RealTimeMultiplayer.create(gameHelper.getApiClient(), roomConfig);
+		Games.RealTimeMultiplayer.create(myApp.getClient(), roomConfig);
 
 		//NEXT: onRoomCreated
 
@@ -238,6 +256,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	@Override
 	public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
+		Log.d(TAG,"Received: "+realTimeMessage);
         String msg = new String(realTimeMessage.getMessageData());
         String[] words = msg.split(" ");
 
@@ -283,6 +302,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 					toAdd = new NumberAndOperand(operation,value,x,y);
 				}
 				GameWorld.items.add(toAdd);
+				Log.d(TAG,"RECEIVE: item added");
 			}
 
 		}
@@ -291,16 +311,17 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	public void sendToServer(String message){
 		byte[] mMsgBuf = message.getBytes();
-		Games.RealTimeMultiplayer.sendUnreliableMessage(gameHelper.getApiClient(),mMsgBuf,mRoomId,
+		Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient,mMsgBuf,mRoomId,
 				room.getCreatorId());
 	}
 
 	public void sendToPlayer(String message){
+		Log.d(TAG, "SENDTOPLAYER"+message);
 		byte[] mMsgBuf = message.getBytes();
 		if (mParticipants!=null){
 			for (Participant p:mParticipants){
 				if (!p.getParticipantId().equals(myId)){
-					Games.RealTimeMultiplayer.sendUnreliableMessage(gameHelper.getApiClient(),mMsgBuf,mRoomId,
+					Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient,mMsgBuf,mRoomId,
 							p.getParticipantId());
 				}
 			}
@@ -339,7 +360,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	@Override
 	public void onConnectedToRoom(Room room) {
-		myId=room.getParticipantId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
+
 
 		if (mRoomId==null){
 			mRoomId=room.getRoomId();
@@ -385,7 +406,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		}
 		mRoomId = room.getRoomId();
 		// show the waiting room UI
-		Intent i= Games.RealTimeMultiplayer.getWaitingRoomIntent(gameHelper.getApiClient(), room, Integer.MAX_VALUE);
+		Intent i= Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, Integer.MAX_VALUE);
 		startActivityForResult(i, RC_WAITING_ROOM);
 
 
@@ -401,7 +422,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		}
 
 		// show the waiting room UI
-		Intent i= Games.RealTimeMultiplayer.getWaitingRoomIntent(gameHelper.getApiClient(), room, Integer.MAX_VALUE);
+		Intent i= Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, Integer.MAX_VALUE);
 		startActivityForResult(i, RC_WAITING_ROOM);
 	}
 
@@ -414,21 +435,6 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	@Override
 	public void onRoomConnected(int statusCode, Room room) {
 		Log.e(TAG,"onRoomConnected");
-		if (statusCode != GamesStatusCodes.STATUS_OK) {
-			showGameError();
-			return;
-		}
-		mParticipants=room.getParticipants();
-		//myId=room.getParticipantId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
-		ownerId = room.getCreatorId();
-		GameWorld.isOwner = myId.equals(ownerId);
-        GameWorld.myself = new Player(myId);
-        GameWorld.players.add(GameWorld.myself);
-
-        playerMap.put(myId, new Integer(1));
-		Log.e(TAG,"Got isOwner");
-
-
 
 	}
 
@@ -436,4 +442,17 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	void showGameError() {
 		BaseGameUtils.makeSimpleDialog(this, "error");
 	}
+
+	private boolean isServer()
+	{
+		for(Participant p : mParticipants )
+		{
+			if(p.getParticipantId().compareTo(myId)<0)
+				return false;
+		}
+		return true;
+	}
+
 }
+
+

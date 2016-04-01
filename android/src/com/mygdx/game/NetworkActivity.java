@@ -31,7 +31,15 @@ import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import gameobjects.Item;
+import gameobjects.NumberAndOperand;
+import gameobjects.Player;
+import gameobjects.Shield;
+import gameobjects.SpeedUp;
+import gameworld.GameWorld;
 
 public class NetworkActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -48,6 +56,9 @@ public class NetworkActivity extends AppCompatActivity implements
     public static Room room = null;
 
     public static MyAppApplication myApp;
+
+    private static HashMap<String,Integer> playerMap = new HashMap<>();
+    private  static HashMap<String, Item> itemMap = new HashMap<>();
 
     TextView textView;
 
@@ -69,6 +80,10 @@ public class NetworkActivity extends AppCompatActivity implements
                     .build();
 
             myApp.setClient(mGoogleApiClient);
+
+            room = myApp.room;
+            Log.d(TAG,"ROOM:"+room.getRoomId());
+            Log.d(TAG,"owner:"+room.getCreatorId());
 
             textView = (TextView) findViewById(R.id.textView);
 
@@ -503,6 +518,10 @@ public class NetworkActivity extends AppCompatActivity implements
                 Log.d(TAG, "Room IS: " + room.getRoomId());
                 Log.d(TAG, "mGoogleApiClient IS: " + mGoogleApiClient);
 
+                Player myself = new Player(room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient())));
+
+                intent.putExtra("myself",myself);
+
                 startActivity(intent);
 
 
@@ -562,20 +581,58 @@ public class NetworkActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onRealTimeMessageReceived(RealTimeMessage message){
-        Log.d(TAG, "message received");
-        byte[] b = message.getMessageData();
-        String string = null;
-        try{
-            string = new String(b, "UTF-8");
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        Log.d(TAG, "String Received: " + string);
+    public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage){
+        Log.d(TAG,"Received: "+realTimeMessage);
+        String msg = new String(realTimeMessage.getMessageData());
+        String[] words = msg.split(" ");
 
-        if(string.equals("pressed")){
-            textView.setText("pressed");
+        //general message
+        if(words[0].equals("INIT")){
+            String id = words[1];
+            Player player = new Player(id);
+            playerMap.put(id, GameWorld.players.size());
+            GameWorld.players.add(player);
+        }
+
+        //sent to both player and server
+        else if(words[0].equals("PLAYER")){
+            String id = words[1];
+            float x = Float.parseFloat(words[2]);
+            float y = Float.parseFloat(words[3]);
+            Player player = GameWorld.players.get(playerMap.get(id));
+            player.setX(x);
+            player.setY(y);
+        }
+
+        //TODO: ONE MORE CASE
+        //ITEM ID X Y TYPE
+        //TYPE: SHIELD, SPEEDUP, PLUS1, MUL2
+        //ITEM ID RM
+        else if(words[0].equals("ITEM")){
+            String id = words[1];
+            if(words[2].equals("RM")){
+                Item toRemove = itemMap.get(id);
+                itemMap.remove(id);
+                toRemove.destroy();
+            }
+            else{
+                float x = Float.parseFloat(words[2]);
+                float y = Float.parseFloat(words[3]);
+                String type = words[4];
+                Item toAdd;
+                if(type.equals("SHIELD")) toAdd = new Shield(x,y);
+                else if(type.equals("SPEEDUP")) toAdd =new SpeedUp(x,y);
+                else {
+                    String operation = type.substring(0,type.length()-1);
+                    int value = Character.getNumericValue(type.charAt(type.length() - 1));
+                    toAdd = new NumberAndOperand(operation,value,x,y);
+                }
+                if(GameWorld.items!=null){
+                    GameWorld.items.add(toAdd);
+                }
+                Log.d(TAG,"RECEIVE: item added");
+            }
+
         }
     }
 

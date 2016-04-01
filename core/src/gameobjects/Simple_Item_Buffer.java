@@ -42,7 +42,7 @@ public class Simple_Item_Buffer {
         for (float y= min_y; y< max_y; y+=125f){
             y_choices.add(new Float(y));
         }
-        generate_Items();
+        //generate_Items();
     }
 
     public void generate_Items() {
@@ -69,13 +69,13 @@ public class Simple_Item_Buffer {
     //TODO: implement a method to generate new items randomly
     public Item generate_random_Item(){
         Random random = new Random();
-        random_item_chooser= random.nextInt(5);
+        random_item_chooser= random.nextInt(10);
         Item newItem;
 
-        if(random_item_chooser==1 || random_item_chooser== 3 || random_item_chooser== 5){
+        if(random_item_chooser<8){
             newItem = new NumberAndOperand();
         }
-        else if(random_item_chooser==4){
+        else if(random_item_chooser==8){
             newItem = new SpeedUp();
         }
         else{

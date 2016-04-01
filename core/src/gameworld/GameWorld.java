@@ -26,7 +26,7 @@ public class GameWorld {
 
     public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
 
-    public static ArrayList<Item> items = simple_item_buffer.items_currently_appearing;  // items for server to update
+    public static ArrayList<Item> items;  // items for server to update
 
     public static int endScore;
 
@@ -34,10 +34,13 @@ public class GameWorld {
     public static boolean isOwner;
 
 
-    public GameWorld() {
+    public GameWorld(Player myself) {
+        this.myself = myself;
+        players.add(myself);
 
         //intialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
+        items = simple_item_buffer.items_currently_appearing;
         //all the items are initialized inside the buffer already when it is constructed
 
         endScore = new Random().nextInt(100) + 1;
@@ -125,8 +128,12 @@ public class GameWorld {
         return players.get(0);
     } // the first player in list, which is myself.
 
+
+    //ITEM ID X Y TYPE
+    //TYPE: SHIELD, SPEEDUP, PLUS1, MUL2
+    //ITEM ID RM
     public void sendAddItem(Item item){
-        MyGdxGame.playServices.sendToPlayer(item.getName() + " " + item.getID() + " " + item.getX() + " " + item.getY());
+        MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID() + " " + item.getX() + " " + item.getY()+" "+item.getName());
 
 
     }

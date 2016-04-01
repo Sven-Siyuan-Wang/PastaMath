@@ -23,21 +23,21 @@ public class GameScreen implements Screen {
     private Stage stage;
     private InputHandler myInput;
 
-    public GameScreen(Game game) throws InterruptedException {
+    public GameScreen(MyGdxGame game) throws InterruptedException {
         this.game = game;
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
-        Gdx.gl.glViewport(0, 0, (int)screenWidth, (int)screenHeight);
+        Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
 
         this.stage = new Stage(new StretchViewport(1280, 720));
 
-        world = new GameWorld(); //initialize world
+        world = new GameWorld(game.myPlayer); //initialize world
         renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
-        //myInput = new InputHandler(world.getPlayer(), this.stage, renderer);
-        //Gdx.input.setInputProcessor(myInput);
+        myInput = new InputHandler(game.myPlayer, this.stage, renderer);
+        Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameScreen", "attached");
     }

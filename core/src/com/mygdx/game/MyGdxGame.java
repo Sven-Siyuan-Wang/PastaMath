@@ -18,8 +18,12 @@ public class MyGdxGame extends Game {
 
 	public static PlayServices playServices;
 
-	public MyGdxGame(PlayServices playServices){
+	public static Player myPlayer;
+
+	public MyGdxGame(PlayServices playServices, Player myself){
+
 		this.playServices = playServices;
+		myPlayer =  myself;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import gameconstants.GameConstants;
@@ -15,7 +16,7 @@ import gameworld.GameRenderer;
 /**
  * Created by Hazel on 28/2/2016.
  */
-public class Player implements GameObject {
+public class Player implements GameObject, Serializable {
     /*Vector2 --> object that can hold 2 values: the x component and y component
      * thus, position.x refers to x-coord, and position.y the y-coord
      * velocity.x and velocity.y would correspond to the speed in either direction

@@ -91,7 +91,7 @@ public class GameRenderer {
 
         this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500, 700);
 
-        renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
+        renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);
         renderSideBar(players);
 
@@ -109,11 +109,14 @@ public class GameRenderer {
 
     //TODO: renderItems inside the item_buffer
     public void renderItems(ArrayList<Item> list){
-        for(Item item: list){
-            batcher.enableBlending();
-            //System.out.println(item.getName());
-            batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+        if(list!=null){
+            for(Item item: list){
+                batcher.enableBlending();
+                //System.out.println(item.getName());
+                batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+            }
         }
+
     }
 
     public void renderPlayers(ArrayList<Player> players){
