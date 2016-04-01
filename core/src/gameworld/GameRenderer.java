@@ -112,8 +112,8 @@ public class GameRenderer {
         if(list!=null){
             for(Item item: list){
                 batcher.enableBlending();
-                //System.out.println(item.getName());
-                batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+                System.out.println("Rendering item: "+item.getName());
+                batcher.draw(AssetLoader.textures.get(item.getName()), item.getX() * GameConstants.SCALE_X, item.getY() * GameConstants.SCALE_Y, item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
             }
         }
 

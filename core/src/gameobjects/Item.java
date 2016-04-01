@@ -26,8 +26,8 @@ public abstract class Item implements GameObject{
 
     Vector2 position;
 
-    private int width= (int) (75*GameConstants.SCALE_X);
-    private int height= (int) (75*GameConstants.SCALE_Y);
+    private int width;
+    private int height;
 
     private float destructionCounter = 10;
 
@@ -43,13 +43,18 @@ public abstract class Item implements GameObject{
         //this.assign_random_coord(); - to be done in Buffer
         lifeTime = 10 + (new Random()).nextFloat()*10;
         this.ID = String.valueOf(itemID++);
+        width = (int) (75*GameConstants.SCALE_X);
+        height = (int) (75*GameConstants.SCALE_Y);
 
 
     }
 
     public Item(float x, float y){
-        position = new Vector2(x,y);
+        position = new Vector2(x*GameConstants.SCALE_X,y*GameConstants.SCALE_Y);
+        width = (int) (75*GameConstants.SCALE_X);
+        height = (int) (75*GameConstants.SCALE_Y);
         setBoundingRect();
+
 
     }
     public String getID(){

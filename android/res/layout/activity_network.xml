@@ -42,14 +42,4 @@
         android:layout_alignParentStart="true"
         android:onClick="showInvitations" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button2"
-        android:onClick="testButton"
-        android:layout_alignTop="@+id/quickgamebutton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
 </RelativeLayout>

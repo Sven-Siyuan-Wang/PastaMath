@@ -375,6 +375,7 @@ public class NetworkActivity extends AppCompatActivity implements
         // auto-match criteria to invite one random automatch opponent.
         Bundle am = RoomConfig.createAutoMatchCriteria(1, 3, 0);
 
+
         // build the room config:
         RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
 
@@ -504,7 +505,7 @@ public class NetworkActivity extends AppCompatActivity implements
 
 
 
-                Intent intent = new Intent(this, AndroidLauncher.class);              //NOTE: SWITCH THIS FOR ACTUAL GAME
+//                Intent intent = new Intent(this, AndroidLauncher.class);              //NOTE: SWITCH THIS FOR ACTUAL GAME
 //                Intent intent = new Intent(this, AndroidLauncherTest2.class);           //REMOVE WHEN NECESSARY
 
 
@@ -519,7 +520,7 @@ public class NetworkActivity extends AppCompatActivity implements
                 Log.d(TAG, "mGoogleApiClient IS: " + mGoogleApiClient);
 
                 Player myself = new Player(room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient())));
-
+                Intent intent = new Intent(this, AndroidLauncher.class);
                 intent.putExtra("myself",myself);
 
                 startActivity(intent);
@@ -557,28 +558,7 @@ public class NetworkActivity extends AppCompatActivity implements
 
     }
 
-    //network test button
-    public void testButton(View view) {
-        Log.d(TAG, "testButton Entered");
-        String str = "pressed";
-        byte[] message = str.getBytes();
-        for (Participant p : mParticipants) {
-            try {
-//                    Games.RealTimeMultiplayer.sendReliableMessage(NetworkActivity.myApp.getClient(), null, message,
-//                            NetworkActivity.mRoomId, p.getParticipantId());
-                Log.d(TAG, "sending message to " + p.getParticipantId());
-//                Games.RealTimeMultiplayer.sendReliableMessage(MyAppApplication.mGoogleApiClient, null, message,
-//                        MyAppApplication.room.getRoomId(), p.getParticipantId());
-                Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, message,
-                        room.getRoomId(), p.getParticipantId());
-                Log.d(TAG, "sent to " + p.getParticipantId());
-            } catch (Exception e) {
-                Log.d(TAG, "exception" + e.toString());
 
-            }
-        }
-        Log.d(TAG, "testButton run till end");
-    }
 
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage){

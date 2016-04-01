@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
+import gameconstants.GameConstants;
+
 /**
  * Created by valerie_tan on 3/18/2016.
  */
@@ -104,7 +106,7 @@ public class Simple_Item_Buffer {
         //set position if it doesnt alr exist
 
         if (!check_if_vector_exist(new Vector2(x, y))) {
-            item.setPosition(x, y);
+            item.setPosition(x*GameConstants.SCALE_X, y*GameConstants.SCALE_Y);
             existing_item_pos_vec.add(item.getPosition()); //add position
         }
         else{
