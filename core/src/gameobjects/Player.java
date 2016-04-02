@@ -272,6 +272,9 @@ public class Player implements GameObject, Serializable {
         return this.id;
     }
 
+    public Vector2 getPosition(){
+        return this.getPosition();
+    }
 
 
 }
