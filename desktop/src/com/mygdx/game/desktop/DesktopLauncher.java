@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.title = "Pasta Math";
 		config.width = 1280;
 		config.height = 720;
-		new LwjglApplication(new MyGdxGame(), config);
+		//new LwjglApplication(new MyGdxGame(), config);
 		//new LwjglApplication(new MyGdxGame(PlayServices, myPlayer), config);
 
 	}

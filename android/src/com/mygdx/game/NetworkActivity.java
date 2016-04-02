@@ -373,8 +373,8 @@ public class NetworkActivity extends AppCompatActivity implements
     public void startQuickGame(View view) {
         Log.d(TAG, "StartQuickGame Entered");
         // auto-match criteria to invite one random automatch opponent.
-        //Bundle am = RoomConfig.createAutoMatchCriteria(1, 3, 0);
-        Bundle am = RoomConfig.createAutoMatchCriteria(0, 3, 0);
+        Bundle am = RoomConfig.createAutoMatchCriteria(2, 3, 0);
+        //Bundle am = RoomConfig.createAutoMatchCriteria(0, 3, 0);
 
 
         // build the room config:
