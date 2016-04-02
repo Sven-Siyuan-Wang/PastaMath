@@ -14,7 +14,7 @@ import gameworld.GameObject;
  * Created by Hazel on 29/2/2016.
  */
 public class AssetLoader {
-    public static Texture texture, speedUp, player, shield;
+    public static Texture texture, speedUp, shield;
     public static Texture gameBackground;
 
     public static Texture up, down, left, right;
@@ -22,12 +22,21 @@ public class AssetLoader {
 
     public static HashMap<String,Texture> textures = new HashMap();
 
+    public static ArrayList<Texture> characters = new ArrayList<Texture>();
+
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        player = new Texture(Gdx.files.internal("data/Character/Character1.png"));
-        textures.put("player",player);
+        Texture player1 = new Texture(Gdx.files.internal("data/Character/Character1.png"));
+        characters.add(player1);
+        Texture player2 = new Texture(Gdx.files.internal("data/Character/Character2.png"));
+        characters.add(player2);
+        Texture player3 = new Texture(Gdx.files.internal("data/Character/Character3.png"));
+        characters.add(player3);
+        Texture player4 = new Texture(Gdx.files.internal("data/Character/Character4.png"));
+        characters.add(player4);
+
 
         speedUp = new Texture(Gdx.files.internal("data/speedup.png"));
         textures.put("speedUp",speedUp);
