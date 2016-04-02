@@ -9,11 +9,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
+import gameobjects.Player;
 import javafx.stage.Screen;
 import screens.GameScreen;
 
 public class MyGdxGame extends Game {
 	GameScreen myScreen;
+
+	public static PlayServices playServices;
+
+	public static Player myPlayer;
+
+	public MyGdxGame(PlayServices playServices, Player myself){
+
+		this.playServices = playServices;
+		myPlayer =  myself;
+	}
 
 	@Override
 	public void create () {
@@ -24,7 +35,11 @@ public class MyGdxGame extends Game {
 
 		AssetLoader.load();
 
-		myScreen = new GameScreen(this);
+		try {
+			myScreen = new GameScreen(this);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		setScreen(myScreen);
 
 	}

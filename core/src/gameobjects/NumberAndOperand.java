@@ -21,6 +21,13 @@ public class NumberAndOperand extends Item { //All these are a form of item
 
 
     //attributes for number_and_operand
+    public NumberAndOperand(String operation, int value, float x, float y){
+        this.operation = operation;
+        this.value = value;
+        number_n_operand= operation + String.valueOf(value);
+        this.setPosition(x,y);
+
+    }
     public NumberAndOperand(){
         Random random = new Random();
         value= random.nextInt(8)+1;

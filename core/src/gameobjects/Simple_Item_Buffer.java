@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
+import gameconstants.GameConstants;
+
 /**
  * Created by valerie_tan on 3/18/2016.
  */
@@ -42,7 +44,7 @@ public class Simple_Item_Buffer {
         for (float y= min_y; y< max_y; y+=125f){
             y_choices.add(new Float(y));
         }
-        generate_Items();
+        //generate_Items();
     }
 
     public void generate_Items() {
@@ -67,15 +69,15 @@ public class Simple_Item_Buffer {
     }
 
     //TODO: implement a method to generate new items randomly
-    public void generate_random_Item(){
+    public Item generate_random_Item(){
         Random random = new Random();
-        random_item_chooser= random.nextInt(5);
+        random_item_chooser= random.nextInt(10);
         Item newItem;
 
-        if(random_item_chooser==1 || random_item_chooser== 3 || random_item_chooser== 5){
+        if(random_item_chooser<8){
             newItem = new NumberAndOperand();
         }
-        else if(random_item_chooser==4){
+        else if(random_item_chooser==8){
             newItem = new SpeedUp();
         }
         else{
@@ -83,6 +85,7 @@ public class Simple_Item_Buffer {
         }
         assign_random_coord(newItem);
         items_currently_appearing.add(newItem);
+        return newItem;
 
     }
 
@@ -103,7 +106,7 @@ public class Simple_Item_Buffer {
         //set position if it doesnt alr exist
 
         if (!check_if_vector_exist(new Vector2(x, y))) {
-            item.setPosition(x, y);
+            item.setPosition(x*GameConstants.SCALE_X, y*GameConstants.SCALE_Y);
             existing_item_pos_vec.add(item.getPosition()); //add position
         }
         else{

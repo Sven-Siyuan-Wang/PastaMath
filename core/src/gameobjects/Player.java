@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.Serializable;
+import java.util.Random;
+
 import gameconstants.GameConstants;
 import gameworld.GameObject;
 import gameworld.GameRenderer;
@@ -13,12 +16,13 @@ import gameworld.GameRenderer;
 /**
  * Created by Hazel on 28/2/2016.
  */
-public class Player implements GameObject {
+public class Player implements GameObject, Serializable {
     /*Vector2 --> object that can hold 2 values: the x component and y component
      * thus, position.x refers to x-coord, and position.y the y-coord
      * velocity.x and velocity.y would correspond to the speed in either direction
      * acceleration --> change in velocity
      */
+    private String id;
     private Vector2 position;
     private float velocity;
     private Vector2 acceleration;
@@ -44,6 +48,20 @@ public class Player implements GameObject {
 
 
     //constructor for Player class
+    public Player(String id){
+        this.id = id;
+        Random random = new Random();
+        position = new Vector2(random.nextInt(500), random.nextInt(500));
+
+        this.width = 100;
+        this.height = 100;
+        this.boundingCircle = new Circle();
+
+        velocity = 200;
+
+        this.currentValue = 0;
+
+    }
     public Player(float x, float y, int width, int height) {
 
         position = new Vector2(x, y);
@@ -116,14 +134,14 @@ public class Player implements GameObject {
         if(!speedUp) {
             speedUp = true;
             Gdx.app.log("Player", "sped up");
-            this.velocity += 1;
+            this.velocity *= 2;
 
         }
     }
 
     public void speedDown() {
         if(speedUp) {
-            this.velocity -= 1;
+            this.velocity /= 2;
             Gdx.app.log("Player", "sped down");
             speedUp = false;
         }

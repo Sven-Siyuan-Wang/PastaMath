@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.MyGdxGame;
 
 import gamehelpers.InputHandler;
 import gameworld.GameRenderer;
@@ -22,20 +23,20 @@ public class GameScreen implements Screen {
     private Stage stage;
     private InputHandler myInput;
 
-    public GameScreen(Game game) {
+    public GameScreen(MyGdxGame game) throws InterruptedException {
         this.game = game;
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
-        Gdx.gl.glViewport(0, 0, (int)screenWidth, (int)screenHeight);
+        Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
 
         this.stage = new Stage(new StretchViewport(1280, 720));
 
-        world = new GameWorld(); //initialize world
+        world = new GameWorld(game.myPlayer); //initialize world
         renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
-        myInput = new InputHandler(world.getPlayer(), this.stage, renderer);
+        myInput = new InputHandler(game.myPlayer, this.stage, renderer);
         Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameScreen", "attached");
@@ -57,7 +58,7 @@ public class GameScreen implements Screen {
         runTime += delta;
         world.update(delta);
         renderer.render(runTime);
-        myInput.render();
+        //myInput.render();
         //Gdx.app.log("GameScreen FPS", (1/delta)+"");
 
     }

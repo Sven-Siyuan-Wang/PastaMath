@@ -1,15 +1,11 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -17,9 +13,7 @@ import java.util.ArrayList;
 import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
 import gameobjects.Item;
-import gameobjects.PickUps;
 import gameobjects.Player;
-import gameobjects.Simple_Item_Buffer;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -61,13 +55,12 @@ public class GameRenderer {
 //        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
-        //original
-        Player player = myWorld.getPlayer();
+
 
         //Todo: keep getting Players and Items
         ArrayList<Player> players= myWorld.getPlayers();
         //todo:use one hard-coded player for testing- remove later
-        players.add(player);
+
 
 
 
@@ -98,7 +91,7 @@ public class GameRenderer {
 
         this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500, 700);
 
-        renderItems(myWorld.getSimple_item_buffer().items_currently_appearing);
+        renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);
         renderSideBar(players);
 
@@ -116,11 +109,17 @@ public class GameRenderer {
 
     //TODO: renderItems inside the item_buffer
     public void renderItems(ArrayList<Item> list){
-        for(Item item: list){
-            batcher.enableBlending();
-            //System.out.println(item.getName());
-            batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+        if(list!=null){
+            for(Item item: list){
+                batcher.enableBlending();
+                System.out.println("Rendering item: "+item.getName());
+                batcher.draw(AssetLoader.textures.get(item.getName()),
+                        item.getX() * GameConstants.SCALE_X,
+                        item.getY() * GameConstants.SCALE_Y,
+                        item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
+            }
         }
+
     }
 
     public void renderPlayers(ArrayList<Player> players){

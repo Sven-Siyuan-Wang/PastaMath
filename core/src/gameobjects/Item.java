@@ -24,22 +24,41 @@ public abstract class Item implements GameObject{
 
     public abstract String getName();
 
-    private Vector2 position;
+    Vector2 position;
 
-    private int width= (int) (75*GameConstants.SCALE_X);
-    private int height= (int) (75*GameConstants.SCALE_Y);
+    private int width;
+    private int height;
 
     private float destructionCounter = 10;
 
     private Rectangle boundingRect;
 
-    private float lifeTime;
+    private String ID;
+
+    float lifeTime;
+    public static int itemID=0;
 
     public Item(){
         position = new Vector2();
         //this.assign_random_coord(); - to be done in Buffer
         lifeTime = 10 + (new Random()).nextFloat()*10;
+        this.ID = String.valueOf(itemID++);
+        width = (int) (75*GameConstants.SCALE_X);
+        height = (int) (75*GameConstants.SCALE_Y);
 
+
+    }
+
+    public Item(float x, float y){
+        position = new Vector2(x*GameConstants.SCALE_X,y*GameConstants.SCALE_Y);
+        width = (int) (75*GameConstants.SCALE_X);
+        height = (int) (75*GameConstants.SCALE_Y);
+        setBoundingRect();
+
+
+    }
+    public String getID(){
+        return ID;
     }
 
     public void decreaseLife(float delta){
@@ -61,7 +80,7 @@ public abstract class Item implements GameObject{
         //GameWorld.objectsCopy.remove(this);
         //NEW
         Gdx.app.log("Debug","Item destroyed.");
-        GameWorld.simple_item_buffer_copy.items_currently_appearing.remove(this);
+        GameWorld.simple_item_buffer.items_currently_appearing.remove(this);
     }
 
     public void update(float delta) {
