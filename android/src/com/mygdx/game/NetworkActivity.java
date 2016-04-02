@@ -600,8 +600,8 @@ public class NetworkActivity extends AppCompatActivity implements
                 float y = Float.parseFloat(words[3]);
                 String type = words[4];
                 Item toAdd;
-                if(type.equals("SHIELD")) toAdd = new Shield(x,y);
-                else if(type.equals("SPEEDUP")) toAdd =new SpeedUp(x,y);
+                if(type.equals("shield")) toAdd = new Shield(x,y);
+                else if(type.equals("speedUp")) toAdd =new SpeedUp(x,y);
                 else {
                     String operation = type.substring(0,type.length()-1);
                     int value = Character.getNumericValue(type.charAt(type.length() - 1));

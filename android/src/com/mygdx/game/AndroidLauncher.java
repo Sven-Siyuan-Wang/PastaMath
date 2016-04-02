@@ -269,6 +269,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
         }
 
         //sent to both player and server
+		//Example: PLAYER ID X Y
         else if(words[0].equals("PLAYER")){
             String id = words[1];
             float x = Float.parseFloat(words[2]);
@@ -280,7 +281,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
         //TODO: ONE MORE CASE
         //ITEM ID X Y TYPE
-		//TYPE: SHIELD, SPEEDUP, PLUS1, MUL2
+		//TYPE: shield, speedUp, plus1, mul2
         //ITEM ID RM
 		else if(words[0].equals("ITEM")){
 			String id = words[1];
