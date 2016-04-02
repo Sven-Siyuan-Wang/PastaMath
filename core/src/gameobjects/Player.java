@@ -207,6 +207,10 @@ public class Player implements GameObject, Serializable {
         }
     }
 
+    public void setCurrentValue(int value){
+        currentValue = value;
+    }
+
 
 
 
@@ -264,9 +268,10 @@ public class Player implements GameObject, Serializable {
 
     public int getCurrentValue() { return this.currentValue; }
 
-    //implemented a method to return player's position vector
-    public Vector2 getPosition(){
-        return this.position;
+    public String getId(){
+        return this.id;
     }
+
+
 
 }
