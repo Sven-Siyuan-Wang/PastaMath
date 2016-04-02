@@ -207,6 +207,10 @@ public class Player implements GameObject, Serializable {
         }
     }
 
+    public void setCurrentValue(int value){
+        currentValue = value;
+    }
+
 
 
 
@@ -263,6 +267,10 @@ public class Player implements GameObject, Serializable {
     public Circle getCollider() { return this.boundingCircle; }
 
     public int getCurrentValue() { return this.currentValue; }
+
+    public String getId(){
+        return this.id;
+    }
 
 
 

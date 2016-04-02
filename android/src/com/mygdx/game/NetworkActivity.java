@@ -373,7 +373,9 @@ public class NetworkActivity extends AppCompatActivity implements
     public void startQuickGame(View view) {
         Log.d(TAG, "StartQuickGame Entered");
         // auto-match criteria to invite one random automatch opponent.
-        Bundle am = RoomConfig.createAutoMatchCriteria(1, 3, 0);
+        final int minNumOfOpponents = 2;
+        final int maxNumOfOpponents = 3;
+        Bundle am = RoomConfig.createAutoMatchCriteria(minNumOfOpponents, maxNumOfOpponents, 0);
 
 
         // build the room config:
@@ -505,15 +507,6 @@ public class NetworkActivity extends AppCompatActivity implements
 
 
 
-//                Intent intent = new Intent(this, AndroidLauncher.class);              //NOTE: SWITCH THIS FOR ACTUAL GAME
-//                Intent intent = new Intent(this, AndroidLauncherTest2.class);           //REMOVE WHEN NECESSARY
-
-
-                //EditText editText = (EditText) findViewById(R.id.edit_message);
-                //String message = editText.getText().toString();
-                //intent.putExtra(EXTRA_MESSAGE, message);
-
-
                 myApp.setClient(mGoogleApiClient);
                 myApp.setRoom(room);
                 Log.d(TAG, "Room IS: " + room.getRoomId());
@@ -521,7 +514,9 @@ public class NetworkActivity extends AppCompatActivity implements
 
                 Player myself = new Player(room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient())));
                 Intent intent = new Intent(this, AndroidLauncher.class);
-                intent.putExtra("myself",myself);
+                intent.putExtra("myself", myself);
+
+                playerMap.put(room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient())), 0);
 
                 startActivity(intent);
 
@@ -562,11 +557,12 @@ public class NetworkActivity extends AppCompatActivity implements
 
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage){
-        Log.d(TAG,"Received: "+realTimeMessage);
+
         String msg = new String(realTimeMessage.getMessageData());
+        Log.d(TAG,"Received: "+msg);
         String[] words = msg.split(" ");
 
-        //general message
+        //general message: INIT PLAYERID
         if(words[0].equals("INIT")){
             String id = words[1];
             Player player = new Player(id);
@@ -575,6 +571,7 @@ public class NetworkActivity extends AppCompatActivity implements
         }
 
         //sent to both player and server
+        //PLAYER ID X Y
         else if(words[0].equals("PLAYER")){
             String id = words[1];
             float x = Float.parseFloat(words[2]);
@@ -591,9 +588,16 @@ public class NetworkActivity extends AppCompatActivity implements
         else if(words[0].equals("ITEM")){
             String id = words[1];
             if(words[2].equals("RM")){
-                Item toRemove = itemMap.get(id);
-                itemMap.remove(id);
-                toRemove.destroy();
+                Log.d(TAG,"RM CONDITION");
+                try{
+                    Item toRemove = itemMap.get(id);
+                    itemMap.remove(id);
+                    toRemove.destroy();
+                    Log.d(TAG,"REMOVE ITEM");
+                }catch(NullPointerException e){
+                    Log.getStackTraceString(e);
+                }
+
             }
             else{
                 float x = Float.parseFloat(words[2]);
@@ -607,11 +611,20 @@ public class NetworkActivity extends AppCompatActivity implements
                     int value = Character.getNumericValue(type.charAt(type.length() - 1));
                     toAdd = new NumberAndOperand(operation,value,x,y);
                 }
+                itemMap.put(id,toAdd);
                 if(GameWorld.items!=null){
                     GameWorld.items.add(toAdd);
                 }
                 Log.d(TAG,"RECEIVE: item added");
             }
+
+        }
+        else if(words[0].equals("SCORE")){
+            String id = words[1];
+            Log.d(TAG,"SCORE PLAYER ID: "+id);
+            int score = Integer.parseInt(words[2]);
+            Player player = GameWorld.players.get(playerMap.get(id));
+            player.setCurrentValue(score);
 
         }
     }

@@ -15,4 +15,5 @@ public interface PlayServices{
         public void startQuickGame();
         public void sendToServer(String message);
         public void sendToPlayer(String message);
+        public void sendToOnePlayer(String id, String message);
 }

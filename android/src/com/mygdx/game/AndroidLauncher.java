@@ -72,20 +72,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		mRoomId = room.getRoomId();
 		mParticipants = room.getParticipants();
 
-//		GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener()
-//		{
-//			@Override
-//			public void onSignInFailed(){ }
-//
-//			@Override
-//			public void onSignInSucceeded(){ }
-//		};
-//		gameHelper.setup(gameHelperListener);
-
-
 		Intent i = getIntent();
 		myself = (Player)i.getSerializableExtra("myself");
-
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new MyGdxGame(this,myself), config); // updated by siyuan
@@ -95,22 +83,9 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		Log.e("isOwner:",String.valueOf(GameWorld.isOwner));
 		playerMap.put(myId, new Integer(1));
 
-//		startQuickGame();
+		sendToPlayer("INIT "+myId);
 
-		//keith network
 		Log.e(TAG, "onCreate ends");
-		//gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
-		//gameHelper.enableDebugLog(false);
-
-
-
-
-		//keith network and
-
-
-
-
-
 
 	} //end of onCreate
 
@@ -264,7 +239,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
         if(words[0].equals("INIT")){
             String id = words[1];
             Player player = new Player(id);
-            playerMap.put(id,GameWorld.players.size());
+            playerMap.put(id, GameWorld.players.size());
             GameWorld.players.add(player);
         }
 
@@ -327,6 +302,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 				}
 			}
 		}
+	}
+
+	@Override
+	public void sendToOnePlayer(String id, String message) {
+		byte[] mMsgBuf = message.getBytes();
+		Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient,mMsgBuf,mRoomId,id);
 	}
 
 	@Override

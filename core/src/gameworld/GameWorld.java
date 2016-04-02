@@ -61,33 +61,32 @@ public class GameWorld {
             }
         }
 
-
         if(isOwner){
             //Server code
-            //todo: use timer to generate new item everytime (random timing) if not more than 10 items
-            //TODO: add object if capacity haven't reached- add to copy or the original?
             if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
                 //make new object every few seconds
                 System.out.println("generate new item");
                 sendAddItem(simple_item_buffer.generate_random_Item());
             }
-            //todo: remove Players and objects accordingly
             //TODO: PLAYER RESPONSES TO COLLISION
             for(Player each_player: players){
                 each_player.update(delta);
-                //: remove Players and objects accordingly
-                //: PLAYER RESPONSES TO COLLISION
-                //int i = 0;
+
                 for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
 
                     Item item = iterator.next();
                     item.decreaseLife(delta);
-                    if(item.expired()) iterator.remove();
+                    if(item.expired()) {
+                        iterator.remove();
+                        sendRemoveItem(item);
+                    }
                     else if(each_player.collides(item)){
                         iterator.remove();
+                        sendRemoveItem(item);
                         //todo: remove corresponding coords
                         simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
                         item.update_player_situation(each_player);
+                        sendPlayerScore(each_player);
 
                     }
                 }
@@ -96,10 +95,15 @@ public class GameWorld {
                     if (!other_player.equals(each_player)){ //you can't knock into yourself
                         if (each_player.knock_into(other_player)){
                             if(each_player.getShielded()) {
-                                each_player.update_collision_count();
+                                other_player.update_collision_count();
                             }
-                            else
+                            else{
                                 each_player.decreaseScoreUponKnock();
+                                other_player.decreaseScoreUponKnock();
+                                sendPlayerScore(each_player);
+                                sendPlayerScore(other_player);
+                            }
+
                         }
                     }
                 }
@@ -107,26 +111,24 @@ public class GameWorld {
 
 
         }
+        else{
+            myself.update(delta);
+
+        }
+        sendMyLocation();
 
 
 
 
 
     }
-
-
-    public Simple_Item_Buffer getSimple_item_buffer(){
-        return simple_item_buffer;
-    }
-
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
     public Player getPlayer(){ //TODO: modify to the first player in list.
-        //Log.e("Myself","getPlayer");
-        return players.get(0);
-    } // the first player in list, which is myself.
+        return myself;
+    }
 
 
     //ITEM ID X Y TYPE
@@ -136,6 +138,20 @@ public class GameWorld {
         MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID() + " " + item.getX() + " " + item.getY()+" "+item.getName());
 
 
+    }
+
+    public void sendRemoveItem(Item item){
+        MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
+    }
+
+    //PLAYER ID X Y
+    public void sendMyLocation(){
+        MyGdxGame.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY());
+    }
+
+    public void sendPlayerScore(Player player){
+        if(player==myself) return;
+        MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue());
     }
 
 }
