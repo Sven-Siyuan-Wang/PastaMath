@@ -22,6 +22,8 @@ public class GameScreen implements Screen {
     private Stage stage;
     private InputHandler myInput;
 
+    private boolean thisScreen = true;
+
     public GameScreen(Game game) {
         this.game = game;
 
@@ -33,7 +35,7 @@ public class GameScreen implements Screen {
 
         this.stage = new Stage(new StretchViewport(1280, 720));
 
-        world = new GameWorld(); //initialize world
+        world = new GameWorld(this); //initialize world
         renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
         myInput = new InputHandler(world.getPlayer(), this.stage, renderer);
         Gdx.input.setInputProcessor(myInput);
@@ -49,17 +51,27 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //Background Colour
-        Gdx.gl.glClearColor(229/255.0f, 214/255.0f, 136/255.0f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         runTime += delta;
-        world.update(delta);
-        renderer.render(runTime);
-        myInput.render();
+        if(world.win) {
+            thisScreen = false;
+            changeScreen("game over");
+        }
+        System.out.println(thisScreen);
+        if(thisScreen) {
+            world.update(delta);
+            renderer.render(runTime);
+            myInput.render();
+        }
+
         //Gdx.app.log("GameScreen FPS", (1/delta)+"");
 
+    }
+
+    public void changeScreen(String id) {
+        if(id == "game over") {
+            game.setScreen(new GameOverScreen(renderer));
+        }
     }
 
     @Override

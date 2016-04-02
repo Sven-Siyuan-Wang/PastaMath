@@ -15,7 +15,7 @@ import gameworld.GameObject;
  */
 public class AssetLoader {
     public static Texture texture, speedUp, player, shield;
-    public static Texture gameBackground;
+    public static Texture gameBackground, gameOverBackground;
 
     public static Texture up, down, left, right;
     public static Texture touchBackground, touchKnob;
@@ -72,6 +72,7 @@ public class AssetLoader {
         touchKnob = new Texture(Gdx.files.internal("data/Buttons/knob.png"));
 
         gameBackground = new Texture(Gdx.files.internal("data/Background/gamebg.png"));
+        gameOverBackground = new Texture(Gdx.files.internal("data/Background/GameOverbg.png"));
 
 
 

@@ -128,7 +128,7 @@ public class InputHandler implements InputProcessor {
      */
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if(touched) {
-            Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
+//            Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
             if (screenX > joyX + 50) {
                 myPlayer.setRight(true);
                 myPlayer.setLeft(false);

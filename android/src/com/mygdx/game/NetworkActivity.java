@@ -299,7 +299,7 @@ public class NetworkActivity extends AppCompatActivity implements
         Log.d(TAG, "StartQuickGame Entered");
         // auto-match criteria to invite one random automatch opponent.
         // You can also specify more opponents (up to 3).
-        Bundle am = RoomConfig.createAutoMatchCriteria(1, 3, 0);
+        Bundle am = RoomConfig.createAutoMatchCriteria(0, 3, 0); //changed to be able to play with only 1 player
 
         // build the room config:
         RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();

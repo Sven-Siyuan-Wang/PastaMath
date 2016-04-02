@@ -11,7 +11,7 @@ import gameobjects.Item;
 import gameobjects.PickUps;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
-
+import screens.GameScreen;
 
 
 /**
@@ -37,11 +37,13 @@ public class GameWorld {
 
     public static boolean win;
 
+    private GameScreen myScreen;
+
 
 
     //TODO: follow template above- make original and copy for buffer
 
-    public GameWorld() {
+    public GameWorld(GameScreen screen) {
         //initialize player here
         players = new ArrayList<Player>();
         player1 = new Player(200, 200, 100, 100);
@@ -55,7 +57,7 @@ public class GameWorld {
         simple_item_buffer= new Simple_Item_Buffer();
         //all the items are initialized inside the buffer already when it is constructed
 
-        endScore = new Random().nextInt(100) + 1;
+        endScore = new Random().nextInt(100) + 50;
 
     }
 
@@ -67,9 +69,10 @@ public class GameWorld {
         //simple_item_buffer_copy.items_currently_appearing= new ArrayList<Item>(simple_item_buffer.items_currently_appearing);
 
         for(Player player: players) {
-            if(player.getCurrentValue()==this.endScore) {
+            if(player.getCurrentValue()>=this.endScore) {
                 Gdx.app.log("World", "someone has won");
                 win = true;
+
             }
         }
 
