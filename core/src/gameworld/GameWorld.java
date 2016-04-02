@@ -41,8 +41,6 @@ public class GameWorld {
         //intialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         items = simple_item_buffer.items_currently_appearing;
-        //all the items are initialized inside the buffer already when it is constructed
-
         endScore = new Random().nextInt(100) + 1;
 
     }
@@ -52,7 +50,8 @@ public class GameWorld {
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
         //all the items are initialized inside the buffer already when it is constructed
-
+        //todo: update player's latest coord first
+        simple_item_buffer.update_player_pos_vec(players);
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {

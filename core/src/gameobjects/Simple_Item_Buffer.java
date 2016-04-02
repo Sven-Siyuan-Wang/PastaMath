@@ -21,6 +21,8 @@ public class Simple_Item_Buffer {
 
     //todo: keep track of existing x-y position float tuples
     public ArrayList<Vector2> existing_item_pos_vec= new ArrayList<Vector2>();
+    //todo: keep track of player's current coords - update using UPDATE method in Gameworld
+    public ArrayList<Vector2> existing_player_pos_vec= new ArrayList<Vector2>();
 
     //TODO: 2 ArrayList<float> values to choose x and y from to assign coords
     public ArrayList<Float> x_choices = new ArrayList<Float>(); //float objects, to be converted back into float primitives
@@ -105,7 +107,7 @@ public class Simple_Item_Buffer {
         float y= y_choices.get(randomizer.nextInt(y_choices.size()));
         //set position if it doesnt alr exist
 
-        if (!check_if_vector_exist(new Vector2(x, y))) {
+        if (!check_if_vector_exist(new Vector2(x, y)) && !overlaps_a_player(new Vector2(x, y))) {
             item.setPosition(x*GameConstants.SCALE_X, y*GameConstants.SCALE_Y);
             existing_item_pos_vec.add(item.getPosition()); //add position
         }
@@ -130,6 +132,24 @@ public class Simple_Item_Buffer {
         return exist;
     }
 
+    //todo: ensure generated items dont overlap with player coords
+    public boolean overlaps_a_player(Vector2 vector_to_check){
+        boolean overlap= false;
+        for (Vector2 player_pos: existing_player_pos_vec){
+            if (vector_to_check.x == player_pos.x && vector_to_check.y == player_pos.y){
+                overlap= true;
+                continue;
+            }
+        }
+        return overlap;
+    }
+
+    //todo: obtain player positions from GameWorld every update(delta)- aft players are created
+    public void update_player_pos_vec(ArrayList<Player> players){
+        for(Player player: players){
+            existing_player_pos_vec.add(player.getPosition());
+        }
+    }
 }
 
 
