@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
         float screenHeight = Gdx.graphics.getHeight();
 
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
-        Gdx.gl.glViewport(0, 0, (int)screenWidth, (int)screenHeight);
+        Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
 
         this.stage = new Stage(new StretchViewport(1280, 720));
 
@@ -57,7 +57,10 @@ public class GameScreen implements Screen {
             thisScreen = false;
             changeScreen("game over");
         }
-        System.out.println(thisScreen);
+        System.out.println("thisScreen is " + thisScreen);
+        System.out.println("world.win is " + world.win);
+        thisScreen = true;
+        world.win = false;
         if(thisScreen) {
             world.update(delta);
             renderer.render(runTime);
@@ -70,7 +73,7 @@ public class GameScreen implements Screen {
 
     public void changeScreen(String id) {
         if(id == "game over") {
-            game.setScreen(new GameOverScreen(renderer));
+            game.setScreen(new GameOverScreen(renderer, game));
         }
     }
 

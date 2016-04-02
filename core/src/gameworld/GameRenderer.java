@@ -155,6 +155,7 @@ public class GameRenderer {
         batcher.enableBlending();
 
         batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.startOverButton, 540*GameConstants.SCALE_X, 360*GameConstants.SCALE_Y, 200*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y);
 
         batcher.end();
     }

@@ -35,7 +35,7 @@ public class GameWorld {
 
     public static int endScore;
 
-    public static boolean win;
+    public static boolean win = false;
 
     private GameScreen myScreen;
 
@@ -70,6 +70,9 @@ public class GameWorld {
 
         for(Player player: players) {
             if(player.getCurrentValue()>=this.endScore) {
+                for(Player player2: players) {
+                    player2.resetCurrentValue();
+                }
                 Gdx.app.log("World", "someone has won");
                 win = true;
 

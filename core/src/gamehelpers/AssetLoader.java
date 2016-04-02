@@ -17,7 +17,7 @@ public class AssetLoader {
     public static Texture texture, speedUp, player, shield;
     public static Texture gameBackground, gameOverBackground;
 
-    public static Texture up, down, left, right;
+    public static Texture up, down, left, right, startOverButton;
     public static Texture touchBackground, touchKnob;
 
     public static HashMap<String,Texture> textures = new HashMap();
@@ -73,6 +73,8 @@ public class AssetLoader {
 
         gameBackground = new Texture(Gdx.files.internal("data/Background/gamebg.png"));
         gameOverBackground = new Texture(Gdx.files.internal("data/Background/GameOverbg.png"));
+
+        startOverButton = new Texture(Gdx.files.internal("data/Buttons/startOverButton.png"));
 
 
 

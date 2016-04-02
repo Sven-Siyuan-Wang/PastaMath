@@ -246,6 +246,10 @@ public class Player implements GameObject {
 
     public int getCurrentValue() { return this.currentValue; }
 
+    public void resetCurrentValue() {
+        this.currentValue=0;
+    }
+
 
 
 }

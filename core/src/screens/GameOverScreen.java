@@ -17,8 +17,9 @@ import gameworld.GameWorld;
 public class GameOverScreen implements Screen {
     private GameRenderer renderer;
     private GameOverInput myInput;
+    private Game game;
 
-    public GameOverScreen(GameRenderer renderer) {
+    public GameOverScreen(GameRenderer renderer, Game game) {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
@@ -26,10 +27,15 @@ public class GameOverScreen implements Screen {
         Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
 
         this.renderer = renderer;
-        myInput = new GameOverInput(renderer);
+        this.game = game;
+        myInput = new GameOverInput(renderer, this);
         Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameOverScreen", "attached");
+    }
+
+    public void changeScreen() {
+        game.setScreen(new GameScreen(game));
     }
 
     @Override
