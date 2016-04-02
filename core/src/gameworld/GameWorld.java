@@ -150,7 +150,6 @@ public class GameWorld {
     }
 
     public void sendPlayerScore(Player player){
-        if(player==myself) return;
         MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue());
     }
 
