@@ -26,8 +26,8 @@ public abstract class Item implements GameObject{
 
     private Vector2 position;
 
-    private int width= (int) (75*GameConstants.SCALE_X);
-    private int height= (int) (75*GameConstants.SCALE_Y);
+    private int width= (int) (75);
+    private int height= (int) (75);
 
     private float destructionCounter = 10;
 

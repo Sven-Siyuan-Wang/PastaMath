@@ -100,7 +100,7 @@ public class InputHandler implements InputProcessor {
      */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 //        myPlayer.onClick(screenX, screenY);
-        if(screenX >= 1080 && screenY >= 520) {
+        if(screenX >= 1080*GameConstants.SCALE_X && screenY >= 520*GameConstants.SCALE_Y) {
             Gdx.app.log("InputHandler", "screenX is " + screenX + " and screenY is " + screenY) ;
             Gdx.app.log("meow", "this is " + (screenY + 100) * GameConstants.SCALE_Y);
             touched = true;
@@ -129,20 +129,20 @@ public class InputHandler implements InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if(touched) {
 //            Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
-            if (screenX > joyX + 50) {
+            if (screenX > joyX + 50*GameConstants.SCALE_X) {
                 myPlayer.setRight(true);
                 myPlayer.setLeft(false);
-            } else if (screenX < joyX - 50) {
+            } else if (screenX < joyX - 50*GameConstants.SCALE_X) {
                 myPlayer.setLeft(true);
                 myPlayer.setRight(false);
             } else {
                 myPlayer.setRight(false);
                 myPlayer.setLeft(false);
             }
-            if (screenY > joyY + 50) {
+            if (screenY > joyY + 50*GameConstants.SCALE_Y) {
                 myPlayer.setUp(true);
                 myPlayer.setDown(false);
-            } else if (screenY < joyY - 50) {
+            } else if (screenY < joyY - 50*GameConstants.SCALE_Y) {
                 myPlayer.setDown(true);
                 myPlayer.setUp(false);
             } else {
