@@ -54,9 +54,17 @@ public class GameWorld {
         items = simple_item_buffer.items_currently_appearing;
         //all the items are initialized inside the buffer already when it is constructed
 
-        endScore = new Random().nextInt(100) + 50;
+
+
+        if(isOwner) {
+            endScore = new Random().nextInt(100) + 50;
+            sendEndScore(endScore);
+
+        }
 
     }
+
+
 
     //TODO(Extra): consider doing thread version? (complicated)
 
@@ -166,6 +174,10 @@ public class GameWorld {
 
     public void sendPlayerScore(Player player){
         MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue());
+    }
+
+    private void sendEndScore(int endScore) {
+        MyGdxGame.playServices.sendToPlayer("ENDSCORE "+ endScore);
     }
 
 }

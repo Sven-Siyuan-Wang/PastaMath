@@ -572,7 +572,7 @@ public class NetworkActivity extends AppCompatActivity implements
             }
 
         }
-
+        //Update player location
         //sent to both player and server
         //PLAYER ID X Y
         else if(words[0].equals("PLAYER")){
@@ -584,7 +584,7 @@ public class NetworkActivity extends AppCompatActivity implements
             player.setY(y);
         }
 
-        //TODO: ONE MORE CASE
+
         //ITEM ID X Y TYPE
         //TYPE: SHIELD, SPEEDUP, PLUS1, MUL2
         //ITEM ID RM
@@ -622,6 +622,8 @@ public class NetworkActivity extends AppCompatActivity implements
             }
 
         }
+
+        //Update score
         else if(words[0].equals("SCORE")){
             String id = words[1];
             Log.d(TAG,"SCORE PLAYER ID: "+id);
@@ -630,6 +632,13 @@ public class NetworkActivity extends AppCompatActivity implements
             player.setCurrentValue(score);
 
         }
+
+        else if(words[0].equals("ENDSCORE")){
+            int endscore = Integer.parseInt(words[1]);
+            GameWorld.endScore = endscore;
+        }
+
+
     }
 
 
