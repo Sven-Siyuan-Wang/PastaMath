@@ -22,6 +22,9 @@ public class Simple_Item_Buffer {
     //todo: keep track of existing x-y position float tuples
     public ArrayList<Vector2> existing_item_pos_vec= new ArrayList<Vector2>();
 
+    //todo: keep track of player pos
+    public ArrayList<Vector2> existing_player_pos_vec= new ArrayList<Vector2>();
+
     //TODO: 2 ArrayList<float> values to choose x and y from to assign coords
     public ArrayList<Float> x_choices = new ArrayList<Float>(); //float objects, to be converted back into float primitives
     public ArrayList<Float> y_choices = new ArrayList<Float>();
@@ -130,6 +133,23 @@ public class Simple_Item_Buffer {
         return exist;
     }
 
+    //todo: check if generated item will overlap with player
+    public boolean overlaps_a_player(Vector2 vector_to_check){
+        boolean overlap= false;
+        for(Vector2 player_pos: existing_player_pos_vec){
+            if(vector_to_check.x==player_pos.x && vector_to_check.y == player_pos.y){
+                overlap= true;
+                continue;
+            }
+        }
+        return overlap;
+    }
+
+    public void update_player_pos_vec(ArrayList<Player> players){
+        for(Player player: players){
+            existing_player_pos_vec.add(player.getPosition());
+        }
+    }
 }
 
 

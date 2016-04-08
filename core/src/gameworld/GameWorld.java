@@ -52,7 +52,8 @@ public class GameWorld {
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
         //all the items are initialized inside the buffer already when it is constructed
-
+        //todo: obtain player latest coord toprevent new items frm overlapping
+        simple_item_buffer.update_player_pos_vec(players);
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
