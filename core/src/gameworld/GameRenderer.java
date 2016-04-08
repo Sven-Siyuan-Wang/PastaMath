@@ -136,7 +136,7 @@ public class GameRenderer {
         for(Player player: players) {
             batcher.enableBlending();
             font.draw(batcher, Integer.toString(player.getCurrentValue()), 1050*GameConstants.SCALE_X, (720-150*count)*GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.characters.get(count++-1), 1130*GameConstants.SCALE_X, (720-220)*count*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.characters.get(count-1), 1130*GameConstants.SCALE_X, (720-220)*count*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
             count++;
         }
     }

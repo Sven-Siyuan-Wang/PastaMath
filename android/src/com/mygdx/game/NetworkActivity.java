@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import com.badlogic.gdx.Game;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -558,8 +559,18 @@ public class NetworkActivity extends AppCompatActivity implements
         if(words[0].equals("INIT")){
             String id = words[1];
             Player player = new Player(id);
-            playerMap.put(id, GameWorld.players.size());
-            GameWorld.players.add(player);
+
+            synchronized (GameWorld.players){
+                if(GameWorld.players.size()==0){
+                    playerMap.put("null",0);
+                    GameWorld.players.add(new Player("null"));
+                }
+
+                playerMap.put(id, GameWorld.players.size());
+                GameWorld.players.add(player);
+
+            }
+
         }
 
         //sent to both player and server

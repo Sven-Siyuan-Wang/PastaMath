@@ -38,7 +38,16 @@ public class GameWorld {
 
     public GameWorld(Player myself) {
         this.myself = myself;
-        players.add(myself);
+
+        synchronized (players){
+            if(players.size()==0){
+                players.add(myself);
+            }
+            else{
+                players.set(0,myself);
+            }
+        }
+
 
         //intialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
