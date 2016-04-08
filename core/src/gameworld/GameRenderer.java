@@ -132,12 +132,12 @@ public class GameRenderer {
     }
 
     public void renderSideBar(ArrayList<Player> players) {
-        int count = 0;
+        int count = 1;
         for(Player player: players) {
             batcher.enableBlending();
-            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1110*GameConstants.SCALE_X, 570-(100*count+50*count)*GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.textures.get("player"), 1050*GameConstants.SCALE_X, (520-(100*count + (50*count)))*GameConstants.SCALE_Y, 50*GameConstants.SCALE_X, 50*GameConstants.SCALE_Y);
-            count +=1;
+            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1050*GameConstants.SCALE_X, (720-150*count)*GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.characters.get(count++-1), 1130*GameConstants.SCALE_X, (720-220)*count*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
+            count++;
         }
     }
 

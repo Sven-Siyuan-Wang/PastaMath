@@ -20,7 +20,7 @@ public class GameScreen implements Screen {
     private GameWorld world;
     private GameRenderer renderer;
     private float runTime;
-    private Game game;
+    private MyGdxGame game;
     private Stage stage;
     private InputHandler myInput;
 

@@ -58,7 +58,6 @@ public class NetworkActivity extends AppCompatActivity implements
     private static HashMap<String,Integer> playerMap = new HashMap<>();
     private  static HashMap<String, Item> itemMap = new HashMap<>();
 
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,6 @@ public class NetworkActivity extends AppCompatActivity implements
             Log.d(TAG,"ROOM:"+room.getRoomId());
             Log.d(TAG,"owner:"+room.getCreatorId());
 
-            textView = (TextView) findViewById(R.id.textView);
 
             Log.d(TAG, "onCreate ends");
         }
