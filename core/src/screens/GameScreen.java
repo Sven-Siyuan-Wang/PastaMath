@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.MyGdxGame;
 
 import gamehelpers.InputHandler;
 import gameworld.GameRenderer;
@@ -23,6 +24,8 @@ public class GameScreen implements Screen {
     private Stage stage;
     private InputHandler myInput;
 
+    private boolean thisScreen = true;
+    
     public GameScreen(MyGdxGame game) throws InterruptedException {
         this.game = game;
 
@@ -50,17 +53,30 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //Background Colour
-        Gdx.gl.glClearColor(229/255.0f, 214/255.0f, 136/255.0f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         runTime += delta;
-        world.update(delta);
-        renderer.render(runTime);
-        //myInput.render();
+        if(world.win) {
+            thisScreen = false;
+            changeScreen("game over");
+        }
+        System.out.println("thisScreen is " + thisScreen);
+        System.out.println("world.win is " + world.win);
+        thisScreen = true;
+        world.win = false;
+        if(thisScreen) {
+            world.update(delta);
+            renderer.render(runTime);
+            myInput.render();
+        }
+
         //Gdx.app.log("GameScreen FPS", (1/delta)+"");
 
+    }
+
+    public void changeScreen(String id) {
+        if(id == "game over") {
+            game.setScreen(new GameOverScreen(renderer, game));
+        }
     }
 
     @Override

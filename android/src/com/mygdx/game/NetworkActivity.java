@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,7 +45,6 @@ public class NetworkActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         RoomStatusUpdateListener, RoomUpdateListener, RealTimeMessageReceivedListener
 {
-
 
 
     final static String TAG = "PASTAMATH NETWORKING";
@@ -112,7 +110,6 @@ public class NetworkActivity extends AppCompatActivity implements
 //        mGoogleApiClient.disconnect();
 //        Log.d(TAG, "onStop end, googleapiclient disconnect");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,10 +182,6 @@ public class NetworkActivity extends AppCompatActivity implements
         // Attempt to reconnect
         mGoogleApiClient.connect();
     }
-
-
-
-
 
     private RoomConfig.Builder makeBasicRoomConfigBuilder() {
         Log.d(TAG, "makeBasicRoomConfigBuilder start");
@@ -368,6 +361,7 @@ public class NetworkActivity extends AppCompatActivity implements
 
 
 
+    //new stuff
 
     //quick game button behaviour
     public void startQuickGame(View view) {

@@ -11,6 +11,8 @@ import gameobjects.Item;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
 import sun.rmi.runtime.Log;
+import screens.GameScreen;
+
 
 
 /**
@@ -30,8 +32,8 @@ public class GameWorld {
 
     public static int endScore;
 
-    public static boolean win;
     public static boolean isOwner;
+    public static boolean win = false;
 
 
     public GameWorld(Player myself) {
@@ -43,7 +45,7 @@ public class GameWorld {
         items = simple_item_buffer.items_currently_appearing;
         //all the items are initialized inside the buffer already when it is constructed
 
-        endScore = new Random().nextInt(100) + 1;
+        endScore = new Random().nextInt(100) + 50;
 
     }
 
@@ -56,7 +58,10 @@ public class GameWorld {
         simple_item_buffer.update_player_pos_vec(players);
 
         for(Player player: players) {
-            if(player.getCurrentValue()==this.endScore) {
+            if(player.getCurrentValue()>=this.endScore) {
+                for(Player player2: players) {
+                    player2.resetCurrentValue();
+                }
                 Gdx.app.log("World", "someone has won");
                 win = true;
             }

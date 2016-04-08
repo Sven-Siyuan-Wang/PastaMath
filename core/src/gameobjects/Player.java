@@ -268,6 +268,10 @@ public class Player implements GameObject, Serializable {
 
     public int getCurrentValue() { return this.currentValue; }
 
+    public void resetCurrentValue() {
+        this.currentValue=0;
+    }
+
     public String getId(){
         return this.id;
     }

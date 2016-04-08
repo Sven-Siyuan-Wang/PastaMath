@@ -49,6 +49,7 @@ public class GameRenderer {
         shapeRenderer.setProjectionMatrix(cam.combined);
 
         this.font = new BitmapFont(Gdx.files.internal("data/font.fnt"));
+        this.font.getData().setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y);
     }
 
     public void render(float runTime) {
@@ -119,7 +120,6 @@ public class GameRenderer {
                         item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
             }
         }
-
     }
 
     public void renderPlayers(ArrayList<Player> players){
@@ -132,12 +132,12 @@ public class GameRenderer {
     }
 
     public void renderSideBar(ArrayList<Player> players) {
-        int count = 1;
+        int count = 0;
         for(Player player: players) {
             batcher.enableBlending();
-            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1050*GameConstants.SCALE_X, (720-150*count)*GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.characters.get(count++-1), 1130*GameConstants.SCALE_X, (720-220)*count*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
-            count++;
+            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1110*GameConstants.SCALE_X, 570-(100*count+50*count)*GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.textures.get("player"), 1050*GameConstants.SCALE_X, (520-(100*count + (50*count)))*GameConstants.SCALE_Y, 50*GameConstants.SCALE_X, 50*GameConstants.SCALE_Y);
+            count +=1;
         }
     }
 
@@ -145,8 +145,18 @@ public class GameRenderer {
         batcher.begin();
         batcher.enableBlending();
 //            Gdx.app.log("render","y: " +  (joyY+100) * GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.touchBackground, (joyX - 100) * GameConstants.SCALE_X, (720 - joyY - 100) * GameConstants.SCALE_Y, 200 * GameConstants.SCALE_X, 200 * GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.touchKnob, (joyX - 25) * GameConstants.SCALE_X, (720 - joyY - 25) * GameConstants.SCALE_Y, 50 * GameConstants.SCALE_X, 50 * GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.touchBackground, joyX - 100* GameConstants.SCALE_X, 720*GameConstants.SCALE_Y - joyY - 100* GameConstants.SCALE_Y, 200 * GameConstants.SCALE_X, 200 * GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.touchKnob, joyX - 25* GameConstants.SCALE_X, 720*GameConstants.SCALE_Y - joyY - 25* GameConstants.SCALE_Y, 50 * GameConstants.SCALE_X, 50 * GameConstants.SCALE_Y);
+        batcher.end();
+    }
+
+    public void renderGameOverScreen() {
+        batcher.begin();
+        batcher.enableBlending();
+
+        batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.startOverButton, 540*GameConstants.SCALE_X, 360*GameConstants.SCALE_Y, 200*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y);
+
         batcher.end();
     }
 
