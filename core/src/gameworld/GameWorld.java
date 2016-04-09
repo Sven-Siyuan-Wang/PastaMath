@@ -1,6 +1,13 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
@@ -19,7 +26,14 @@ import screens.GameScreen;
  * Created by Hazel on 28/2/2016.
  */
 public class GameWorld {
+    //todo: initialize box2d and related componnents here
+    public static World box2dworld;
+    public static Box2DDebugRenderer box2DDebugRenderer;
+    public static OrthographicCamera box2dcamera;
 
+    //todo: intiialize Bodies of player and items- in GameWorld?
+    public static Array<Body> player_bodies= new Array<Body>();
+    public static Array<Body> item_bodies= new Array<Body>();
 
     //TODO: initialize all players and game objects here- SERVER
     public static ArrayList<Player> players = new ArrayList<Player>();
@@ -37,6 +51,14 @@ public class GameWorld {
 
 
     public GameWorld(Player myself) {
+        //todo: initialize box2d world
+        float w= Gdx.graphics.getWidth();
+        float h= Gdx.graphics.getHeight();
+        box2dworld = new World(new Vector2(0, 0), false); //gravity vector=0, don't sleep
+        box2dcamera = new OrthographicCamera();
+        box2dcamera.setToOrtho(false, w, h); //divide to zoom in
+        box2DDebugRenderer= new Box2DDebugRenderer();
+
         this.myself = myself;
 
         synchronized (players){
@@ -65,11 +87,42 @@ public class GameWorld {
     }
 
 
-
-    //TODO(Extra): consider doing thread version? (complicated)
-
-    //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
+        //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
+        //fill array with bodies
+        box2dworld.getBodies(player_bodies);
+        box2dworld.getBodies(item_bodies);
+/* EXAMPLE:
+// Create an array to be filled with the bodies
+// (better don't create a new one every time though)
+Array<Body> bodies = new Array<Body>();
+// Now fill the array with all bodies
+world.getBodies(bodies);
+
+for (Body b : bodies) {
+    // Get the body's user data - in this example, our user
+    // data is an instance of the Entity class
+    Entity e = (Entity) b.getUserData();
+
+    if (e != null) {
+        // Update the entities/sprites position and angle
+        e.setPosition(b.getPosition().x, b.getPosition().y);
+        // We need to convert our angle from radians to degrees
+        e.setRotation(MathUtils.radiansToDegrees * b.getAngle());
+    }
+}
+ */
+
+
+
+
+
+
+
+
+
+
+
         //all the items are initialized inside the buffer already when it is constructed
         //todo: obtain player latest coord toprevent new items frm overlapping
         simple_item_buffer.update_player_pos_vec(players);

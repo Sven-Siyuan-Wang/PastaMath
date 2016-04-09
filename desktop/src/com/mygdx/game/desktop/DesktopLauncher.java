@@ -11,5 +11,8 @@ public class DesktopLauncher {
 		config.width = 640;
 		config.height = 360;
 		new LwjglApplication(new MyGdxGame(), config);
+		//ensure fps
+		config.backgroundFPS= 60;
+		config.backgroundFPS= 60;
 	}
 }

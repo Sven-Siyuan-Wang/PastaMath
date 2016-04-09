@@ -53,6 +53,8 @@ public class GameRenderer {
     }
 
     public void render(float runTime) {
+        //todo: stepping the simulation ofr box2d world
+
 //        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
