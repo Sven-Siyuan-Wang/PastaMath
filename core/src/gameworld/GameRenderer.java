@@ -88,9 +88,6 @@ public class GameRenderer {
         //end spritebatch
         batcher.end();
 
-//        myWorld.getStage().act();
-//        myWorld.getStage().draw();
-
     }
 
     //TODO: renderItems inside the item_buffer
@@ -98,14 +95,14 @@ public class GameRenderer {
         for(Item item: list){
             batcher.enableBlending();
             //System.out.println(item.getName());
-            batcher.draw(AssetLoader.textures.get(item.getName()), item.getX()*GameConstants.SCALE_X, item.getY()*GameConstants.SCALE_Y, item.getWidth()*GameConstants.SCALE_X, item.getHeight()*GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.textures.get(item.getName()), item.getX() * GameConstants.SCALE_X, item.getY() * GameConstants.SCALE_Y, item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
         }
     }
 
     public void renderPlayers(ArrayList<Player> players){
         for(Player player: players){
             batcher.enableBlending();
-            batcher.draw(AssetLoader.textures.get("player"), player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.textures.get("player"), player.getX() * GameConstants.SCALE_X, player.getY() * GameConstants.SCALE_Y, player.getWidth() * GameConstants.SCALE_X, player.getHeight() * GameConstants.SCALE_Y);
         }
 
     }
@@ -114,9 +111,15 @@ public class GameRenderer {
         int count = 0;
         for(Player player: players) {
             batcher.enableBlending();
-            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1110*GameConstants.SCALE_X, 570-(100*count+50*count)*GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.textures.get("player"), 1050*GameConstants.SCALE_X, (520-(100*count + (50*count)))*GameConstants.SCALE_Y, 50*GameConstants.SCALE_X, 50*GameConstants.SCALE_Y);
-            count +=1;
+            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1110 * GameConstants.SCALE_X, 570 - (100 * count + 50 * count) * GameConstants.SCALE_Y);
+            if(!player.getSpeedUp() && !player.getShield()) {
+                batcher.draw(AssetLoader.textures.get("player"), 1050 * GameConstants.SCALE_X, (520 - (100 * count + (50 * count))) * GameConstants.SCALE_Y, 50 * GameConstants.SCALE_X, 50 * GameConstants.SCALE_Y);
+                count += 1;
+            } else if(player.getSpeedUp()) {
+
+            } else if(player.getShield()) {
+
+            }
         }
     }
 
@@ -138,9 +141,4 @@ public class GameRenderer {
 
         batcher.end();
     }
-
-
-
-
-
 }

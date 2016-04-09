@@ -250,6 +250,14 @@ public class Player implements GameObject {
         this.currentValue=0;
     }
 
+    public boolean getSpeedUp() {
+        return this.speedUp;
+    }
+
+    public boolean getShield() {
+        return this.shielded;
+    }
+
 
 
 }
