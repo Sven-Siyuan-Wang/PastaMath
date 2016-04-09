@@ -12,6 +12,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.MyGdxGame;
 
 import gamehelpers.InputHandler;
+import gameworld.GameListener;
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
 
@@ -56,6 +57,7 @@ public class GameScreen implements Screen {
     public void show() {
         Gdx.app.log("GameScreen", "show called");
         //TODO: setContactListener
+        GameWorld.box2dworld.setContactListener(new GameListener());
 
     }
 

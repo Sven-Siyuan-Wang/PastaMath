@@ -281,6 +281,10 @@ public class Player implements GameObject, Serializable {
         return this.position;
     }
 
+    //implement setPosition method for player_body
+    public void setPosition(Vector2 position){
+        this.position= position;
+    }
 
 
 }

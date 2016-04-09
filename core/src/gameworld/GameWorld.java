@@ -3,6 +3,7 @@ package gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2D;
@@ -102,6 +103,7 @@ public class GameWorld {
 
         //setUserData of corresponding Players
         for (int i=0; i<players.size(); i++){
+            //todo: how to create bodies?
             player_bodies.get(i) = createPlayerBody(players.get(i));
             player_bodies.get(i).setUserData(players.get(i));
         }
@@ -113,12 +115,35 @@ public class GameWorld {
         //TODO: SETUSERDATA TO FIXTURES FOR PLAYERS AND ITEMS, need to keep track of their identities for ContactListnener
     }
 
-
+    //todo: a method to centre camera on player's (MYSELF?) position (extra)
+    public void cameraUpdate(float delta){
+        Vector3 position= box2dcamera.position;
+        position.x= myself.getPosition().x;
+        position.y= myself.getPosition().y;
+        box2dcamera.position.set(position);
+        box2dcamera.update();
+    }
     public void update(float delta) {
+        //todo:  stepping for the world
+        box2dworld.step(1 / 60f, 6, 2);
+
         //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
         //fill array with bodies
         box2dworld.getBodies(player_bodies);
         box2dworld.getBodies(current_item_bodies);
+
+        for (Body player_body: player_bodies){
+            Player player= (Player) player_body.getUserData();
+            if (player!=null){
+                player.setPosition(player_body.getPosition());
+            }
+        }
+        for (Body item_body: current_item_bodies){
+            Item item= (Item) item_body.getUserData();
+            if(item!=null){
+                item.setPosition(item_body.getPosition().x, item_body.getPosition().y);
+            }
+        }
 /* EXAMPLE:
 // Create an array to be filled with the bodies
 // (better don't create a new one every time though)
@@ -139,14 +164,6 @@ for (Body b : bodies) {
     }
 }
  */
-
-
-
-
-
-
-
-
 
 
 
