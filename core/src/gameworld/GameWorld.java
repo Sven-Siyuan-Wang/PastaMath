@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
@@ -17,6 +21,7 @@ import java.util.Random;
 import gameobjects.Item;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
+import javafx.scene.shape.Circle;
 import sun.rmi.runtime.Log;
 import screens.GameScreen;
 
@@ -31,9 +36,6 @@ public class GameWorld {
     public static Box2DDebugRenderer box2DDebugRenderer;
     public static OrthographicCamera box2dcamera;
 
-    //todo: intiialize Bodies of player and items- in GameWorld?
-    public static Array<Body> player_bodies= new Array<Body>();
-    public static Array<Body> item_bodies= new Array<Body>();
 
     //TODO: initialize all players and game objects here- SERVER
     public static ArrayList<Player> players = new ArrayList<Player>();
@@ -49,6 +51,12 @@ public class GameWorld {
     public static boolean isOwner;
     public static boolean win = false;
 
+
+    //todo: (BOX2D) intiialize Bodies and Fixtures of player and items
+    public static Array<Body> player_bodies= new Array<Body>(players.size());
+    public static Array<Fixture> player_fixtures= new Array<Fixture>(players.size());
+    public static Array<Body> current_item_bodies= new Array<Body>(items.size());
+    public static Array<Fixture> current_item_fixtures= new Array<Fixture>(items.size());
 
     public GameWorld(Player myself) {
         //todo: initialize box2d world
@@ -76,14 +84,33 @@ public class GameWorld {
         items = simple_item_buffer.items_currently_appearing;
         //all the items are initialized inside the buffer already when it is constructed
 
-
-
         if(isOwner) {
             endScore = new Random().nextInt(100) + 50;
             sendEndScore(endScore);
 
         }
 
+        //TODO: initialize bodies of players and items and setup the user data
+        /*
+        The easiest way to manage a link between your sprites or game objects and Box2D is with Box2D’s User Data.
+        You can set the user data to your game object and
+        then update the object's position based on the Box2D body.
+         */
+
+        //create Bodies of Players using createPlayerBody method
+        //create Bodies of Items using createItemBody method
+
+        //setUserData of corresponding Players
+        for (int i=0; i<players.size(); i++){
+            player_bodies.get(i) = createPlayerBody(players.get(i));
+            player_bodies.get(i).setUserData(players.get(i));
+        }
+        //setUserData of corresponding Items
+        for (int i=0; i<items.size(); i++){
+            current_item_bodies.get(i).setUserData(items.get(i));
+        }
+
+        //TODO: SETUSERDATA TO FIXTURES FOR PLAYERS AND ITEMS, need to keep track of their identities for ContactListnener
     }
 
 
@@ -91,7 +118,7 @@ public class GameWorld {
         //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
         //fill array with bodies
         box2dworld.getBodies(player_bodies);
-        box2dworld.getBodies(item_bodies);
+        box2dworld.getBodies(current_item_bodies);
 /* EXAMPLE:
 // Create an array to be filled with the bodies
 // (better don't create a new one every time though)
@@ -233,4 +260,68 @@ for (Body b : bodies) {
         MyGdxGame.playServices.sendToPlayer("ENDSCORE "+ endScore);
     }
 
+
+    //TODO: implement createPlayerBody and createItemBody methods - with Player and Item as arguments
+    public Body createPlayerBody(Player player){ //radius= 75/2
+        //todo: create dynamic bodies for players
+        Body player_body;
+        //1. create body definition
+        BodyDef bodyDef= new BodyDef();
+        //2. set body to dynamic
+        bodyDef.type= BodyDef.BodyType.DynamicBody;
+        //Set body's starting position in the world; //todo: obtain player location?
+        bodyDef.position.set(player.getPosition());
+
+        //Create body in the box2d world
+        player_body= box2dworld.createBody(bodyDef);
+
+        //Create circle shape, set radius to 37.5
+        CircleShape circle = new CircleShape();
+        circle.setRadius(37.5f);
+
+        //Create a fixture definition to apply our shape to
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape= circle;
+        fixtureDef.density= 1f;
+        fixtureDef.friction= 0.2f;
+        fixtureDef.restitution= 1f; //bounce
+
+        //Create our fixture and attach it to the body
+        Fixture fixture= player_body.createFixture(fixtureDef);
+
+        //Dispose of shapes
+        circle.dispose();
+        return player_body;
+    }
+    public Body createItemBody(Item item){ //radius= 125
+        //todo: create static bodies for items
+        Body item_body;
+        //1. create body definition
+        BodyDef bodyDef= new BodyDef();
+        //2. set body to dynamic
+        bodyDef.type= BodyDef.BodyType.StaticBody;
+        //Set body's starting position in the world; //todo: obtain player location?
+        bodyDef.position.set(item.getPosition());
+
+        //Create body in the box2d world
+        item_body= box2dworld.createBody(bodyDef);
+
+        //Create circle shape, set radius to 37.5
+        CircleShape circle = new CircleShape();
+        circle.setRadius(62.5f); //125 /2
+
+        //Create a fixture definition to apply our shape to
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape= circle;
+        fixtureDef.density= 1f;
+        fixtureDef.friction= 0.2f;
+        fixtureDef.restitution= 1f; //bounce
+
+        //Create our fixture and attach it to the body
+        Fixture fixture= item_body.createFixture(fixtureDef);
+
+        //Dispose of shapes
+        circle.dispose();
+        return item_body;
+    }
 }
