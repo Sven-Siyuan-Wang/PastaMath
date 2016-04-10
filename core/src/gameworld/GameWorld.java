@@ -32,11 +32,11 @@ import screens.GameScreen;
  * Created by Hazel on 28/2/2016.
  */
 public class GameWorld {
-    //todo: initialize box2d and related componnents here
+    //todo: initialize box2d and related componnents here (static or NOT?)
     public static World box2dworld;
     public static Box2DDebugRenderer box2DDebugRenderer;
     public static OrthographicCamera box2dcamera;
-
+    public final int PIXELS_PER_METER= 40; //used to scale in box2d
 
     //TODO: initialize all players and game objects here- SERVER
     public static ArrayList<Player> players = new ArrayList<Player>();
@@ -47,7 +47,9 @@ public class GameWorld {
 
     public static ArrayList<Item> items;  // items for server to update
 
-    public static int endScore;
+    public static Iterator<Item> items_iterator;
+
+        public static int endScore;
 
     public static boolean isOwner;
     public static boolean win = false;
@@ -83,7 +85,9 @@ public class GameWorld {
         //intialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         items = simple_item_buffer.items_currently_appearing;
-        //all the items are initialized inside the buffer already when it is constructed
+        //added the iterator here.
+        items_iterator= simple_item_buffer.items_currently_appearing.iterator();
+        //does the iterator get updated automatically?
 
         if(isOwner) {
             endScore = new Random().nextInt(100) + 50;
@@ -127,21 +131,25 @@ public class GameWorld {
         //todo:  stepping for the world
         box2dworld.step(1 / 60f, 6, 2);
 
+        //todo: ensuring items iterator is updated
+
         //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
         //fill array with bodies
         box2dworld.getBodies(player_bodies);
         box2dworld.getBodies(current_item_bodies);
-
+        //box2dworld.getFixtures(player_fixtures);
+        //box2dworld.getFixtures(current_item_fixtures);
         //todo: does the actual items get updated from bodies? need to update from FIXTURES also?
-        for (Body player_body: player_bodies){
-            Player player= (Player) player_body.getUserData();
-            if (player!=null){
+        for (Body player_body : player_bodies) {
+            Player player = (Player) player_body.getUserData();
+            if (player != null) {
                 player.setPosition(player_body.getPosition());
             }
         }
-        for (Body item_body: current_item_bodies){
-            Item item= (Item) item_body.getUserData();
-            if(item!=null){
+
+        for (Body item_body : current_item_bodies) {
+            Item item = (Item) item_body.getUserData();
+            if (item != null) {
                 item.setPosition(item_body.getPosition().x, item_body.getPosition().y);
             }
         }
@@ -167,14 +175,13 @@ for (Body b : bodies) {
  */
 
 
-
         //all the items are initialized inside the buffer already when it is constructed
         //todo: obtain player latest coord toprevent new items frm overlapping
         simple_item_buffer.update_player_pos_vec(players);
 
-        for(Player player: players) {
-            if(player.getCurrentValue()>=this.endScore) {
-                for(Player player2: players) {
+        for (Player player : players) {
+            if (player.getCurrentValue() >= this.endScore) {
+                for (Player player2 : players) {
                     player2.resetCurrentValue();
                 }
                 Gdx.app.log("World", "someone has won");
@@ -182,17 +189,38 @@ for (Body b : bodies) {
             }
         }
 
-        if(isOwner){
+        if (isOwner) {
             //Server code
-            if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
+            if (simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity) {
                 //make new object every few seconds
                 System.out.println("generate new item");
                 sendAddItem(simple_item_buffer.generate_random_Item());
             }
+
+            //TODO: NEW CODE(NECESSARY)- THE OTHERS MOVED INTO GAMELISTENER
+            for (Player each_player : players) {
+                each_player.update(delta);
+            }
+
+            for (Iterator<Item> iterator = simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ) {
+
+                Item item = iterator.next();
+                item.decreaseLife(delta);
+                if (item.expired()) {
+                    iterator.remove();
+                    sendRemoveItem(item);
+                }
+            }
+        }
+
+        //TODO: COMMENT OUT ALL THESE IF GAMELISTENER WORKS
+
             //TODO: PLAYER RESPONSES TO COLLISION
+            /*
             for(Player each_player: players){
                 each_player.update(delta);
 
+                //todo: move iterator as an attribute of gameworld, to be accessed in gamelistener
                 for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
 
                     Item item = iterator.next();
@@ -201,6 +229,8 @@ for (Body b : bodies) {
                         iterator.remove();
                         sendRemoveItem(item);
                     }
+
+                    //todo: move into GameListener
                     else if(each_player.collides(item)){
                         iterator.remove();
                         sendRemoveItem(item);
@@ -212,36 +242,34 @@ for (Body b : bodies) {
                     }
                 }
                 //check if a player collided into another player
+                //todo: move into GameListener
+
                 for(Player other_player: players){
                     if (!other_player.equals(each_player)){ //you can't knock into yourself
                         if (each_player.knock_into(other_player)){
                             if(each_player.getShielded()) {
-                                other_player.update_collision_count();
+                                //other_player.update_collision_count();
+                                each_player.update_collision_count();
+                                //TODO: EH THIS ONE GOT ERROR LA... U SHIELDED SO U UPDATE COUNT
                             }
                             else{
+                                //todo: don't double decrease! its suppose to do for each one alr
                                 each_player.decreaseScoreUponKnock();
-                                other_player.decreaseScoreUponKnock();
+                                //other_player.decreaseScoreUponKnock();
                                 sendPlayerScore(each_player);
-                                sendPlayerScore(other_player);
+                                //sendPlayerScore(other_player);
                             }
 
                         }
                     }
                 }
             }
+            */
 
-
-        }
         else{
             myself.update(delta);
-
         }
         sendMyLocation();
-
-
-
-
-
     }
     public ArrayList<Player> getPlayers() {
         return players;
@@ -291,6 +319,7 @@ for (Body b : bodies) {
         //Set body's starting position in the world; //todo: obtain player location?
         bodyDef.position.set(player.getPosition());
         //todo: ENSURE MATCH IMAGE positioning: IF COLLISION IS WEIRD, minus 75 on each side to move it to *bottom left8
+        //todo: or 75/2?
         //Create body in the box2d world
         player_body= box2dworld.createBody(bodyDef);
 

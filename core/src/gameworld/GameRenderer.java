@@ -53,7 +53,7 @@ public class GameRenderer {
     }
 
     public void render(float runTime) {
-        //todo: combining rendering the 2 cameras for box2drenderer
+        //todo: combining rendering the 2 cameras for box2dDebugrenderer
         GameWorld.box2DDebugRenderer.render(GameWorld.box2dworld, cam.combined);
 
 //        Gdx.app.log("GameRenderer", "render");

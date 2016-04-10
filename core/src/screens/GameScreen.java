@@ -57,8 +57,8 @@ public class GameScreen implements Screen {
     public void show() {
         Gdx.app.log("GameScreen", "show called");
         //TODO: setContactListener
-        GameWorld.box2dworld.setContactListener(new GameListener());
-
+        GameWorld.box2dworld.setContactListener(new GameListener(world));
+        //construct the contactListener using the world as argument
     }
 
     @Override
