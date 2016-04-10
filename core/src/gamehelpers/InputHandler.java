@@ -36,8 +36,9 @@ public class InputHandler implements InputProcessor {
 
     public void render() {
         //Render joystick here
+        renderer.renderJoystick(joyX, joyY);
         if(touched) {
-            renderer.renderJoystick(joyX, joyY);
+            renderer.renderJoystickButtons(myPlayer.getUp(), myPlayer.getDown(), myPlayer.getLeft(), myPlayer.getRight());
 
         }
 
@@ -100,13 +101,29 @@ public class InputHandler implements InputProcessor {
      */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 //        myPlayer.onClick(screenX, screenY);
-        if(screenX >= 1080*GameConstants.SCALE_X && screenY >= 520*GameConstants.SCALE_Y) {
-            Gdx.app.log("InputHandler", "screenX is " + screenX + " and screenY is " + screenY) ;
-            Gdx.app.log("meow", "this is " + (screenY + 100) * GameConstants.SCALE_Y);
-            touched = true;
-            joyX = screenX;
-            joyY = screenY;
+        touched = true;
+        Gdx.app.log("InputHandler", "screenX is " + screenX + " and screenY is " + screenY);
+        if (screenX > (1155 + 50)*GameConstants.SCALE_X) {
+            myPlayer.setRight(true);
+            myPlayer.setLeft(false);
+        } else if (screenX < (1155 - 50)*GameConstants.SCALE_X) {
+            myPlayer.setLeft(true);
+            myPlayer.setRight(false);
+        } else {
+            myPlayer.setRight(false);
+            myPlayer.setLeft(false);
         }
+        if (screenY > (125 + 50)*GameConstants.SCALE_Y) {
+            myPlayer.setUp(true);
+            myPlayer.setDown(false);
+        } else if (screenY < (125 - 50)*GameConstants.SCALE_Y) {
+            myPlayer.setDown(true);
+            myPlayer.setUp(false);
+        } else {
+            myPlayer.setUp(false);
+            myPlayer.setDown(false);
+        }
+
         return false;
     }
 
@@ -127,28 +144,27 @@ public class InputHandler implements InputProcessor {
        If screenY < joyY-50, move down
      */
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if(touched) {
+        touched = true;
 //            Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
-            if (screenX > joyX + 50*GameConstants.SCALE_X) {
-                myPlayer.setRight(true);
-                myPlayer.setLeft(false);
-            } else if (screenX < joyX - 50*GameConstants.SCALE_X) {
-                myPlayer.setLeft(true);
-                myPlayer.setRight(false);
-            } else {
-                myPlayer.setRight(false);
-                myPlayer.setLeft(false);
-            }
-            if (screenY > joyY + 50*GameConstants.SCALE_Y) {
-                myPlayer.setUp(true);
-                myPlayer.setDown(false);
-            } else if (screenY < joyY - 50*GameConstants.SCALE_Y) {
-                myPlayer.setDown(true);
-                myPlayer.setUp(false);
-            } else {
-                myPlayer.setUp(false);
-                myPlayer.setDown(false);
-            }
+        if (screenX > (1155 + 50)*GameConstants.SCALE_X) {
+            myPlayer.setRight(true);
+            myPlayer.setLeft(false);
+        } else if (screenX < (1155 - 50)*GameConstants.SCALE_X) {
+            myPlayer.setLeft(true);
+            myPlayer.setRight(false);
+        } else {
+            myPlayer.setRight(false);
+            myPlayer.setLeft(false);
+        }
+        if (screenY > (720-125 + 50)*GameConstants.SCALE_Y) {
+            myPlayer.setUp(true);
+            myPlayer.setDown(false);
+        } else if (screenY < (720-125 - 50)*GameConstants.SCALE_Y) {
+            myPlayer.setDown(true);
+            myPlayer.setUp(false);
+        } else {
+            myPlayer.setUp(false);
+            myPlayer.setDown(false);
         }
         return false;
     }

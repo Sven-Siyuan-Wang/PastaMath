@@ -17,8 +17,9 @@ public class AssetLoader {
     public static Texture texture, speedUp, shield;
     public static Texture gameBackground, gameOverBackground;
 
-    public static Texture up, down, left, right, startOverButton;
+    public static Texture startOverButton;
     public static Texture touchBackground, touchKnob;
+    public static Texture downright, downleft, upright, upleft, up, down, left, right;
 
     public static HashMap<String,Texture> textures = new HashMap();
 
@@ -76,6 +77,10 @@ public class AssetLoader {
         down = new Texture(Gdx.files.internal("data/Buttons/down.png"));
         left = new Texture(Gdx.files.internal("data/Buttons/left.png"));
         right = new Texture(Gdx.files.internal("data/Buttons/right.png"));
+        downleft = new Texture(Gdx.files.internal("data/Buttons/downleft.png"));
+        downright = new Texture(Gdx.files.internal("data/Buttons/downright.png"));
+        upleft = new Texture(Gdx.files.internal("data/Buttons/upleft.png"));
+        upright = new Texture(Gdx.files.internal("data/Buttons/upright.png"));
 
         touchBackground = new Texture(Gdx.files.internal("data/Buttons/touchbackground.png"));
         touchKnob = new Texture(Gdx.files.internal("data/Buttons/knob.png"));

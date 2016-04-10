@@ -367,7 +367,7 @@ public class NetworkActivity extends AppCompatActivity implements
         Log.d(TAG, "StartQuickGame Entered");
         // auto-match criteria to invite one random automatch opponent.
         final int minNumOfOpponents = 1;
-        final int maxNumOfOpponents = 2;
+        final int maxNumOfOpponents = 3;
         Bundle am = RoomConfig.createAutoMatchCriteria(minNumOfOpponents, maxNumOfOpponents, 0);
 
 

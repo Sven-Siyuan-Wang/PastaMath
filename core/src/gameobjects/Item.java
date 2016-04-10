@@ -43,16 +43,16 @@ public abstract class Item implements GameObject{
         //this.assign_random_coord(); - to be done in Buffer
         lifeTime = 10 + (new Random()).nextFloat()*10;
         this.ID = String.valueOf(itemID++);
-        width = (int) (75*GameConstants.SCALE_X);
-        height = (int) (75*GameConstants.SCALE_Y);
+        width = (int) (75);
+        height = (int) (75);
 
 
     }
 
     public Item(float x, float y){
-        position = new Vector2(x*GameConstants.SCALE_X,y*GameConstants.SCALE_Y);
-        width = (int) (75*GameConstants.SCALE_X);
-        height = (int) (75*GameConstants.SCALE_Y);
+        position = new Vector2(x,y);
+        width = (int) (75);
+        height = (int) (75);
         setBoundingRect();
 
 

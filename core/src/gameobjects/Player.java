@@ -231,6 +231,19 @@ public class Player implements GameObject, Serializable {
         down = bool;
     }
 
+    public boolean getLeft() {
+        return left;
+    }
+    public boolean getRight() {
+        return right;
+    }
+    public boolean getUp() {
+        return up;
+    }
+    public boolean getDown() {
+        return down;
+    }
+
     //get methods for attributes
     public float getX() {
         return position.x;
