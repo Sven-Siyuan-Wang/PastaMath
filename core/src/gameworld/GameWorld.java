@@ -163,6 +163,8 @@ public class GameWorld {
             decrease_deduction_score_lifespan(delta);
         }
 
+
+        //TODO: SOLVE THIS CHICKEN AND EGG PROBLEM
         //TODO: where to re-initialize the Arrays and update them? in update() method? cos Players and items always changing also
         //todo: cannot get and set at the same time, the ContactListener must happen in between first
         //todo: body moves, player update position.... but if item is removed what happens to its body?
