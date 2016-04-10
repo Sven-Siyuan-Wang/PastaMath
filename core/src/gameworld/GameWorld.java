@@ -36,7 +36,17 @@ public class GameWorld {
     public static World box2dworld;
     public static Box2DDebugRenderer box2DDebugRenderer;
     public static OrthographicCamera box2dcamera;
-    public final int PIXELS_PER_METER= 40; //used to scale in box2d
+    /*
+    If your game must work in pixel units then you should convert your length units
+    from pixels to meters when passing values from Box2D. Likewise you should convert
+    the values received from Box2D from meters to pixels.
+    This will improve the stability of the physics simulation.
+     */
+
+    //TODO: http://box2d.org/2011/12/pixels/ refer to this - see how to convert PPM value
+
+    public final int PPM= 40; //used to scale in box2d (PIXELS PER METER)
+    //DIVIDE BY PPM TO CONVERT
 
     //TODO: initialize all players and game objects here- SERVER
     public static ArrayList<Player> players = new ArrayList<Player>();
@@ -54,6 +64,10 @@ public class GameWorld {
     public static boolean isOwner;
     public static boolean win = false;
 
+
+    //todo: static deduction score that changes every 10 seconds, and have a timer
+    public static int deduction_score=0;
+    public static float deduction_score_lifespan= 10; //10 seconds
 
     //todo: (BOX2D) intiialize Bodies and Fixtures of player and items
     public static Array<Body> player_bodies= new Array<Body>(players.size());
@@ -92,7 +106,6 @@ public class GameWorld {
         if(isOwner) {
             endScore = new Random().nextInt(100) + 50;
             sendEndScore(endScore);
-
         }
 
         //TODO: initialize bodies of players and items and setup the user data
@@ -102,8 +115,11 @@ public class GameWorld {
         then update the object's position based on the Box2D body.
          */
 
-        //create Bodies of Players using createPlayerBody method
-        //create Bodies of Items using createItemBody method
+        //TODO: where to re-initialize the Arrays and update them? in update() method?
+        player_bodies= new Array<Body>(players.size());
+        player_fixtures= new Array<Fixture>(players.size());
+        current_item_bodies= new Array<Body>(items.size());
+        Array<Fixture> current_item_fixtures= new Array<Fixture>(items.size());
 
         //setUserData of corresponding Players
         for (int i=0; i<players.size(); i++){
@@ -113,6 +129,7 @@ public class GameWorld {
         }
         //setUserData of corresponding Items
         for (int i=0; i<items.size(); i++){
+            current_item_bodies.get(i)= createItemBody(items.get(i));
             current_item_bodies.get(i).setUserData(items.get(i));
         }
 
@@ -122,16 +139,49 @@ public class GameWorld {
     //todo: a method to centre camera on player's (MYSELF?) position (extra)
     public void cameraUpdate(float delta){
         Vector3 position= box2dcamera.position;
-        position.x= myself.getPosition().x;
-        position.y= myself.getPosition().y;
+        position.x= myself.getPosition().x * PPM;
+        position.y= myself.getPosition().y * PPM;
         box2dcamera.position.set(position);
         box2dcamera.update();
+    }
+
+    public boolean deduction_score_lifespan_expired(){
+        return deduction_score_lifespan<=0;
+    }
+    public void decrease_deduction_score_lifespan(float delta){
+        deduction_score_lifespan-= delta;
     }
     public void update(float delta) {
         //todo:  stepping for the world
         box2dworld.step(1 / 60f, 6, 2);
 
-        //todo: ensuring items iterator is updated
+        //TODO: CHANGE DEDUCTION POINTS EVERY 10 SECONDS
+        if(deduction_score_lifespan_expired()){ //i.e. "expire
+            deduction_score= new Random().nextInt(10);
+        }
+        else{
+            decrease_deduction_score_lifespan(delta);
+        }
+
+        //TODO: where to re-initialize the Arrays and update them? in update() method? cos Players and items always changing also
+        //todo: cannot get and set at the same time, the ContactListener must happen in between first
+        //todo: body moves, player update position.... but if item is removed what happens to its body?
+        player_bodies= new Array<Body>(players.size());
+        player_fixtures= new Array<Fixture>(players.size());
+        current_item_bodies= new Array<Body>(items.size());
+        Array<Fixture> current_item_fixtures= new Array<Fixture>(items.size());
+
+        //setUserData of corresponding Players
+        for (int i=0; i<players.size(); i++){
+            //todo: how to create bodies?
+            player_bodies.get(i) = createPlayerBody(players.get(i));
+            player_bodies.get(i).setUserData(players.get(i));
+        }
+        //setUserData of corresponding Items
+        for (int i=0; i<items.size(); i++){
+            current_item_bodies.get(i)= createItemBody(items.get(i));
+            current_item_bodies.get(i).setUserData(items.get(i));
+        }
 
         //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
         //fill array with bodies
@@ -139,7 +189,11 @@ public class GameWorld {
         box2dworld.getBodies(current_item_bodies);
         //box2dworld.getFixtures(player_fixtures);
         //box2dworld.getFixtures(current_item_fixtures);
-        //todo: does the actual items get updated from bodies? need to update from FIXTURES also?
+
+        //TODO: SETTING POSITIONS FROM BODIES IS DONE IN UPDATE LOOP
+        //TODO: is this necessary? yes, cos based on existing players and items
+
+        //TODO:  **player bounce off each other important
         for (Body player_body : player_bodies) {
             Player player = (Player) player_body.getUserData();
             if (player != null) {
@@ -147,10 +201,11 @@ public class GameWorld {
             }
         }
 
+        //todo: item doesn't matter
         for (Body item_body : current_item_bodies) {
             Item item = (Item) item_body.getUserData();
             if (item != null) {
-                item.setPosition(item_body.getPosition().x, item_body.getPosition().y);
+                item.setPosition(item_body.getPosition().x /PPM, item_body.getPosition().y/PPM);
             }
         }
 /* EXAMPLE:
@@ -197,7 +252,7 @@ for (Body b : bodies) {
                 sendAddItem(simple_item_buffer.generate_random_Item());
             }
 
-            //TODO: NEW CODE(NECESSARY)- THE OTHERS MOVED INTO GAMELISTENER
+            //TODO: EXTRACTED THE NECESSARY CODE- THE OTHERS MOVED INTO GAMELISTENER
             for (Player each_player : players) {
                 each_player.update(delta);
             }
@@ -325,7 +380,7 @@ for (Body b : bodies) {
 
         //Create circle shape, set radius to 37.5
         CircleShape circle = new CircleShape();
-        circle.setRadius(37.5f);
+        circle.setRadius(37.5f / PPM);
 
         //Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
@@ -357,7 +412,7 @@ for (Body b : bodies) {
 
         //Create circle shape, set radius to 37.5
         CircleShape circle = new CircleShape();
-        circle.setRadius(62.5f); //125 /2
+        circle.setRadius(62.5f/PPM); //125 /2
 
         //Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();

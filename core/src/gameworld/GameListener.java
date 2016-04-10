@@ -62,9 +62,9 @@ public class GameListener implements ContactListener {
                             each_player.update_collision_count();
                         }
                         else{
-                            each_player.decreaseScoreUponKnock();
-                        }gameWorld.sendPlayerScore(each_player);
-
+                            each_player.deductChangingScoreUponKnock(gameWorld.deduction_score);
+                        }
+                        gameWorld.sendPlayerScore(each_player);
                     }
                 }
                 //ACTIONS FOR PLAYER-ITEM OR ITEM-PLAYER COLLISION

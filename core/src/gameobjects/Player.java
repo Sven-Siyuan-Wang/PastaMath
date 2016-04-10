@@ -165,6 +165,7 @@ public class Player implements GameObject, Serializable {
         return (Intersector.overlaps(boundingCircle, other.boundingCircle));
     }
 
+    /*
     public void decreaseScoreUponKnock(){
         if (currentValue<= 10){
             currentValue= 0;
@@ -173,6 +174,18 @@ public class Player implements GameObject, Serializable {
             currentValue -= 10;
         }
     }
+    */
+
+    //TODO: deduction score will change every 10 seconds, take in argument from GameWorld
+    public void deductChangingScoreUponKnock(int deduction_score){
+        if (currentValue<= deduction_score){
+            currentValue= 0;
+        }
+        else {
+            currentValue -= deduction_score;
+        }
+    }
+
 
     //TODO: methods FOR ITEMS to change player's situation attributes
     public void setShielded(boolean shielded){
