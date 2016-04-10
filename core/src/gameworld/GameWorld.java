@@ -75,7 +75,7 @@ public class GameWorld {
         simple_item_buffer.update_player_pos_vec(players);
 
         for(Player player: players) {
-            if(player.getCurrentValue()>=this.endScore) {
+            if(player.getCurrentValue()==this.endScore) {
                 for(Player player2: players) {
                     player2.resetCurrentValue();
                 }
