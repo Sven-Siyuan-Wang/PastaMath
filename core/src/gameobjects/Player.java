@@ -281,6 +281,14 @@ public class Player implements GameObject, Serializable {
         return this.position;
     }
 
+    public boolean getSpeedUp() {
+        return this.speedUp;
+    }
+
+    public boolean getShield() {
+        return this.shielded;
+    }
+
 
 
 }

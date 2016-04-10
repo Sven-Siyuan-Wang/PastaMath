@@ -1,5 +1,6 @@
 package gameworld;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -55,32 +56,13 @@ public class GameRenderer {
     public void render(float runTime) {
 //        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-
+        
 
 
         //Todo: keep getting Players and Items
         ArrayList<Player> players= myWorld.getPlayers();
         //todo:use one hard-coded player for testing- remove later
-
-
-
-
-        //1. draw background to prevent flickering
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
-
-        //2. draw the filled rectangle
-        //tell shapeRenderer to begin drawing filled shapes
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        //draw background colour
-        shapeRenderer.setColor(55/255.0f, 80/255.0f, 100/255.0f, 1);
-        shapeRenderer.rect(0, 0, this.gameWidth, this.gameHeight);
-
-        //tells shapeRenderer to finish rendering (IMPORTANT; must be done every time)
-        shapeRenderer.end();
+        
 
         //begin SpriteBatch
         batcher.begin();
@@ -90,7 +72,7 @@ public class GameRenderer {
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
-        this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500, 700);
+        this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);
@@ -135,9 +117,16 @@ public class GameRenderer {
         int count = 1;
         for(Player player: players) {
             batcher.enableBlending();
-            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1050*GameConstants.SCALE_X, (720-150*count)*GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.characters.get(count-1), 1130*GameConstants.SCALE_X, (720-220*count)*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
-            count++;
+            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1110 * GameConstants.SCALE_X, 570 - (100 * count + 50 * count) * GameConstants.SCALE_Y);
+            if(!player.getSpeedUp() && !player.getShield()) {
+                batcher.draw(AssetLoader.textures.get("player"), 1050 * GameConstants.SCALE_X, (520 - (100 * count + (50 * count))) * GameConstants.SCALE_Y, 50 * GameConstants.SCALE_X, 50 * GameConstants.SCALE_Y);
+                count += 1;
+            } else if(player.getSpeedUp()) {
+
+            } else if(player.getShield()) {
+
+            }
+           
         }
     }
 
