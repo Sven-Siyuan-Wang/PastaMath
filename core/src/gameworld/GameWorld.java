@@ -60,7 +60,7 @@ public class GameWorld {
     public static Array<Fixture> current_item_fixtures= new Array<Fixture>(items.size());
 
     public GameWorld(Player myself) {
-        //todo: initialize box2d world
+        //todo: initialize box2d world - CONSIDER TO DO IN GAMESCREEN OR NOT?
         float w= Gdx.graphics.getWidth();
         float h= Gdx.graphics.getHeight();
         box2dworld = new World(new Vector2(0, 0), false); //gravity vector=0, don't sleep
@@ -132,6 +132,7 @@ public class GameWorld {
         box2dworld.getBodies(player_bodies);
         box2dworld.getBodies(current_item_bodies);
 
+        //todo: does the actual items get updated from bodies? need to update from FIXTURES also?
         for (Body player_body: player_bodies){
             Player player= (Player) player_body.getUserData();
             if (player!=null){
@@ -277,6 +278,7 @@ for (Body b : bodies) {
         MyGdxGame.playServices.sendToPlayer("ENDSCORE "+ endScore);
     }
 
+    //TODO: create PPM constant cos 1 unit is 1 m in box2d... (PERFORM CALCULATIONS)
 
     //TODO: implement createPlayerBody and createItemBody methods - with Player and Item as arguments
     public Body createPlayerBody(Player player){ //radius= 75/2
@@ -288,7 +290,7 @@ for (Body b : bodies) {
         bodyDef.type= BodyDef.BodyType.DynamicBody;
         //Set body's starting position in the world; //todo: obtain player location?
         bodyDef.position.set(player.getPosition());
-
+        //todo: ENSURE MATCH IMAGE positioning: IF COLLISION IS WEIRD, minus 75 on each side to move it to *bottom left8
         //Create body in the box2d world
         player_body= box2dworld.createBody(bodyDef);
 
@@ -319,6 +321,7 @@ for (Body b : bodies) {
         bodyDef.type= BodyDef.BodyType.StaticBody;
         //Set body's starting position in the world; //todo: obtain player location?
         bodyDef.position.set(item.getPosition());
+        //todo: ENSURE MATCH IMAGE positioning: IF COLLISION IS WEIRD, minus 75 on each side to move it to *bottom left8
 
         //Create body in the box2d world
         item_body= box2dworld.createBody(bodyDef);

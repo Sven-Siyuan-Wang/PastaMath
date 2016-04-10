@@ -18,6 +18,15 @@ public class GameListener implements ContactListener {
     //TODO: transfer all the gameworld update checking for different collisions into here
     //ANY 2 OBJECTS
 
+    //TODO: need to use inside the update() method? or it constantly listens?
+
+
+    //todo: IN ORDER TO change information, scores of players or get info from items
+    //todo: cast the getUserData to respective objects first from Fixtures
+    //todo: fixtures are updated over here, afterwhich actual objects will update their positions based on fixtures
+
+    //todo: determine what to update in Listener(everything else),
+    //todo: what to update in GameWorld(set position only?- takes on the body/fixture's positon)
     private ContactListener createContactListener()
     {
         ContactListener contactListener = new ContactListener()
