@@ -70,10 +70,10 @@ public class GameWorld {
     public static float deduction_score_lifespan= 10; //10 seconds
 
     //todo: (BOX2D) intiialize Bodies and Fixtures of player and items
-    public static Array<Body> player_bodies= new Array<Body>(players.size());
-    public static Array<Fixture> player_fixtures= new Array<Fixture>(players.size());
-    public static Array<Body> current_item_bodies= new Array<Body>(items.size());
-    public static Array<Fixture> current_item_fixtures= new Array<Fixture>(items.size());
+    public static Array<Body> player_bodies;
+    public static Array<Fixture> player_fixtures;
+    public static Array<Body> current_item_bodies;
+    public static Array<Fixture> current_item_fixtures;
 
     public GameWorld(Player myself) {
         //todo: initialize box2d world - CONSIDER TO DO IN GAMESCREEN OR NOT?
@@ -119,17 +119,15 @@ public class GameWorld {
         player_bodies= new Array<Body>(players.size());
         player_fixtures= new Array<Fixture>(players.size());
         current_item_bodies= new Array<Body>(items.size());
-        Array<Fixture> current_item_fixtures= new Array<Fixture>(items.size());
 
         //setUserData of corresponding Players
         for (int i=0; i<players.size(); i++){
-            //todo: how to create bodies?
-            player_bodies.get(i) = createPlayerBody(players.get(i));
+            player_bodies.set(i, createPlayerBody(players.get(i)));
             player_bodies.get(i).setUserData(players.get(i));
         }
         //setUserData of corresponding Items
         for (int i=0; i<items.size(); i++){
-            current_item_bodies.get(i)= createItemBody(items.get(i));
+            current_item_bodies.set(i, createItemBody(items.get(i)));
             current_item_bodies.get(i).setUserData(items.get(i));
         }
 
@@ -167,23 +165,12 @@ public class GameWorld {
         //TODO: SOLVE THIS CHICKEN AND EGG PROBLEM
         //TODO: where to re-initialize the Arrays and update them? in update() method? cos Players and items always changing also
         //todo: cannot get and set at the same time, the ContactListener must happen in between first
-        //todo: body moves, player update position.... but if item is removed what happens to its body?
-        player_bodies= new Array<Body>(players.size());
-        player_fixtures= new Array<Fixture>(players.size());
-        current_item_bodies= new Array<Body>(items.size());
-        Array<Fixture> current_item_fixtures= new Array<Fixture>(items.size());
 
-        //setUserData of corresponding Players
-        for (int i=0; i<players.size(); i++){
-            //todo: how to create bodies?
-            player_bodies.get(i) = createPlayerBody(players.get(i));
-            player_bodies.get(i).setUserData(players.get(i));
-        }
-        //setUserData of corresponding Items
-        for (int i=0; i<items.size(); i++){
-            current_item_bodies.get(i)= createItemBody(items.get(i));
-            current_item_bodies.get(i).setUserData(items.get(i));
-        }
+        //todo: assume bodies always stay there(intiialized at the start), aft that players just follow it
+        //TODO: solving problem: do the deleting and creating along WITH EACH ITEM- u don't keep reinitializing!
+        //todo: the bodies should stay there
+
+
 
         //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
         //fill array with bodies
@@ -195,6 +182,7 @@ public class GameWorld {
         //TODO: SETTING POSITIONS FROM BODIES IS DONE IN UPDATE LOOP
         //TODO: is this necessary? yes, cos based on existing players and items
 
+        //TODO: BODIES UPDATE POSITIONS BASED ON ? (ISNT IT DONE IN CONTACT?)
         //TODO:  **player bounce off each other important
         for (Body player_body : player_bodies) {
             Player player = (Player) player_body.getUserData();
