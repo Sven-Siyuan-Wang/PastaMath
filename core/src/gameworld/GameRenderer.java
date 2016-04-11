@@ -37,6 +37,8 @@ public class GameRenderer {
 
     private float runTime;
 
+    private boolean touched;
+
     public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
         this.myWorld = world;
 
@@ -57,6 +59,10 @@ public class GameRenderer {
 
         this.scorefont = new BitmapFont(Gdx.files.internal("data/font.fnt"));
         this.scorefont.getData().setScale(GameConstants.SCALE_X*(float)0.8, GameConstants.SCALE_Y*(float)0.8);
+    }
+
+    public void setTouched(boolean touched) {
+        this.touched = touched;
     }
 
     public void render(float runTime) {

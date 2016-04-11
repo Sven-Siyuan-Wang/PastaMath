@@ -20,7 +20,6 @@ import gameworld.GameRenderer;
  */
 public class InputHandler implements InputProcessor {
     private Player myPlayer;
-    Stage stage;
     int joyX;
     int joyY;
     boolean touched;
@@ -39,7 +38,9 @@ public class InputHandler implements InputProcessor {
         renderer.renderJoystick(joyX, joyY);
         if(touched) {
             renderer.renderJoystickButtons(myPlayer.getUp(), myPlayer.getDown(), myPlayer.getLeft(), myPlayer.getRight());
-
+            renderer.setTouched(true);
+        } else {
+            renderer.setTouched(false);
         }
 
     }

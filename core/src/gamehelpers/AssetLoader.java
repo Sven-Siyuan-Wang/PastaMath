@@ -68,11 +68,7 @@ public class AssetLoader {
 
         shield = new Texture(Gdx.files.internal("data/shield.png"));
         textures.put("shield",shield);
-
-
-
-
-
+        
         Texture mul2 = new Texture(Gdx.files.internal("data/NormalPickups/multiply2.png"));
         Texture mul3 = new Texture(Gdx.files.internal("data/NormalPickups/multiply3.png"));
         Texture plus1 = new Texture(Gdx.files.internal("data/NormalPickups/plus1.png"));
@@ -141,27 +137,29 @@ public class AssetLoader {
             char2speed[i] = new TextureRegion(spriteSheet, count, 500, 100, 100);
             char3speed[i] = new TextureRegion(spriteSheet, count, 600, 100, 100);
             char4speed[i] = new TextureRegion(spriteSheet, count, 700, 100, 100);
-//            char1shield[i] = new TextureRegion(spriteSheet, count, 800, 100, 100);
-//            char2shield[i] = new TextureRegion(spriteSheet, count, 900, 100, 100);
-//            char3shield[i] = new TextureRegion(spriteSheet, count, 1000, 100, 100);
-//            char4shield[i] = new TextureRegion(spriteSheet, count, 1100, 100, 100);
+            char1shield[i] = new TextureRegion(spriteSheet, count, 800, 100, 100);
+            char2shield[i] = new TextureRegion(spriteSheet, count, 900, 100, 100);
+            char3shield[i] = new TextureRegion(spriteSheet, count, 1000, 100, 100);
+            char4shield[i] = new TextureRegion(spriteSheet, count, 1100, 100, 100);
             count +=100;
         }
 
-        char1Animation = new Animation(0.6f, char1);
-        char2Animation = new Animation(0.6f, char2);
-        char3Animation = new Animation(0.6f, char3);
-        char4Animation = new Animation(0.6f, char4);
+        float frameTime = 0.09f;
 
-        char1speedAnimation = new Animation(0.6f, char1speed);
-        char2speedAnimation = new Animation(0.6f, char2speed);
-        char3speedAnimation = new Animation(0.6f, char3speed);
-        char4speedAnimation = new Animation(0.6f, char4speed);
+        char1Animation = new Animation(frameTime, char1);
+        char2Animation = new Animation(frameTime, char2);
+        char3Animation = new Animation(frameTime, char3);
+        char4Animation = new Animation(frameTime, char4);
 
-//        char1shieldAnimation = new Animation(0.06f, char1shield);
-//        char2shieldAnimation = new Animation(0.06f, char2shield);
-//        char3shieldAnimation = new Animation(0.06f, char3shield);
-//        char4shieldAnimation = new Animation(0.06f, char4shield);
+        char1speedAnimation = new Animation(frameTime, char1speed);
+        char2speedAnimation = new Animation(frameTime, char2speed);
+        char3speedAnimation = new Animation(frameTime, char3speed);
+        char4speedAnimation = new Animation(frameTime, char4speed);
+
+        char1shieldAnimation = new Animation(frameTime, char1shield);
+        char2shieldAnimation = new Animation(frameTime, char2shield);
+        char3shieldAnimation = new Animation(frameTime, char3shield);
+        char4shieldAnimation = new Animation(frameTime, char4shield);
 
 
         characterAnimations.add(char1Animation);
@@ -172,6 +170,10 @@ public class AssetLoader {
         characterAnimations.add(char2speedAnimation);
         characterAnimations.add(char3speedAnimation);
         characterAnimations.add(char4speedAnimation);
+        characterAnimations.add(char1shieldAnimation);
+        characterAnimations.add(char2shieldAnimation);
+        characterAnimations.add(char3shieldAnimation);
+        characterAnimations.add(char4shieldAnimation);
 
         char1Animation.setPlayMode(Animation.PlayMode.LOOP);
         char2Animation.setPlayMode(Animation.PlayMode.LOOP);
@@ -181,6 +183,10 @@ public class AssetLoader {
         char2speedAnimation.setPlayMode(Animation.PlayMode.LOOP);
         char3speedAnimation.setPlayMode(Animation.PlayMode.LOOP);
         char4speedAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char1shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char2shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char3shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char4shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
     }
 
