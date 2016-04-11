@@ -21,9 +21,33 @@ public class AssetLoader {
     public static Texture touchBackground, touchKnob;
     public static Texture downright, downleft, upright, upleft, up, down, left, right;
 
+    public static Texture spriteSheet;
+
+    public static TextureRegion char1_1, char1_2, char1_3, char1_4, char1_5, char1_6;
+    public static TextureRegion char2_1, char2_2, char2_3, char2_4, char2_5, char2_6;
+    public static TextureRegion char3_1, char3_2, char3_3, char3_4, char3_5, char3_6;
+    public static TextureRegion char4_1, char4_2, char4_3, char4_4, char4_5, char4_6;
+
+    public static Animation char1Animation, char2Animation, char3Animation, char4Animation;
+
+    public static TextureRegion char1speed_1, char1speed_2, char1speed_3, char1speed_4, char1speed_5, char1speed_6;
+    public static TextureRegion char2speed_1, char2speed_2, char2speed_3, char2speed_4, char2speed_5, char2speed_6;
+    public static TextureRegion char3speed_1, char3speed_2, char3speed_3, char3speed_4, char3speed_5, char3speed_6;
+    public static TextureRegion char4speed_1, char4speed_2, char4speed_3, char4speed_4, char4speed_5, char4speed_6;
+
+    public static Animation char1speedAnimation, char2speedAnimation, char3speedAnimation, char4speedAnimation;
+
+    public static TextureRegion char1shield_1, char1shield_2, char1shield_3, char1shield_4, char1shield_5, char1shield_6;
+    public static TextureRegion char2shield_1, char2shield_2, char2shield_3, char2shield_4, char2shield_5, char2shield_6;
+    public static TextureRegion char3shield_1, char3shield_2, char3shield_3, char3shield_4, char3shield_5, char3shield_6;
+    public static TextureRegion char4shield_1, char4shield_2, char4shield_3, char4shield_4, char4shield_5, char4shield_6;
+
+    public static Animation char1shieldAnimation, char2shieldAnimation, char3shieldAnimation, char4shieldAnimation;
+
     public static HashMap<String,Texture> textures = new HashMap();
 
     public static ArrayList<Texture> characters = new ArrayList<Texture>();
+    public static ArrayList<Animation> characterAnimations = new ArrayList<Animation>();
 
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
@@ -90,7 +114,63 @@ public class AssetLoader {
 
         startOverButton = new Texture(Gdx.files.internal("data/Buttons/startOverButton.png"));
 
+        spriteSheet = new Texture(Gdx.files.internal("data/Character/charspritesheet.png"));
 
+        TextureRegion[] char1 = {char1_1, char1_2, char1_3, char1_4, char1_5, char1_6};
+        TextureRegion[] char2 = {char2_1, char2_2, char2_3, char2_4, char2_5, char2_6};
+        TextureRegion[] char3 = {char3_1, char3_2, char3_3, char3_4, char3_5, char3_6};
+        TextureRegion[] char4 = {char4_1, char4_2, char4_3, char4_4, char4_5, char4_6};
+
+        TextureRegion[] char1speed = {char1speed_1, char1speed_2, char1speed_3, char1speed_4, char1speed_5, char1speed_6};
+        TextureRegion[] char2speed = {char2speed_1, char2speed_2, char2speed_3, char2speed_4, char2speed_5, char2speed_6};
+        TextureRegion[] char3speed = {char3speed_1, char3speed_2, char3speed_3, char3speed_4, char3speed_5, char3speed_6};
+        TextureRegion[] char4speed = {char4speed_1, char4speed_2, char4speed_3, char4speed_4, char4speed_5, char4speed_6};
+
+        TextureRegion[] char1shield = {char1shield_1, char1shield_2, char1shield_3, char1shield_4, char1shield_5, char1shield_6};
+        TextureRegion[] char2shield = {char2shield_1, char2shield_2, char2shield_3, char2shield_4, char2shield_5, char2shield_6};
+        TextureRegion[] char3shield = {char3shield_1, char3shield_2, char3shield_3, char3shield_4, char3shield_5, char3shield_6};
+        TextureRegion[] char4shield = {char4shield_1, char4shield_2, char4shield_3, char4shield_4, char4shield_5, char4shield_6};
+
+        int count = 0;
+        for(int i = 0; i<6; i++) {
+            char1[i] = new TextureRegion(spriteSheet, count, 0, 100, 100);
+            char2[i] = new TextureRegion(spriteSheet, count, 100, 100, 100);
+            char3[i] = new TextureRegion(spriteSheet, count, 200, 100, 100);
+            char4[i] = new TextureRegion(spriteSheet, count, 300, 100, 100);
+            char1speed[i] = new TextureRegion(spriteSheet, count, 400, 100, 100);
+            char2speed[i] = new TextureRegion(spriteSheet, count, 500, 100, 100);
+            char3speed[i] = new TextureRegion(spriteSheet, count, 600, 100, 100);
+            char4speed[i] = new TextureRegion(spriteSheet, count, 700, 100, 100);
+//            char1shield[i] = new TextureRegion(spriteSheet, count, 800, 100, 100);
+//            char2shield[i] = new TextureRegion(spriteSheet, count, 900, 100, 100);
+//            char3shield[i] = new TextureRegion(spriteSheet, count, 1000, 100, 100);
+//            char4shield[i] = new TextureRegion(spriteSheet, count, 1100, 100, 100);
+        }
+
+        char1Animation = new Animation(0.06f, char1);
+        char2Animation = new Animation(0.06f, char2);
+        char3Animation = new Animation(0.06f, char3);
+        char4Animation = new Animation(0.06f, char4);
+
+        char1speedAnimation = new Animation(0.06f, char1speed);
+        char2speedAnimation = new Animation(0.06f, char2speed);
+        char3speedAnimation = new Animation(0.06f, char3speed);
+        char4speedAnimation = new Animation(0.06f, char4speed);
+
+//        char1shieldAnimation = new Animation(0.06f, char1shield);
+//        char2shieldAnimation = new Animation(0.06f, char2shield);
+//        char3shieldAnimation = new Animation(0.06f, char3shield);
+//        char4shieldAnimation = new Animation(0.06f, char4shield);
+
+
+        characterAnimations.add(char1Animation);
+        characterAnimations.add(char2Animation);
+        characterAnimations.add(char3Animation);
+        characterAnimations.add(char4Animation);
+        characterAnimations.add(char1speedAnimation);
+        characterAnimations.add(char2speedAnimation);
+        characterAnimations.add(char3speedAnimation);
+        characterAnimations.add(char4speedAnimation);
 
     }
 

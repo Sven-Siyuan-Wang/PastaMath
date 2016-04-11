@@ -35,6 +35,8 @@ public class GameRenderer {
     private BitmapFont font;
     private BitmapFont scorefont;
 
+    private float runTime;
+
     public GameRenderer(GameWorld world, int gameWidth, int gameHeight) {
         this.myWorld = world;
 
@@ -58,6 +60,7 @@ public class GameRenderer {
     }
 
     public void render(float runTime) {
+        this.runTime = runTime;
 //        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         
@@ -110,9 +113,28 @@ public class GameRenderer {
 
     public void renderPlayers(ArrayList<Player> players){
         int count = 0;
-        for(Player player: players){
+        for(Player player: players) {
             batcher.enableBlending();
-            batcher.draw(AssetLoader.characters.get(count++), player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
+            if (player.getSpeedUp()) {
+                batcher.draw(AssetLoader.characterAnimations.get((count++)+4).getKeyFrame(runTime),
+                        player.getX() * GameConstants.SCALE_X,
+                        player.getY() * GameConstants.SCALE_Y,
+                        player.getWidth() * GameConstants.SCALE_X,
+                        player.getHeight() * GameConstants.SCALE_Y);
+            } else if (player.getShield()) {
+                batcher.draw(AssetLoader.characterAnimations.get((count++)+4).getKeyFrame(runTime),
+                        player.getX() * GameConstants.SCALE_X,
+                        player.getY() * GameConstants.SCALE_Y,
+                        player.getWidth() * GameConstants.SCALE_X,
+                        player.getHeight() * GameConstants.SCALE_Y);
+            } else {
+                batcher.draw(AssetLoader.characterAnimations.get(count++).getKeyFrame(runTime),
+                        player.getX() * GameConstants.SCALE_X,
+                        player.getY() * GameConstants.SCALE_Y,
+                        player.getWidth() * GameConstants.SCALE_X,
+                        player.getHeight() * GameConstants.SCALE_Y);
+//            batcher.draw(AssetLoader.characters.get(count++), player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
+            }
         }
 
     }
