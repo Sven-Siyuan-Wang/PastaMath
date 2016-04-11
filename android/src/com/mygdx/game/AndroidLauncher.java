@@ -58,6 +58,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	public static Player myself;
 
+	private static String serverID;
+
 	//keith network end
 
 	@Override
@@ -71,6 +73,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		room = myApp.getRoom();
 		mRoomId = room.getRoomId();
 		mParticipants = room.getParticipants();
+		mGoogleApiClient.connect();
 
 		Intent i = getIntent();
 		myself = (Player)i.getSerializableExtra("myself");
@@ -96,7 +99,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	{
 		super.onStart();
 		//gameHelper.onStart(this);
-		mGoogleApiClient.connect();
+
 	}
 
 	@Override
@@ -231,7 +234,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	@Override
 	public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
-		Log.d(TAG,"Received: "+realTimeMessage);
+		Log.d(TAG, "Received: " + realTimeMessage);
         String msg = new String(realTimeMessage.getMessageData());
         String[] words = msg.split(" ");
 
@@ -286,9 +289,10 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	}
 
 	public void sendToServer(String message){
+		Log.d(TAG, "SENDTOSERVER"+message);
 		byte[] mMsgBuf = message.getBytes();
 		Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient,mMsgBuf,mRoomId,
-				room.getCreatorId());
+				getServerID());
 	}
 
 	public void sendToPlayer(String message){
@@ -433,6 +437,21 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 				return false;
 		}
 		return true;
+	}
+
+	public String getServerID(){
+		if(serverID==null){
+			serverID = myId;
+			for(Participant p : mParticipants )
+			{
+				if(p.getParticipantId().compareTo(serverID)<0)
+					serverID = p.getParticipantId();
+			}
+
+		}
+
+		return serverID;
+
 	}
 
 }

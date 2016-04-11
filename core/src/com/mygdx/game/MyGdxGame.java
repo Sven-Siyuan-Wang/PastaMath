@@ -15,6 +15,8 @@ import screens.GameScreen;
 
 public class MyGdxGame extends Game {
 	GameScreen myScreen;
+	public static final int V_WIDTH = 640;
+	public static final int V_HEIGHT = 360;
 
 	public static PlayServices playServices;
 
