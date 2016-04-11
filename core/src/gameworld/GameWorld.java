@@ -10,8 +10,6 @@ import java.util.Random;
 import gameobjects.Item;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
-import sun.rmi.runtime.Log;
-import screens.GameScreen;
 
 
 
@@ -34,6 +32,9 @@ public class GameWorld {
 
     public static boolean isOwner;
     public static boolean win = false;
+
+    public static int playerCounter = 0;
+
 
 
     public GameWorld(Player myself) {
@@ -86,50 +87,50 @@ public class GameWorld {
 
         if(isOwner){
             //Server code
-            if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
-                //make new object every few seconds
-                System.out.println("generate new item");
-                sendAddItem(simple_item_buffer.generate_random_Item());
-            }
-            //TODO: PLAYER RESPONSES TO COLLISION
-            for(Player each_player: players){
-                each_player.update(delta);
 
-                for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
-
-                    Item item = iterator.next();
-                    item.decreaseLife(delta);
-                    if(item.expired()) {
-                        iterator.remove();
-                        sendRemoveItem(item);
-                    }
-                    else if(each_player.collides(item)){
-                        iterator.remove();
-                        sendRemoveItem(item);
-                        //todo: remove corresponding coords
-                        simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
-                        item.update_player_situation(each_player);
-                        sendPlayerScore(each_player);
-
-                    }
+                if (simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity) {
+                    //make new object every few seconds
+                    System.out.println("generate new item");
+                    sendAddItem(simple_item_buffer.generate_random_Item());
                 }
-                //check if a player collided into another player
-                for(Player other_player: players){
-                    if (!other_player.equals(each_player)){ //you can't knock into yourself
-                        if (each_player.knock_into(other_player)){
-                            if(each_player.getShielded()) {
-                                other_player.update_collision_count();
-                            }
-                            else{
-                                each_player.decreaseScoreUponKnock();
-                                other_player.decreaseScoreUponKnock();
-                                sendPlayerScore(each_player);
-                                sendPlayerScore(other_player);
-                            }
+                //TODO: PLAYER RESPONSES TO COLLISION
+                for (Player each_player : players) {
+                    each_player.update(delta);
+
+                    for (Iterator<Item> iterator = simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ) {
+
+                        Item item = iterator.next();
+                        item.decreaseLife(delta);
+                        if (item.expired()) {
+                            iterator.remove();
+                            sendRemoveItem(item);
+                        } else if (each_player.collides(item)) {
+                            iterator.remove();
+                            sendRemoveItem(item);
+                            //todo: remove corresponding coords
+                            simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
+                            item.update_player_situation(each_player);
+                            sendPlayerScore(each_player);
 
                         }
                     }
-                }
+                    //check if a player collided into another player
+                    for (Player other_player : players) {
+                        if (!other_player.equals(each_player)) { //you can't knock into yourself
+                            if (each_player.knock_into(other_player)) {
+                                if (each_player.getShielded()) {
+                                    other_player.update_collision_count();
+                                } else {
+                                    each_player.decreaseScoreUponKnock();
+                                    other_player.decreaseScoreUponKnock();
+                                    sendPlayerScore(each_player);
+                                    sendPlayerScore(other_player);
+                                }
+
+                            }
+                        }
+                    }
+
             }
 
 

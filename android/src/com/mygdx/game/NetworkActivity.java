@@ -59,6 +59,8 @@ public class NetworkActivity extends AppCompatActivity implements
     private static HashMap<String,Integer> playerMap = new HashMap<>();
     private  static HashMap<String, Item> itemMap = new HashMap<>();
 
+    private static int playerCounter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -636,6 +638,12 @@ public class NetworkActivity extends AppCompatActivity implements
         else if(words[0].equals("ENDSCORE")){
             int endscore = Integer.parseInt(words[1]);
             GameWorld.endScore = endscore;
+            Log.d(TAG, "Received ENDSCORE "+ endscore);
+        }
+        else if (words[0].equals("READY")){
+            playerCounter++;
+            GameWorld.playerCounter = playerCounter;
+            Log.d(TAG, "Received READY, playerCounter :" + playerCounter);
         }
 
 

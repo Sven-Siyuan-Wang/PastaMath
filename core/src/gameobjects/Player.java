@@ -24,17 +24,17 @@ public class Player implements GameObject, Serializable {
      */
     private String id;
     private Vector2 position;
-    private float velocity;
+    public float velocity;
     private Vector2 acceleration;
 
     private float rotation;
     private int width;
     private int height;
 
-    private Boolean up = false;
-    private Boolean down = false;
-    private Boolean left = false;
-    private Boolean right = false;
+    public Boolean up = false;
+    public Boolean down = false;
+    public Boolean left = false;
+    public Boolean right = false;
 
     private Circle boundingCircle;
     private boolean speedUp;
