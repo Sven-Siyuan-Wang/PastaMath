@@ -69,11 +69,16 @@ public class GameWorld {
     public static int deduction_score=0;
     public static float deduction_score_lifespan= 10; //10 seconds
 
+
+    //todo: keep track of whether all players r here alr
+    public boolean all_players_joined= false;
+    public boolean bodies_initialized=false;
+
     //todo: (BOX2D) intiialize Bodies and Fixtures of player and items
     public static Array<Body> player_bodies;
     public static Array<Fixture> player_fixtures;
     public static Array<Body> current_item_bodies;
-    public static Array<Fixture> current_item_fixtures;
+    //public static Array<Fixture> current_item_fixtures;
 
     public GameWorld(Player myself) {
         //todo: initialize box2d world - CONSIDER TO DO IN GAMESCREEN OR NOT?
@@ -95,7 +100,7 @@ public class GameWorld {
             }
         }
 
-
+        System.out.println("players: "+ players.size());
         //intialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
         items = simple_item_buffer.items_currently_appearing;
@@ -115,11 +120,15 @@ public class GameWorld {
         then update the object's position based on the Box2D body.
          */
 
+        //TODO: create all bodies only when players is filled.
+
+        /*
         //TODO: where to re-initialize the Arrays and update them? in update() method?
         player_bodies= new Array<Body>(players.size());
         player_fixtures= new Array<Fixture>(players.size());
         current_item_bodies= new Array<Body>(items.size());
 
+        //todo: create bodies for players and items -- ERROR: player size=0...
         //setUserData of corresponding Players
         for (int i=0; i<players.size(); i++){
             player_bodies.set(i, createPlayerBody(players.get(i)));
@@ -130,6 +139,7 @@ public class GameWorld {
             current_item_bodies.set(i, createItemBody(items.get(i)));
             current_item_bodies.get(i).setUserData(items.get(i));
         }
+        */
 
         //TODO: SETUSERDATA TO FIXTURES FOR PLAYERS AND ITEMS, need to keep track of their identities for ContactListnener
     }
@@ -153,6 +163,31 @@ public class GameWorld {
         //todo:  stepping for the world
         box2dworld.step(1 / 60f, 6, 2);
 
+        //todo: create bodies only when all players are here
+        Gdx.app.log("World", "players.size = " + players.size());
+        all_players_joined= (players.size()==2);
+        if (all_players_joined && !bodies_initialized){
+            //TODO: where to re-initialize the Arrays and update them? in update() method?
+            player_bodies= new Array<Body>(2);
+            player_fixtures= new Array<Fixture>(2);
+            current_item_bodies= new Array<Body>(2);
+
+            //todo: create bodies for players and items -- ERROR: player size=0...
+            //setUserData of corresponding Players
+            for (int i=0; i<2; i++){
+                player_bodies.set(i, createPlayerBody(players.get(i)));
+                player_bodies.get(i).setUserData(players.get(i));
+            }
+            //setUserData of corresponding Items
+            for (int i=0; i<2; i++){
+                current_item_bodies.set(i, createItemBody(items.get(i)));
+                current_item_bodies.get(i).setUserData(items.get(i));
+            }
+
+            bodies_initialized= true;
+        }
+
+
         //TODO: CHANGE DEDUCTION POINTS EVERY 10 SECONDS
         if(deduction_score_lifespan_expired()){ //i.e. "expire
             deduction_score= new Random().nextInt(10);
@@ -171,32 +206,34 @@ public class GameWorld {
         //todo: the bodies should stay there
 
 
+        if (bodies_initialized) {
+            //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
+            //fill array with bodies
+            box2dworld.getBodies(player_bodies);
+            box2dworld.getBodies(current_item_bodies);
+            //box2dworld.getFixtures(player_fixtures);
+            //box2dworld.getFixtures(current_item_fixtures);
 
-        //TODO:UPDATE BODIES OF ITEMS AND PLAYERS using userdata- the renderer will just render player
-        //fill array with bodies
-        box2dworld.getBodies(player_bodies);
-        box2dworld.getBodies(current_item_bodies);
-        //box2dworld.getFixtures(player_fixtures);
-        //box2dworld.getFixtures(current_item_fixtures);
+            //TODO: SETTING POSITIONS FROM BODIES IS DONE IN UPDATE LOOP
+            //TODO: is this necessary? yes, cos based on existing players and items
 
-        //TODO: SETTING POSITIONS FROM BODIES IS DONE IN UPDATE LOOP
-        //TODO: is this necessary? yes, cos based on existing players and items
-
-        //TODO: BODIES UPDATE POSITIONS BASED ON ? (ISNT IT DONE IN CONTACT?)
-        //TODO:  **player bounce off each other important
-        for (Body player_body : player_bodies) {
-            Player player = (Player) player_body.getUserData();
-            if (player != null) {
-                player.setPosition(player_body.getPosition());
+            //TODO: BODIES UPDATE POSITIONS BASED ON ? (ISNT IT DONE IN CONTACT?)
+            //TODO:  **player bounce off each other important
+            for (Body player_body : player_bodies) {
+                Player player = (Player) player_body.getUserData();
+                if (player != null) {
+                    player.setPosition(player_body.getPosition());
+                }
             }
-        }
 
-        //todo: item doesn't matter
-        for (Body item_body : current_item_bodies) {
-            Item item = (Item) item_body.getUserData();
-            if (item != null) {
-                item.setPosition(item_body.getPosition().x /PPM, item_body.getPosition().y/PPM);
+            //todo: item doesn't matter
+            for (Body item_body : current_item_bodies) {
+                Item item = (Item) item_body.getUserData();
+                if (item != null) {
+                    item.setPosition(item_body.getPosition().x / PPM, item_body.getPosition().y / PPM);
+                }
             }
+
         }
 /* EXAMPLE:
 // Create an array to be filled with the bodies
