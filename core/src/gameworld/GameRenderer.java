@@ -95,12 +95,14 @@ public class GameRenderer {
             debugTag = "Player: ";
         }
 
-        String initTag = GameWorld.allInitialized ? "init " : "no" ;
 
-        this.font.draw(batcher, debugTag+ initTag+ "Get " + myWorld.endScore + " points!", 200*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+
+        this.font.draw(batcher, debugTag+ "Get " + myWorld.endScore + " points!", 200*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
-        renderPlayers(players);
+
+        if(GameWorld.allInitialized) renderPlayers(players);
+
         renderSideBar(players);
 
         if(myWorld.win) {

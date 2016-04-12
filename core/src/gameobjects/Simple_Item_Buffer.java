@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import gameconstants.GameConstants;
+import gameworld.GameWorld;
 
 /**
  * Created by valerie_tan on 3/18/2016.
@@ -84,7 +85,10 @@ public class Simple_Item_Buffer {
             newItem = new Shield();
         }
         assign_random_coord(newItem);
-        items_currently_appearing.add(newItem);
+
+        synchronized (GameWorld.items){
+            items_currently_appearing.add(newItem);
+        }
         return newItem;
 
     }

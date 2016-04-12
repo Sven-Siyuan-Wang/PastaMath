@@ -4,17 +4,21 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.MyGdxGame;
 
 import gamehelpers.InputHandler;
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
+import gameworld.WorldContactListener;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -30,9 +34,12 @@ public class GameScreen implements Screen {
     private boolean thisScreen = true;
 
     //Box2d variables
-    public static World world;
-    private static Box2DDebugRenderer b2dr;
+    public static World world = new World(new Vector2(0,0), true);;
+    public static Box2DDebugRenderer b2dr;
 
+    // gamecam and viewport
+    public static OrthographicCamera gamecam;
+    private Viewport gamePort;
     
     public GameScreen(MyGdxGame game) throws InterruptedException {
         this.game = game;
@@ -44,8 +51,13 @@ public class GameScreen implements Screen {
         Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
 
         // Box2d stuff
-        world = new World(new Vector2(0,0), true);
+
         b2dr = new Box2DDebugRenderer();
+
+        gamecam = new OrthographicCamera();
+        gamePort = new FitViewport(screenWidth,screenHeight,gamecam);
+        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+
 
         this.stage = new Stage(new StretchViewport(1280, 720));
 
@@ -55,6 +67,13 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameScreen", "attached");
+
+        world.setContactListener(new WorldContactListener());
+
+
+
+
+
 
 
 
@@ -68,6 +87,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        b2dr.render(world,gamecam.combined);
 
         runTime += delta;
         if(gameWorld.win) {
@@ -79,6 +99,7 @@ public class GameScreen implements Screen {
         thisScreen = true;
         gameWorld.win = false;
         if(thisScreen) {
+
             gameWorld.update(delta);
             renderer.render(runTime);
             myInput.render();

@@ -8,9 +8,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.mygdx.game.MyGdxGame;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -56,6 +59,7 @@ public class Player implements GameObject, Serializable {
     // Box 2d variables
     public World world;
     public Body b2body;
+    protected Fixture fixture;
 
 
 
@@ -105,9 +109,15 @@ public class Player implements GameObject, Serializable {
         CircleShape shape = new CircleShape();
         shape.setRadius(50);
 
+        fdef.filter.categoryBits = MyGdxGame.PLAYER_BIT;
+        fdef.filter.maskBits = MyGdxGame.ITEM_BIT | MyGdxGame.NOTHING_BIT;
         fdef.shape = shape;
-        b2body.createFixture(fdef);
-    }
+        fixture = b2body.createFixture(fdef);
+        fixture.setUserData(this);
+
+
+}
+
 
     public void update(float delta) {
 
@@ -194,23 +204,7 @@ public class Player implements GameObject, Serializable {
         }
     }
 
-    public boolean collides(GameObject a) {
-        if(position.x < (a.getX() + a.getWidth())) {
-//            Gdx.app.log("Player", "collided, and x is " + position.x + " and pickup's x is " + pickup.getX() + " and pickup's width is" + pickup.getWidth());
-            return (Intersector.overlaps(boundingCircle, (Rectangle) a.getCollider()));
 
-        }
-        return false;
-    }
-
-    public boolean collides(Item item){
-        boolean collision = Intersector.overlaps(boundingCircle, item.getCollider());
-        return collision;
-    }
-
-    public boolean knock_into(Player other){
-        return (Intersector.overlaps(boundingCircle, other.boundingCircle));
-    }
 
     public void decreaseScoreUponKnock(){
         if (currentValue<= 10){
@@ -339,6 +333,10 @@ public class Player implements GameObject, Serializable {
 
     public boolean getShield() {
         return this.shielded;
+    }
+
+    public void handleCollision(){
+        if(!shielded) decreaseScoreUponKnock();
     }
 
 

@@ -1,10 +1,17 @@
 package gameobjects;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.MyGdxGame;
 
 import java.util.Random;
 import java.util.Vector;
@@ -13,6 +20,7 @@ import gameconstants.GameConstants;
 import gameworld.GameObject;
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
+import screens.GameScreen;
 
 /**
  * Created by WSY on 18/3/16.
@@ -42,8 +50,10 @@ public abstract class Item implements GameObject{
 
 
     //Box 2d
-    public World world;
+    public World world = GameScreen.world;
     public Body b2body;
+
+    protected Fixture fixture;
 
     public Item(){
         position = new Vector2();
@@ -52,6 +62,7 @@ public abstract class Item implements GameObject{
         this.ID = String.valueOf(itemID++);
         width = (int) (75);
         height = (int) (75);
+
 
 
 
@@ -89,7 +100,10 @@ public abstract class Item implements GameObject{
         //GameWorld.objectsCopy.remove(this);
         //NEW
         Gdx.app.log("Debug","Item destroyed.");
-        GameWorld.items.remove(this);
+        synchronized (GameWorld.items){
+            GameWorld.items.remove(this);
+        }
+        world.destroyBody(b2body);
     }
 
     public void update(float delta) {
@@ -100,11 +114,11 @@ public abstract class Item implements GameObject{
     }
 
     public float getX() {
-        return position.x;
+        return b2body.getPosition().x;
     }
 
     public float getY() {
-        return position.y;
+        return b2body.getPosition().y;
     }
 
     public int getWidth() {
@@ -117,31 +131,39 @@ public abstract class Item implements GameObject{
 
     //todo: add get and set for items
     public void setPosition(float x, float y){
-        this.position.x= x;
-        this.position.y= y;
+        b2body.setTransform(new Vector2(x,y),0);
     }
 
-    public Vector2 getPosition(){
-        return position;
-    }
 
 
     public Rectangle getCollider() {
         return new Rectangle(this.boundingRect);
     }
 
-    /*
-    public void assign_random_coord() {
-        //generate a random number (use integer, easier to check for overlap)
-        Random randomizer = new Random();
-        //nextInt gives 0 to n-1
-        float x = randomizer.nextFloat() * (Gdx.graphics.getWidth()- 4) + 2 ;
-        float y = randomizer.nextFloat() * (Gdx.graphics.getHeight() - 4) + 2;
+    public void defineItem(){
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(position);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        b2body = world.createBody(bdef);
 
-        position.x= x;
-        position.y= y;
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(37.5f);
+
+        fdef.shape = shape;
+        fixture = b2body.createFixture(fdef);
+        fixture.setUserData(this);
+        setCategoryFilter(MyGdxGame.ITEM_BIT);
+
     }
-    */
+
+    public void setCategoryFilter(short filterBit){
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        fixture.setFilterData(filter);
+    }
+
 
 
 

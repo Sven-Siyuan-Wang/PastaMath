@@ -597,7 +597,13 @@ public class NetworkActivity extends AppCompatActivity implements
 
                 Item toRemove = itemMap.get(id);
                 itemMap.remove(id);
-                toRemove.destroy();
+
+                try{
+                    toRemove.destroy();
+                }catch(NullPointerException e){
+                    Log.d(TAG, msg);
+
+                }
                 Log.d(TAG,"REMOVE ITEM");
 
 
