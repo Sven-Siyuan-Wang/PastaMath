@@ -3,6 +3,8 @@ package gameobjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.Random;
 import java.util.Vector;
@@ -38,6 +40,11 @@ public abstract class Item implements GameObject{
     float lifeTime;
     public static int itemID=0;
 
+
+    //Box 2d
+    public World world;
+    public Body b2body;
+
     public Item(){
         position = new Vector2();
         //this.assign_random_coord(); - to be done in Buffer
@@ -45,6 +52,8 @@ public abstract class Item implements GameObject{
         this.ID = String.valueOf(itemID++);
         width = (int) (75);
         height = (int) (75);
+
+
 
 
     }
@@ -80,7 +89,7 @@ public abstract class Item implements GameObject{
         //GameWorld.objectsCopy.remove(this);
         //NEW
         Gdx.app.log("Debug","Item destroyed.");
-        GameWorld.simple_item_buffer.items_currently_appearing.remove(this);
+        GameWorld.items.remove(this);
     }
 
     public void update(float delta) {

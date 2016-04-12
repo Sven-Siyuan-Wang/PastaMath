@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.Vector2;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -582,8 +583,7 @@ public class NetworkActivity extends AppCompatActivity implements
             float x = Float.parseFloat(words[2]);
             float y = Float.parseFloat(words[3]);
             Player player = GameWorld.players.get(playerMap.get(id));
-            player.setX(x);
-            player.setY(y);
+            player.setPosition(new Vector2(x,y));
         }
 
 
@@ -594,14 +594,12 @@ public class NetworkActivity extends AppCompatActivity implements
             String id = words[1];
             if(words[2].equals("RM")){
                 Log.d(TAG,"RM CONDITION");
-                try{
-                    Item toRemove = itemMap.get(id);
-                    itemMap.remove(id);
-                    toRemove.destroy();
-                    Log.d(TAG,"REMOVE ITEM");
-                }catch(NullPointerException e){
-                    Log.getStackTraceString(e);
-                }
+
+                Item toRemove = itemMap.get(id);
+                itemMap.remove(id);
+                toRemove.destroy();
+                Log.d(TAG,"REMOVE ITEM");
+
 
             }
             else{
@@ -617,9 +615,7 @@ public class NetworkActivity extends AppCompatActivity implements
                     toAdd = new NumberAndOperand(operation,value,x,y);
                 }
                 itemMap.put(id,toAdd);
-                if(GameWorld.items!=null){
-                    GameWorld.items.add(toAdd);
-                }
+                GameWorld.items.add(toAdd);
                 Log.d(TAG,"RECEIVE: item added");
             }
 

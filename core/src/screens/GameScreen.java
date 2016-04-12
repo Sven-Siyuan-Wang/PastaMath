@@ -4,6 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MyGdxGame;
@@ -17,7 +20,7 @@ import gameworld.GameWorld;
  * Created by Hazel on 28/2/2016.
  */
 public class GameScreen implements Screen {
-    private GameWorld world;
+    private GameWorld gameWorld;
     private GameRenderer renderer;
     private float runTime;
     private MyGdxGame game;
@@ -25,6 +28,11 @@ public class GameScreen implements Screen {
     private InputHandler myInput;
 
     private boolean thisScreen = true;
+
+    //Box2d variables
+    public static World world;
+    private static Box2DDebugRenderer b2dr;
+
     
     public GameScreen(MyGdxGame game) throws InterruptedException {
         this.game = game;
@@ -35,14 +43,21 @@ public class GameScreen implements Screen {
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
         Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
 
+        // Box2d stuff
+        world = new World(new Vector2(0,0), true);
+        b2dr = new Box2DDebugRenderer();
+
         this.stage = new Stage(new StretchViewport(1280, 720));
 
-        world = new GameWorld(game.myPlayer); //initialize world
-        renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
+        gameWorld = new GameWorld(game.myPlayer); //initialize world
+        renderer = new GameRenderer(gameWorld, (int) screenWidth, (int)screenHeight); //initialize renderer
         myInput = new InputHandler(game.myPlayer, this.stage, renderer);
         Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameScreen", "attached");
+
+
+
     }
 
     @Override
@@ -55,16 +70,16 @@ public class GameScreen implements Screen {
     public void render(float delta) {
 
         runTime += delta;
-        if(world.win) {
+        if(gameWorld.win) {
             thisScreen = false;
             changeScreen("game over");
         }
         System.out.println("thisScreen is " + thisScreen);
-        System.out.println("world.win is " + world.win);
+        System.out.println("gameWorld.win is " + gameWorld.win);
         thisScreen = true;
-        world.win = false;
+        gameWorld.win = false;
         if(thisScreen) {
-            world.update(delta);
+            gameWorld.update(delta);
             renderer.render(runTime);
             myInput.render();
         }

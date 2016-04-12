@@ -9,6 +9,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.math.Vector2;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesStatusCodes;
@@ -60,6 +61,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	private static String serverID;
 
+
 	//keith network end
 
 	@Override
@@ -79,7 +81,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		myself = (Player)i.getSerializableExtra("myself");
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new MyGdxGame(this,myself), config); // updated by siyuan
+		initialize(new MyGdxGame(this,myself,2), config); // updated by siyuan
 
 		myId=room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient()));
 		GameWorld.isOwner = isServer();
@@ -234,57 +236,6 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	@Override
 	public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
-		Log.d(TAG, "Received: " + realTimeMessage);
-        String msg = new String(realTimeMessage.getMessageData());
-        String[] words = msg.split(" ");
-
-        //general message
-        if(words[0].equals("INIT")){
-            String id = words[1];
-            Player player = new Player(id);
-            playerMap.put(id, GameWorld.players.size());
-            GameWorld.players.add(player);
-        }
-
-        //sent to both player and server
-		//Example: PLAYER ID X Y
-        else if(words[0].equals("PLAYER")){
-            String id = words[1];
-            float x = Float.parseFloat(words[2]);
-            float y = Float.parseFloat(words[3]);
-            Player player = GameWorld.players.get(playerMap.get(id));
-            player.setX(x);
-            player.setY(y);
-        }
-
-        //TODO: ONE MORE CASE
-        //ITEM ID X Y TYPE
-		//TYPE: shield, speedUp, plus1, mul2
-        //ITEM ID RM
-		else if(words[0].equals("ITEM")){
-			String id = words[1];
-			if(words[2].equals("RM")){
-				Item toRemove = itemMap.get(id);
-				itemMap.remove(id);
-				toRemove.destroy();
-			}
-			else{
-				float x = Float.parseFloat(words[2]);
-				float y = Float.parseFloat(words[3]);
-				String type = words[4];
-				Item toAdd;
-				if(type.equals("SHIELD")) toAdd = new Shield(x,y);
-				else if(type.equals("SPEEDUP")) toAdd =new SpeedUp(x,y);
-				else {
-					String operation = type.substring(0,type.length()-1);
-					int value = Character.getNumericValue(type.charAt(type.length() - 1));
-					toAdd = new NumberAndOperand(operation,value,x,y);
-				}
-				GameWorld.items.add(toAdd);
-				Log.d(TAG,"RECEIVE: item added");
-			}
-
-		}
 
 	}
 

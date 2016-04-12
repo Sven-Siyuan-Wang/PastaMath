@@ -22,10 +22,14 @@ public class MyGdxGame extends Game {
 
 	public static Player myPlayer;
 
-	public MyGdxGame(PlayServices playServices, Player myself){
+	public static int numberOfPlayers;
+
+	public MyGdxGame(PlayServices playServices, Player myself, int numberOfPlayers){
+
 
 		this.playServices = playServices;
 		myPlayer =  myself;
+		this.numberOfPlayers = numberOfPlayers;
 	}
 
 	@Override

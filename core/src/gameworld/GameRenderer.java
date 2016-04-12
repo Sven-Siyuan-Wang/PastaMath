@@ -85,7 +85,19 @@ public class GameRenderer {
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
-        this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        //for debug
+        String debugTag = null;
+        if(GameWorld.isOwner){
+            debugTag = "Server: ";
+        }
+
+        else {
+            debugTag = "Player: ";
+        }
+
+        String initTag = GameWorld.allInitialized ? "init " : "no" ;
+
+        this.font.draw(batcher, debugTag+ initTag+ "Get " + myWorld.endScore + " points!", 200*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);

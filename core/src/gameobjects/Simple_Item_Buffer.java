@@ -67,9 +67,6 @@ public class Simple_Item_Buffer {
         }
     }
 
-    public ArrayList<Item> getItems_currently_appearing(){
-        return items_currently_appearing;
-    }
 
     //TODO: implement a method to generate new items randomly
     public Item generate_random_Item(){
@@ -108,13 +105,14 @@ public class Simple_Item_Buffer {
         float y= y_choices.get(randomizer.nextInt(y_choices.size()));
         //set position if it doesnt alr exist
 
-        if (!check_if_vector_exist(new Vector2(x, y))) {
-            item.setPosition(x, y);
-            existing_item_pos_vec.add(item.getPosition()); //add position
-        }
-        else{
-            assign_random_coord(item); //recursive- keep generating random coord if it exist alr
-        }
+//        if (!check_if_vector_exist(new Vector2(x, y))) {
+//            item.setPosition(x, y);
+//            existing_item_pos_vec.add(item.getPosition()); //add position
+//        }
+//        else{
+//            assign_random_coord(item); //recursive- keep generating random coord if it exist alr
+//        }
+        item.setPosition(x,y);
 
         item.setBoundingRect();
     }
