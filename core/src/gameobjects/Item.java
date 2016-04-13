@@ -53,6 +53,10 @@ public abstract class Item implements GameObject{
     public World world = GameScreen.world;
     public Body b2body;
 
+    // destroy
+    public boolean toDestroy = false;
+    public boolean destroyed = false;
+
     protected Fixture fixture;
 
     public Item(){
@@ -95,22 +99,21 @@ public abstract class Item implements GameObject{
 
 
     public void destroy() {
-        //boundingRect=null;
-        //ORIGINAL
-        //GameWorld.objectsCopy.remove(this);
-        //NEW
-        Gdx.app.log("Debug","Item destroyed.");
-        synchronized (GameWorld.items){
-            GameWorld.items.remove(this);
-        }
+
+        Gdx.app.log("Debug", "Item destroyed.");
+
         world.destroyBody(b2body);
+        setCategoryFilter(MyGdxGame.DESTROYED_BIT);
+        destroyed = true;
     }
 
-    public void update(float delta) {
-        destructionCounter -= (1*delta);
-        if(destructionCounter < 0) {
-            this.destroy();
+    public void update() {
+        if(toDestroy && !destroyed){
+            destroy();
+            if(GameWorld.isOwner) GameWorld.numberOfActiveItems--;
+
         }
+
     }
 
     public float getX() {

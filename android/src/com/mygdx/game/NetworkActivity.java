@@ -413,7 +413,6 @@ public class NetworkActivity extends AppCompatActivity implements
 //        startActivityForResult(intent, RC_SELECT_PLAYERS);
 
         Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiClient, room, 2);           //REMOVE WHEN REQUIRED
-//        Intent i = Games.RealTimeMultiplayer.getWaitingRoomIntent(myApp.getClient(), room, 2);
         startActivityForResult(i, RC_WAITING_ROOM); //returns onActivityResult
 
         Log.d(TAG, "showWaitingRoom done");
@@ -599,7 +598,7 @@ public class NetworkActivity extends AppCompatActivity implements
                 itemMap.remove(id);
 
                 try{
-                    toRemove.destroy();
+                    toRemove.toDestroy = true;
                 }catch(NullPointerException e){
                     Log.d(TAG, msg);
 

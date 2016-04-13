@@ -1,6 +1,7 @@
 package gameobjects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.MyGdxGame;
 
 import java.util.Random;
 
@@ -35,7 +36,8 @@ public class SpeedUp extends Item {
 
     public void update_player_situation(Player player){
         player.speedUp();
-    };
+        MyGdxGame.playServices.sendToPlayer("ITEM " + getID() + " " + "RM");
+    }
 
     public String getName(){
         return "speedUp";

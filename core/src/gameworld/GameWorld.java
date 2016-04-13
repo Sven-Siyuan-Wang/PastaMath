@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -39,6 +40,8 @@ public class GameWorld {
 
     public static boolean allInitialized = false;
 
+    public static int numberOfActiveItems;
+
 
 
     public GameWorld(Player myself) {
@@ -49,7 +52,6 @@ public class GameWorld {
                 players.add(myself);
             }
             else{
-                myself.initialize(GameScreen.world);
                 players.set(0,myself);
             }
         }
@@ -67,38 +69,26 @@ public class GameWorld {
             endScore = new Random().nextInt(100) + 50;
             sendEndScore(endScore);
             items = simple_item_buffer.items_currently_appearing;
+            numberOfActiveItems = 0;
 
 
         }
 
     }
 
-
-
-    //TODO(Extra): consider doing thread version? (complicated)
-
-    //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
 
         if(!allInitialized ){
-            if( players.size()== MyGdxGame.numberOfPlayers){
+            if( players.size()== MyGdxGame.numberOfPlayers && !players.get(0).getId().equals("null")){
                 for(Player player: players){
                     player.initialize(GameScreen.world);
                 }
                 allInitialized = true;
-                System.out.println("All players initialized");
+                Gdx.app.log("GameWorld", "All players initialized");
             }
         }
 
-
-
-
-        //all the items are initialized inside the buffer already when it is constructed
-        //todo: obtain player latest coord toprevent new items frm overlapping
-        //simple_item_buffer.update_player_pos_vec(players);
-
         else{
-
 
             for(Player player: players) {
                 if(player.getCurrentValue()==this.endScore) {
@@ -110,46 +100,44 @@ public class GameWorld {
                 }
             }
 
-            //update box 2d world
-            GameScreen.world.step(1 / 60f, 6, 2);
 
             if(isOwner){
                 //Server code
 
-
-                if (simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity) {
-                    //make new object every few seconds
-
+                //make new object every few seconds
+                if (numberOfActiveItems < Simple_Item_Buffer.max_items_capacity) {
                     sendAddItem(simple_item_buffer.generate_random_Item());
+                    numberOfActiveItems++;
+                    Gdx.app.log("GameWorld","Number of items: "+numberOfActiveItems);
                 }
 
 
                 for (Iterator<Item> iterator = simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ) {
-
                     Item item = iterator.next();
                     item.decreaseLife(delta);
-                    if (item.expired()) {
-                        iterator.remove();
+                    if (!item.destroyed && item.expired()) {
                         sendRemoveItem(item);
-                        GameScreen.world.destroyBody(item.b2body);
+                        item.toDestroy = true;
+
                     }
                 }
-
-
-
-
-
 
             }
             // My player code
 
             myself.update(delta);
-            Gdx.app.log("GameWorld","Player Update");
+            Gdx.app.log("GameWorld", "Player Update");
 
+            try{
+                for(Item item: items){
+                    item.update();
+                }
+            } catch (ConcurrentModificationException e){
+                Gdx.app.log("GameWorld", "CatchConcurrentModificationException");
+            }
 
             sendMyLocation();
 
-            Gdx.app.log("Gameworld","Number of players: "+players.size());
 
         }
 

@@ -89,11 +89,13 @@ public class GameRenderer {
         String debugTag = null;
         if(GameWorld.isOwner){
             debugTag = "Server: ";
+
         }
 
         else {
             debugTag = "Player: ";
         }
+        debugTag += GameWorld.allInitialized ? "init" : "no";
 
 
 
@@ -112,8 +114,6 @@ public class GameRenderer {
         //end spritebatch
         batcher.end();
 
-//        myWorld.getStage().act();
-//        myWorld.getStage().draw();
 
     }
 
@@ -121,12 +121,15 @@ public class GameRenderer {
     public void renderItems(ArrayList<Item> list){
         if(list!=null){
             for(Item item: list){
-                batcher.enableBlending();
-                System.out.println("Rendering item: "+item.getName());
-                batcher.draw(AssetLoader.textures.get(item.getName()),
-                        item.getX() * GameConstants.SCALE_X,
-                        item.getY() * GameConstants.SCALE_Y,
-                        item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
+                if(!item.destroyed){
+                    batcher.enableBlending();
+                    System.out.println("Rendering item: "+item.getName());
+                    batcher.draw(AssetLoader.textures.get(item.getName()),
+                            item.getX() * GameConstants.SCALE_X,
+                            item.getY() * GameConstants.SCALE_Y,
+                            item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
+                }
+
             }
         }
     }

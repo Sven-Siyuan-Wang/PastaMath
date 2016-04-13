@@ -99,10 +99,10 @@ public class GameScreen implements Screen {
         thisScreen = true;
         gameWorld.win = false;
         if(thisScreen) {
-
             gameWorld.update(delta);
             renderer.render(runTime);
             myInput.render();
+            if(runTime>1) world.step(1 / 60f, 6, 2);
         }
 
         //Gdx.app.log("GameScreen FPS", (1/delta)+"");

@@ -3,6 +3,7 @@ package gameobjects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.MyGdxGame;
 
 import java.io.File;
 import java.util.Random;
@@ -67,6 +68,8 @@ public class NumberAndOperand extends Item { //All these are a form of item
 
     public void update_player_situation(Player player){
         player.setCurrentValue(value, operation);
+        MyGdxGame.playServices.sendToPlayer("ITEM " + getID() + " " + "RM");
+        MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue());
     }
 
 

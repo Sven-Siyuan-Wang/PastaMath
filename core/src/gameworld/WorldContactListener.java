@@ -22,25 +22,30 @@ public class WorldContactListener implements ContactListener {
     @Override
     public void beginContact(Contact contact) {
         Gdx.app.log(TAG, "beginContact");
-        Fixture fixA = contact.getFixtureA();
-        Fixture fixB = contact.getFixtureB();
+        if(GameWorld.isOwner){
+            Fixture fixA = contact.getFixtureA();
+            Fixture fixB = contact.getFixtureB();
 
-        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+            int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
-        switch (cDef){
-            case MyGdxGame.PLAYER_BIT | MyGdxGame.PLAYER_BIT:
-                ((Player) fixA.getUserData()).handleCollision();
-                ((Player) fixB.getUserData()).handleCollision();
-                break;
-            case MyGdxGame.PLAYER_BIT | MyGdxGame.ITEM_BIT:
-                if(fixA.getFilterData().categoryBits == MyGdxGame.PLAYER_BIT){
-                    ((Item) fixB.getUserData()).update_player_situation((Player) fixA.getUserData());
-                    ((Item) fixB.getUserData()).destroy();
-                }
-                else{
-                    ((Item) fixA.getUserData()).update_player_situation((Player) fixB.getUserData());
-                    ((Item) fixA.getUserData()).destroy();
-                }
+            switch (cDef){
+                case MyGdxGame.PLAYER_BIT | MyGdxGame.PLAYER_BIT:
+                    ((Player) fixA.getUserData()).handleCollision();
+                    ((Player) fixB.getUserData()).handleCollision();
+                    Gdx.app.log("ContactListener", "Player-player");
+                    break;
+                case MyGdxGame.PLAYER_BIT | MyGdxGame.ITEM_BIT:
+                    if(fixA.getFilterData().categoryBits == MyGdxGame.PLAYER_BIT){
+                        ((Item) fixB.getUserData()).update_player_situation((Player) fixA.getUserData());
+                        ((Item) fixB.getUserData()).toDestroy = true;
+
+                    }
+                    else{
+                        ((Item) fixA.getUserData()).update_player_situation((Player) fixB.getUserData());
+                        ((Item) fixA.getUserData()).toDestroy = true;
+                    }
+
+            }
 
         }
 

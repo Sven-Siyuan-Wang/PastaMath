@@ -110,7 +110,7 @@ public class Player implements GameObject, Serializable {
         shape.setRadius(50);
 
         fdef.filter.categoryBits = MyGdxGame.PLAYER_BIT;
-        fdef.filter.maskBits = MyGdxGame.ITEM_BIT | MyGdxGame.NOTHING_BIT;
+        fdef.filter.maskBits = MyGdxGame.ITEM_BIT;
         fdef.shape = shape;
         fixture = b2body.createFixture(fdef);
         fixture.setUserData(this);
@@ -337,6 +337,8 @@ public class Player implements GameObject, Serializable {
 
     public void handleCollision(){
         if(!shielded) decreaseScoreUponKnock();
+        else update_collision_count();
+
     }
 
 
