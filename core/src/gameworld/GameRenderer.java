@@ -163,30 +163,12 @@ public class GameRenderer {
         batcher.end();
     }
 
-    public void renderJoystickButtons(boolean up, boolean down, boolean left, boolean right) {
+    public void renderJoystickKnob() {
         batcher.begin();
         batcher.enableBlending();
-        if(down) {
-            if (!left && !right) {
-                batcher.draw(AssetLoader.up, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-            } else if (left) {
-                batcher.draw(AssetLoader.upleft, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-            } else if (right) {
-                batcher.draw(AssetLoader.upright, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-            }
-        } else if(up) {
-            if(!left && !right) {
-                batcher.draw(AssetLoader.down, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-            } else if (left) {
-                batcher.draw(AssetLoader.downleft, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-            } else if (right) {
-                batcher.draw(AssetLoader.downright, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-            }
-        } else if(left) {
-            batcher.draw(AssetLoader.left, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-        } else if(right) {
-            batcher.draw(AssetLoader.right, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
-        }
+
+        //render joystick knob
+        batcher.draw(AssetLoader.touchKnob, 0, 0, 150*GameConstants.SCALE_X, 150*GameConstants.SCALE_Y);
 
         batcher.end();
     }

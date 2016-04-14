@@ -37,7 +37,7 @@ public class InputHandler implements InputProcessor {
         //Render joystick here
         renderer.renderJoystick(joyX, joyY);
         if(touched) {
-            renderer.renderJoystickButtons(myPlayer.getUp(), myPlayer.getDown(), myPlayer.getLeft(), myPlayer.getRight());
+            renderer.renderJoystickKnob();
             renderer.setTouched(true);
         } else {
             renderer.setTouched(false);
