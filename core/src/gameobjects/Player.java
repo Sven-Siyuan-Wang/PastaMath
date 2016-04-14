@@ -35,9 +35,8 @@ public class Player implements GameObject, Serializable {
     private String id;
     private Vector2 position;
     public float velocity;
-    private Vector2 acceleration;
+    public static final float speedValue = 400;
 
-    private float rotation;
     private int width;
     private int height;
 
@@ -46,7 +45,7 @@ public class Player implements GameObject, Serializable {
     public Boolean left = false;
     public Boolean right = false;
 
-    private Circle boundingCircle;
+
     private boolean speedUp;
 
     float speedUpCounter = 0;
@@ -72,9 +71,8 @@ public class Player implements GameObject, Serializable {
 
         this.width = 100;
         this.height = 100;
-        this.boundingCircle = new Circle();
 
-        velocity = 200;
+        velocity = speedValue;
 
         this.currentValue = 0;
 
@@ -86,9 +84,8 @@ public class Player implements GameObject, Serializable {
 
         this.width = width;
         this.height = height;
-        this.boundingCircle = new Circle();
 
-        velocity = 200;
+        velocity = speedValue;
 
         this.currentValue = 0;
     }
@@ -121,7 +118,6 @@ public class Player implements GameObject, Serializable {
 
     public void update(float delta) {
 
-//        Gdx.app.log("delta", Float.toString(delta));
         float deltaX = 0;
         float deltaY = 0;
         if(up) {
@@ -159,21 +155,11 @@ public class Player implements GameObject, Serializable {
             }
         }
 
-        boundingCircle.set(position.x, position.y, 50f);
-
-        //todo: if player is shielded, dont let its score change
-        if(shielded){
-            //do nothing;
-        }
-        else{
-            //change score
-        }
-        //todo: if player collided into something, adjust effects accordingly- change score or speed
     }
 
     public void setPosition(Vector2 position){
         try{
-            b2body.setTransform(position, 0);
+            b2body.setLinearVelocity(position.x - getX(), position.y - getY());
         } catch (NullPointerException e){
             setPosition(position);
         }
@@ -225,6 +211,7 @@ public class Player implements GameObject, Serializable {
     public int getCollision_count(){
         return this.collision_count;
     }
+
     public void update_collision_count(){
         if(collision_count==3){
             resetCollision_count();
@@ -309,7 +296,6 @@ public class Player implements GameObject, Serializable {
     }
 
 
-    public Circle getCollider() { return this.boundingCircle; }
 
     public int getCurrentValue() { return this.currentValue; }
 

@@ -12,5 +12,4 @@ public interface GameObject {
     public int getWidth();
     public int getHeight();
     public void destroy();
-    public Shape2D getCollider();
 }

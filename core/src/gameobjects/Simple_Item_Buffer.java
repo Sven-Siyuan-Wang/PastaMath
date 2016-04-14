@@ -118,7 +118,6 @@ public class Simple_Item_Buffer {
 //        }
         item.setPosition(x,y);
 
-        item.setBoundingRect();
     }
 
 

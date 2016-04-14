@@ -39,9 +39,6 @@ public abstract class Item implements GameObject{
     private int width;
     private int height;
 
-    private float destructionCounter = 10;
-
-    private Rectangle boundingRect;
 
     private String ID;
 
@@ -61,23 +58,18 @@ public abstract class Item implements GameObject{
 
     public Item(){
         position = new Vector2();
-        //this.assign_random_coord(); - to be done in Buffer
+
         lifeTime = 10 + (new Random()).nextFloat()*10;
         this.ID = String.valueOf(itemID++);
-        width = (int) (75);
-        height = (int) (75);
-
-
-
-
-
+        width = 75;
+        height = 75;
     }
 
     public Item(float x, float y){
         position = new Vector2(x,y);
-        width = (int) (75);
-        height = (int) (75);
-        setBoundingRect();
+        width = 75;
+        height = 75;
+
 
 
     }
@@ -93,9 +85,6 @@ public abstract class Item implements GameObject{
         return (lifeTime<=0);
     }
 
-    public void setBoundingRect(){
-        boundingRect = new Rectangle(this.position.x-width/2, this.position.y-height/2, width, height); // DUNNO why x,y have to be shifted by half the dimension
-    }
 
 
     public void destroy() {
@@ -139,9 +128,6 @@ public abstract class Item implements GameObject{
 
 
 
-    public Rectangle getCollider() {
-        return new Rectangle(this.boundingRect);
-    }
 
     public void defineItem(){
         BodyDef bdef = new BodyDef();
