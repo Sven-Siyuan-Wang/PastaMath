@@ -85,10 +85,26 @@ public class GameRenderer {
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
-        this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        //for debug
+        String debugTag = null;
+        if(GameWorld.isOwner){
+            debugTag = "Server: ";
+
+        }
+
+        else {
+            debugTag = "Player: ";
+        }
+        debugTag += GameWorld.allInitialized ? "init" : "no";
+
+
+
+        this.font.draw(batcher, debugTag+ "Get " + myWorld.endScore + " points!", 200*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
-        renderPlayers(players);
+
+        if(GameWorld.allInitialized) renderPlayers(players);
+
         renderSideBar(players);
 
         if(myWorld.win) {
@@ -98,8 +114,6 @@ public class GameRenderer {
         //end spritebatch
         batcher.end();
 
-//        myWorld.getStage().act();
-//        myWorld.getStage().draw();
 
     }
 
@@ -107,12 +121,15 @@ public class GameRenderer {
     public void renderItems(ArrayList<Item> list){
         if(list!=null){
             for(Item item: list){
-                batcher.enableBlending();
-                System.out.println("Rendering item: "+item.getName());
-                batcher.draw(AssetLoader.textures.get(item.getName()),
-                        item.getX() * GameConstants.SCALE_X,
-                        item.getY() * GameConstants.SCALE_Y,
-                        item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
+                if(!item.destroyed){
+                    batcher.enableBlending();
+                    System.out.println("Rendering item: "+item.getName());
+                    batcher.draw(AssetLoader.textures.get(item.getName()),
+                            item.getX() * GameConstants.SCALE_X,
+                            item.getY() * GameConstants.SCALE_Y,
+                            item.getWidth() * GameConstants.SCALE_X, item.getHeight() * GameConstants.SCALE_Y);
+                }
+
             }
         }
     }

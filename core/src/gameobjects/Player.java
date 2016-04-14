@@ -1,10 +1,19 @@
 package gameobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.mygdx.game.MyGdxGame;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -12,6 +21,7 @@ import java.util.Random;
 import gameconstants.GameConstants;
 import gameworld.GameObject;
 import gameworld.GameRenderer;
+import screens.GameScreen;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -46,6 +56,13 @@ public class Player implements GameObject, Serializable {
     private int currentValue;
     private int collision_count=0; //after 3 collisions, the shield will not work anymore
 
+    // Box 2d variables
+    public World world;
+    public Body b2body;
+    protected Fixture fixture;
+
+
+
 
     //constructor for Player class
     public Player(String id){
@@ -61,6 +78,7 @@ public class Player implements GameObject, Serializable {
 
         this.currentValue = 0;
 
+
     }
     public Player(float x, float y, int width, int height) {
 
@@ -75,28 +93,59 @@ public class Player implements GameObject, Serializable {
         this.currentValue = 0;
     }
 
+    public void initialize(World world){
+        this.world = world;
+        definePlayer();
+
+    }
+
+    public void definePlayer(){
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(position);
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(50);
+
+        fdef.filter.categoryBits = MyGdxGame.PLAYER_BIT;
+        fdef.filter.maskBits = MyGdxGame.ITEM_BIT;
+        fdef.shape = shape;
+        fixture = b2body.createFixture(fdef);
+        fixture.setUserData(this);
+
+
+}
+
+
     public void update(float delta) {
 
 //        Gdx.app.log("delta", Float.toString(delta));
+        float deltaX = 0;
+        float deltaY = 0;
         if(up) {
-            if(!(position.y <= 0)) {
-                position.y -= velocity*delta;
+            if(!(b2body.getPosition().y <= 0)) {
+                deltaY = -velocity;
+
 
             }
         } else if(down) {
-            if(!(position.y >= 520)) {
-                position.y += velocity*delta;
+            if(!(b2body.getPosition().y  >= 520)) {
+                deltaY = velocity;
             }
         }
         if(right) {
-            if(!(position.x >=930)) {
-                position.x += velocity * delta;
+            if(!(b2body.getPosition().x >=930)) {
+                deltaX = velocity;
             }
         } else if(left) {
-            if(!(position.x<=0)) {
-                position.x -= velocity * delta;
+            if(!(b2body.getPosition().x <=0)) {
+                deltaX = -velocity;
             }
         }
+
+        b2body.setLinearVelocity(new Vector2(deltaX,deltaY));
 
 
 
@@ -120,6 +169,14 @@ public class Player implements GameObject, Serializable {
             //change score
         }
         //todo: if player collided into something, adjust effects accordingly- change score or speed
+    }
+
+    public void setPosition(Vector2 position){
+        try{
+            b2body.setTransform(position, 0);
+        } catch (NullPointerException e){
+            setPosition(position);
+        }
     }
 
     public void onNotClick() {
@@ -147,23 +204,7 @@ public class Player implements GameObject, Serializable {
         }
     }
 
-    public boolean collides(GameObject a) {
-        if(position.x < (a.getX() + a.getWidth())) {
-//            Gdx.app.log("Player", "collided, and x is " + position.x + " and pickup's x is " + pickup.getX() + " and pickup's width is" + pickup.getWidth());
-            return (Intersector.overlaps(boundingCircle, (Rectangle) a.getCollider()));
 
-        }
-        return false;
-    }
-
-    public boolean collides(Item item){
-        boolean collision = Intersector.overlaps(boundingCircle, item.getCollider());
-        return collision;
-    }
-
-    public boolean knock_into(Player other){
-        return (Intersector.overlaps(boundingCircle, other.boundingCircle));
-    }
 
     public void decreaseScoreUponKnock(){
         if (currentValue<= 10){
@@ -246,20 +287,14 @@ public class Player implements GameObject, Serializable {
 
     //get methods for attributes
     public float getX() {
-        return position.x;
+        return b2body.getPosition().x;
     }
 
-    public void setX(float x) {
-        position.x = x;
-    }
 
     public float getY() {
-        return position.y;
+        return b2body.getPosition().y;
     }
 
-    public void setY(float y) {
-        position.y = y;
-    }
 
     public float getVelocity() {
         return this.velocity;
@@ -273,9 +308,6 @@ public class Player implements GameObject, Serializable {
         return this.height;
     }
 
-    public float getRotation() {
-        return this.rotation;
-    }
 
     public Circle getCollider() { return this.boundingCircle; }
 
@@ -291,7 +323,8 @@ public class Player implements GameObject, Serializable {
 
     //todo: get pos
     public Vector2 getPosition(){
-        return this.position;
+        if (b2body == null) return position;
+        return b2body.getPosition();
     }
 
     public boolean getSpeedUp() {
@@ -300,6 +333,12 @@ public class Player implements GameObject, Serializable {
 
     public boolean getShield() {
         return this.shielded;
+    }
+
+    public void handleCollision(){
+        if(!shielded) decreaseScoreUponKnock();
+        else update_collision_count();
+
     }
 
 

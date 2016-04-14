@@ -1,11 +1,15 @@
 package gameobjects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.MyGdxGame;
 
 import java.io.File;
 import java.util.Random;
 
 import gameworld.GameObject;
+import screens.GameScreen;
 
 /**
  * Created by valerie_tan on 3/19/2016.
@@ -20,12 +24,19 @@ public class NumberAndOperand extends Item { //All these are a form of item
     private static int choose_2_or_3;
 
 
+
     //attributes for number_and_operand
     public NumberAndOperand(String operation, int value, float x, float y){
         this.operation = operation;
         this.value = value;
         number_n_operand= operation + String.valueOf(value);
-        this.setPosition(x,y);
+        position = new Vector2(x,y);
+        this.world = GameScreen.world;
+        defineItem();
+
+
+
+
 
     }
     public NumberAndOperand(){
@@ -49,10 +60,16 @@ public class NumberAndOperand extends Item { //All these are a form of item
             }
         }
         number_n_operand= operation + String.valueOf(value);
+
+        this.world = GameScreen.world;
+        defineItem();
+
     }
 
     public void update_player_situation(Player player){
         player.setCurrentValue(value, operation);
+        MyGdxGame.playServices.sendToPlayer("ITEM " + getID() + " " + "RM");
+        MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue());
     }
 
 

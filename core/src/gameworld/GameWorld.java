@@ -1,16 +1,19 @@
 package gameworld;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 
 import gameobjects.Item;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
-
+import screens.GameScreen;
 
 
 /**
@@ -26,14 +29,18 @@ public class GameWorld {
 
     public static Simple_Item_Buffer simple_item_buffer= new Simple_Item_Buffer();
 
-    public static ArrayList<Item> items;  // items for server to update
+    public static ArrayList<Item> items = new ArrayList<Item>();  // items for server to update
 
-    public static int endScore;
+    public static int endScore = 999;
 
     public static boolean isOwner;
     public static boolean win = false;
 
     public static int playerCounter = 0;
+
+    public static boolean allInitialized = false;
+
+    public static int numberOfActiveItems;
 
 
 
@@ -52,7 +59,8 @@ public class GameWorld {
 
         //intialize buffer of items and pickups
         simple_item_buffer= new Simple_Item_Buffer();
-        items = simple_item_buffer.items_currently_appearing;
+
+
         //all the items are initialized inside the buffer already when it is constructed
 
 
@@ -60,86 +68,79 @@ public class GameWorld {
         if(isOwner) {
             endScore = new Random().nextInt(100) + 50;
             sendEndScore(endScore);
+            items = simple_item_buffer.items_currently_appearing;
+            numberOfActiveItems = 0;
+
 
         }
 
     }
 
-
-
-    //TODO(Extra): consider doing thread version? (complicated)
-
-    //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
-        //all the items are initialized inside the buffer already when it is constructed
-        //todo: obtain player latest coord toprevent new items frm overlapping
-        simple_item_buffer.update_player_pos_vec(players);
 
-        for(Player player: players) {
-            if(player.getCurrentValue()==this.endScore) {
-                for(Player player2: players) {
-                    player2.resetCurrentValue();
+        if(!allInitialized ){
+            if( players.size()== MyGdxGame.numberOfPlayers && !players.get(0).getId().equals("null")){
+                for(Player player: players){
+                    player.initialize(GameScreen.world);
                 }
-                Gdx.app.log("World", "someone has won");
-                win = true;
+                allInitialized = true;
+                Gdx.app.log("GameWorld", "All players initialized");
             }
         }
 
-        if(isOwner){
-            //Server code
-
-                if (simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity) {
-                    //make new object every few seconds
-                    System.out.println("generate new item");
-                    sendAddItem(simple_item_buffer.generate_random_Item());
-                }
-                //TODO: PLAYER RESPONSES TO COLLISION
-                for (Player each_player : players) {
-                    each_player.update(delta);
-
-                    for (Iterator<Item> iterator = simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ) {
-
-                        Item item = iterator.next();
-                        item.decreaseLife(delta);
-                        if (item.expired()) {
-                            iterator.remove();
-                            sendRemoveItem(item);
-                        } else if (each_player.collides(item)) {
-                            iterator.remove();
-                            sendRemoveItem(item);
-                            //todo: remove corresponding coords
-                            simple_item_buffer.existing_item_pos_vec.remove(item.getPosition());
-                            item.update_player_situation(each_player);
-                            sendPlayerScore(each_player);
-
-                        }
-                    }
-                    //check if a player collided into another player
-                    for (Player other_player : players) {
-                        if (!other_player.equals(each_player)) { //you can't knock into yourself
-                            if (each_player.knock_into(other_player)) {
-                                if (each_player.getShielded()) {
-                                    other_player.update_collision_count();
-                                } else {
-                                    each_player.decreaseScoreUponKnock();
-                                    other_player.decreaseScoreUponKnock();
-                                    sendPlayerScore(each_player);
-                                    sendPlayerScore(other_player);
-                                }
-
-                            }
-                        }
-                    }
-
-            }
-
-
-        }
         else{
+
+            for(Player player: players) {
+                if(player.getCurrentValue()==this.endScore) {
+                    for(Player player2: players) {
+                        player2.resetCurrentValue();
+                    }
+                    Gdx.app.log("World", "someone has won");
+                    win = true;
+                }
+            }
+
+
+            if(isOwner){
+                //Server code
+
+                //make new object every few seconds
+                if (numberOfActiveItems < Simple_Item_Buffer.max_items_capacity) {
+                    sendAddItem(simple_item_buffer.generate_random_Item());
+                    numberOfActiveItems++;
+                    Gdx.app.log("GameWorld","Number of items: "+numberOfActiveItems);
+                }
+
+
+                for (Iterator<Item> iterator = simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ) {
+                    Item item = iterator.next();
+                    item.decreaseLife(delta);
+                    if (!item.destroyed && item.expired()) {
+                        sendRemoveItem(item);
+                        item.toDestroy = true;
+
+                    }
+                }
+
+            }
+            // My player code
+
             myself.update(delta);
+            Gdx.app.log("GameWorld", "Player Update");
+
+            try{
+                for(Item item: items){
+                    item.update();
+                }
+            } catch (ConcurrentModificationException e){
+                Gdx.app.log("GameWorld", "CatchConcurrentModificationException");
+            }
+
+            sendMyLocation();
+
 
         }
-        sendMyLocation();
+
 
 
 

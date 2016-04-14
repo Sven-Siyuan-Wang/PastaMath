@@ -22,10 +22,19 @@ public class MyGdxGame extends Game {
 
 	public static Player myPlayer;
 
-	public MyGdxGame(PlayServices playServices, Player myself){
+	public static int numberOfPlayers;
+
+	public static final short NOTHING_BIT = 0;
+	public static final short PLAYER_BIT = 1;
+	public static final short ITEM_BIT = 2;
+	public static final short DESTROYED_BIT = 4;
+
+	public MyGdxGame(PlayServices playServices, Player myself, int numberOfPlayers){
+
 
 		this.playServices = playServices;
 		myPlayer =  myself;
+		this.numberOfPlayers = numberOfPlayers;
 	}
 
 	@Override
