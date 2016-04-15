@@ -32,8 +32,7 @@ public class GameRenderer {
     private int gameWidth;
     private float aspect_ratio;
 
-    private BitmapFont font;
-    private BitmapFont scorefont;
+    private BitmapFont font, scorefont, penaltyfont;
 
     private float runTime;
 
@@ -59,6 +58,9 @@ public class GameRenderer {
 
         this.scorefont = new BitmapFont(Gdx.files.internal("data/font.fnt"));
         this.scorefont.getData().setScale(GameConstants.SCALE_X*(float)0.8, GameConstants.SCALE_Y*(float)0.8);
+
+        this.penaltyfont = new BitmapFont(Gdx.files.internal("data/font.fnt"));
+        this.scorefont.getData().setScale(GameConstants.SCALE_X*(float)0.6, GameConstants.SCALE_Y*(float)0.6);
     }
 
     public void setTouched(boolean touched) {
@@ -88,7 +90,9 @@ public class GameRenderer {
 
         String collisionPenalty = GameWorld.collisionPenalty;
         String debugTag = GameWorld.isOwner ? "Server: " : "Player: ";
-        this.font.draw(batcher, collisionPenalty+ " " + debugTag + "Get " + myWorld.endScore + " points!", 100*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        this.font.draw(batcher, debugTag + "Get " + myWorld.endScore + " points!", 10*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+
+        this.penaltyfont.draw(batcher, collisionPenalty + " points", 1030*GameConstants.SCALE_X, 700*GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);
@@ -152,8 +156,14 @@ public class GameRenderer {
         int count = 1;
         for(Player player: players) {
             batcher.enableBlending();
-            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1120 * GameConstants.SCALE_X, (690-100*count) * GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.characters.get(count-1), 1040 * GameConstants.SCALE_X, (620-100*count) * GameConstants.SCALE_Y, 75 * GameConstants.SCALE_X, 75 * GameConstants.SCALE_Y);
+            font.draw(batcher, Integer.toString(player.getCurrentValue()),
+                    1120 * GameConstants.SCALE_X,
+                    (690-100*count) * GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.characters.get(count-1),
+                    1040 * GameConstants.SCALE_X,
+                    (620-100*count) * GameConstants.SCALE_Y,
+                    75 * GameConstants.SCALE_X,
+                    75 * GameConstants.SCALE_Y);
             count += 1;
         }
     }
@@ -162,7 +172,11 @@ public class GameRenderer {
         batcher.begin();
         batcher.enableBlending();
 //            Gdx.app.log("render","y: " +  (joyY+100) * GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.touchBackground, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.touchBackground,
+                (1030)* GameConstants.SCALE_X,
+                (0)* GameConstants.SCALE_Y,
+                250 * GameConstants.SCALE_X,
+                250 * GameConstants.SCALE_Y);
         batcher.end();
     }
 
@@ -171,24 +185,56 @@ public class GameRenderer {
         batcher.enableBlending();
         if(down) {
             if (!left && !right) {
-                batcher.draw(AssetLoader.up, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+                batcher.draw(AssetLoader.up,
+                        (1030) * GameConstants.SCALE_X,
+                        (0) * GameConstants.SCALE_Y,
+                        250 * GameConstants.SCALE_X,
+                        250 * GameConstants.SCALE_Y);
             } else if (left) {
-                batcher.draw(AssetLoader.upleft, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+                batcher.draw(AssetLoader.upleft,
+                        (1030) * GameConstants.SCALE_X,
+                        (0) * GameConstants.SCALE_Y,
+                        250 * GameConstants.SCALE_X,
+                        250 * GameConstants.SCALE_Y);
             } else if (right) {
-                batcher.draw(AssetLoader.upright, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+                batcher.draw(AssetLoader.upright,
+                        (1030) * GameConstants.SCALE_X,
+                        (0) * GameConstants.SCALE_Y,
+                        250 * GameConstants.SCALE_X,
+                        250 * GameConstants.SCALE_Y);
             }
         } else if(up) {
             if(!left && !right) {
-                batcher.draw(AssetLoader.down, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+                batcher.draw(AssetLoader.down,
+                        (1030)* GameConstants.SCALE_X,
+                        (0)* GameConstants.SCALE_Y,
+                        250 * GameConstants.SCALE_X,
+                        250 * GameConstants.SCALE_Y);
             } else if (left) {
-                batcher.draw(AssetLoader.downleft, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+                batcher.draw(AssetLoader.downleft,
+                        (1030)* GameConstants.SCALE_X,
+                        (0)* GameConstants.SCALE_Y,
+                        250 * GameConstants.SCALE_X,
+                        250 * GameConstants.SCALE_Y);
             } else if (right) {
-                batcher.draw(AssetLoader.downright, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+                batcher.draw(AssetLoader.downright,
+                        (1030)* GameConstants.SCALE_X,
+                        (0)* GameConstants.SCALE_Y,
+                        250 * GameConstants.SCALE_X,
+                        250 * GameConstants.SCALE_Y);
             }
         } else if(left) {
-            batcher.draw(AssetLoader.left, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.left,
+                    (1030)* GameConstants.SCALE_X,
+                    (0)* GameConstants.SCALE_Y,
+                    250 * GameConstants.SCALE_X,
+                    250 * GameConstants.SCALE_Y);
         } else if(right) {
-            batcher.draw(AssetLoader.right, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.right,
+                    (1030)* GameConstants.SCALE_X,
+                    (0)* GameConstants.SCALE_Y,
+                    250 * GameConstants.SCALE_X,
+                    250 * GameConstants.SCALE_Y);
         }
 
         batcher.end();
