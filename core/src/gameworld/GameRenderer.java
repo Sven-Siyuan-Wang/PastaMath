@@ -176,17 +176,20 @@ public class GameRenderer {
         batcher.begin();
         batcher.enableBlending();
 //            Gdx.app.log("render","y: " +  (joyY+100) * GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.touchBackground, (1030)* GameConstants.SCALE_X, (0)* GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.touchBackground, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
         batcher.end();
     }
 
-    public void renderJoystickKnob() {
+    public void renderJoystickKnob(boolean touched, int joyX, int joyY) {
         batcher.begin();
         batcher.enableBlending();
 
-        //render joystick knob
-        batcher.draw(AssetLoader.touchKnob, 0, 0, 150*GameConstants.SCALE_X, 150*GameConstants.SCALE_Y);
-
+        if(!touched) {
+            batcher.draw(AssetLoader.touchKnob, 1080*GameConstants.SCALE_X, 50*GameConstants.SCALE_Y, 150*GameConstants.SCALE_X, 150*GameConstants.SCALE_Y);
+        } else {
+            //render joystick knob
+            batcher.draw(AssetLoader.touchKnob, joyX*GameConstants.SCALE_X, (720-joyY)*GameConstants.SCALE_Y, 150 * GameConstants.SCALE_X, 150 * GameConstants.SCALE_Y);
+        }
         batcher.end();
     }
 
@@ -195,7 +198,7 @@ public class GameRenderer {
         batcher.enableBlending();
 
         batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.startOverButton, 540*GameConstants.SCALE_X, 360*GameConstants.SCALE_Y, 200*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.startOverButton, 515*GameConstants.SCALE_X, 120*GameConstants.SCALE_Y, 250*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y);
 
         batcher.end();
     }

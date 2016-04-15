@@ -37,7 +37,7 @@ public class InputHandler implements InputProcessor {
         //Render joystick here
         renderer.renderJoystick(joyX, joyY);
         if(touched) {
-            renderer.renderJoystickKnob();
+            renderer.renderJoystickKnob(touched, joyX, joyY);
             renderer.setTouched(true);
         } else {
             renderer.setTouched(false);
@@ -102,6 +102,8 @@ public class InputHandler implements InputProcessor {
      */
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 //        myPlayer.onClick(screenX, screenY);
+        joyX = screenX;
+        joyY = screenY;
         touched = true;
         Gdx.app.log("InputHandler", "screenX is " + screenX + " and screenY is " + screenY);
         if (screenX > (1155 + 50)*GameConstants.SCALE_X) {
@@ -146,6 +148,8 @@ public class InputHandler implements InputProcessor {
      */
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         touched = true;
+        joyX = screenX;
+        joyY = screenY;
 //            Gdx.app.log("InputHandler", "touch is dragged to " + screenX + ", " + screenY);
         if (screenX > (1155 + 50)*GameConstants.SCALE_X) {
             myPlayer.setRight(true);
