@@ -75,7 +75,7 @@ public class GameScreen implements Screen {
 
     public void changeScreen(String id) {
         if(id == "game over") {
-            game.setScreen(new GameOverScreen(renderer, game));
+            game.setScreen(new GameOverScreen(renderer, game, world.scoreForGameOver));
         }
     }
 

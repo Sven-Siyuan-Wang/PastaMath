@@ -35,7 +35,10 @@ public class GameWorld {
     public static boolean win = false;
 
     private float penaltyTimer;
-    public static String collisionPenalty;
+    public static String collisionPenalty = "";
+
+    public static int[] scoreForGameOver;
+
 
 
     public GameWorld(Player myself) {
@@ -86,9 +89,11 @@ public class GameWorld {
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
-//                for(Player player2: players) {
-//                    player2.resetCurrentValue();
-//                }
+                int count = 0;
+                for(Player player2: players) {
+                    scoreForGameOver[count] = player2.getCurrentValue();
+                    player2.resetCurrentValue();
+                }
                 Gdx.app.log("World", "someone has won");
                 win = true;
             }
