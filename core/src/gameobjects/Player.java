@@ -159,7 +159,10 @@ public class Player implements GameObject, Serializable {
 
     public void setPosition(Vector2 position){
         try{
-            b2body.setLinearVelocity(position.x - getX(), position.y - getY());
+            float oldX = getX();
+            float oldY = getY();
+            b2body.setTransform(position, 0);
+            b2body.setLinearVelocity(0.1f*(position.x - oldX), 0.1f*(position.y - oldY));
         } catch (NullPointerException e){
             setPosition(position);
         }
