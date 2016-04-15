@@ -222,7 +222,7 @@ public class GameWorld {
             for (Body player_body : player_bodies) {
                 Player player = (Player) player_body.getUserData();
                 if (player != null) {
-                    player.setPosition(player_body.getPosition());
+                    player.setPosition(player_body.getPosition().x/PPM, player_body.getPosition().y/PPM);
                 }
             }
 

@@ -295,8 +295,9 @@ public class Player implements GameObject, Serializable {
     }
 
     //implement setPosition method for player_body
-    public void setPosition(Vector2 position){
-        this.position= position;
+    public void setPosition(float x, float y){
+        this.position.x= x;
+        this.position.y =y;
     }
 
 
