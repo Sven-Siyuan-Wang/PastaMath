@@ -552,7 +552,8 @@ public class NetworkActivity extends AppCompatActivity implements
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage){
 
         String msg = new String(realTimeMessage.getMessageData());
-        Log.d(TAG,"Received: "+msg);
+        //
+        // Log.d(TAG,"Received: "+msg);
         String[] words = msg.split(" ");
 
         //general message: INIT PLAYERID
@@ -615,9 +616,8 @@ public class NetworkActivity extends AppCompatActivity implements
                     toAdd = new NumberAndOperand(operation,value,x,y);
                 }
                 itemMap.put(id,toAdd);
-                if(GameWorld.items!=null){
-                    GameWorld.items.add(toAdd);
-                }
+                GameWorld.items.add(toAdd);
+
                 Log.d(TAG,"RECEIVE: item added");
             }
 

@@ -16,11 +16,9 @@ public class Simple_Item_Buffer {
     //THIS CLASS HANDLES ALL KINDS OF ITEMS: NUMBERS WITH OPERATIONS, BUFFS.
 
     public ArrayList<Item> items_currently_appearing; //static ArrayList in buffer class
-    public static int max_items_capacity;
+    public static int max_items_capacity = 3;
     private int random_item_chooser;
 
-    //todo: keep track of existing x-y position float tuples
-    public ArrayList<Vector2> existing_item_pos_vec= new ArrayList<Vector2>();
 
     //todo: keep track of player pos
     public ArrayList<Vector2> existing_player_pos_vec= new ArrayList<Vector2>();
@@ -32,12 +30,18 @@ public class Simple_Item_Buffer {
     public float min_y= 150f ;
     public float max_x= 1050f - 125f;
     public float max_y= 720f -125f;
-    private Random randomizer;
+    private Random randomizerX;
+    private Random randomizerY;
+    private boolean[][] itemPosGrid;
+
+    //debug
+    private int preXindex;
+    private int preYindex;
 
     public Simple_Item_Buffer() { //default constructor
         items_currently_appearing = new ArrayList<Item>();
-        max_items_capacity = 8;
-        randomizer = new Random();
+        randomizerX = new Random();
+        randomizerY = new Random();
 
         //TODO: GENERATE X Y WITH GAPS OF item TO ENSURE GOT SPACE FOR RECTANGLE
         //todo: use intervals based on 125 by 125, and then use random.nextInt(#intervals) to find corresponding x and y
@@ -47,29 +51,14 @@ public class Simple_Item_Buffer {
         for (float y= min_y; y< max_y; y+=125f){
             y_choices.add(new Float(y));
         }
-        //generate_Items();
+
+        int numCol = x_choices.size();
+        int numRow = y_choices.size();
+
+        itemPosGrid = new boolean[numRow][numCol];
+
     }
 
-    public void generate_Items() {
-        //generates 2 number_n_operands + 1 power-ups
-        //todo: assign random coords to a newly randomly generated item and add into the list
-        ///items_currently_appearing.add(item_without_coord);
-        for (int i = 0; i < 5; i++) {
-            items_currently_appearing.add(new NumberAndOperand());
-        }
-        items_currently_appearing.add(new Shield());
-        items_currently_appearing.add(new SpeedUp());
-        items_currently_appearing.add(new SpeedUp());
-
-        //assign random coords in THIS buffer class after Item is initialized
-        for(Item item: items_currently_appearing){
-            assign_random_coord(item);
-        }
-    }
-
-    public ArrayList<Item> getItems_currently_appearing(){
-        return items_currently_appearing;
-    }
 
     //TODO: implement a method to generate new items randomly
     public Item generate_random_Item(){
@@ -95,43 +84,30 @@ public class Simple_Item_Buffer {
     //TODO: MOVED RANDOM COORD ASSIGNMENT FROM ITEM CLASS SO CAN STORE THEM IN A TEMPORARILY LIST
 
     public void assign_random_coord(Item item) {
-        //generate a random number (use integer, easier to check for overlap)
-        //todo: get game info - remember to minus off to leave space
+
+        int x_index;
+        int y_index;
+        do{
+            x_index = randomizerX.nextInt(x_choices.size());
+            y_index = randomizerY.nextInt(y_choices.size());
+        } while(itemPosGrid[y_index][x_index] || (x_index==preXindex && y_index==preYindex)); //regenerate position in grid if the position is taken
+
+        preXindex = x_index;
+        preYindex = y_index;
 
 
-        //nextInt gives 0 to n-1
-        //todo: CALCULATE BORDERS TO ENSURE ITEMS WITHIN SCREEN
-        //float x = randomizer.nextFloat() * (Gdx.graphics.getWidth()- 4) + 2 ;
-        //float y = randomizer.nextFloat() * (Gdx.graphics.getHeight() - 4) + 2;
+        float x = x_choices.get(x_index);
+        float y= y_choices.get(y_index);
+        item.setPosition(x, y);
 
-        float x = x_choices.get(randomizer.nextInt(x_choices.size()));
-        float y= y_choices.get(randomizer.nextInt(y_choices.size()));
-        //set position if it doesnt alr exist
+        itemPosGrid[y_index][x_index] = true; //add position
 
-        if (!check_if_vector_exist(new Vector2(x, y))) {
-            item.setPosition(x, y);
-            existing_item_pos_vec.add(item.getPosition()); //add position
-        }
-        else{
-            assign_random_coord(item); //recursive- keep generating random coord if it exist alr
-        }
+        Gdx.app.log("SimpleItemBuffer", "new "+x_index+" "+y_index);
 
         item.setBoundingRect();
     }
 
 
-    //a method to check if vector alr exists
-    public boolean check_if_vector_exist(Vector2 vector_to_check){
-        boolean exist= false;
-        for (Vector2 existing_vector: existing_item_pos_vec){
-            //compare both x and y
-            if (existing_vector.x == vector_to_check.x && existing_vector.y== vector_to_check.y){
-                exist= true;
-                continue;
-            }
-        }
-        return exist;
-    }
 
     //todo: check if generated item will overlap with player
     public boolean overlaps_a_player(Vector2 vector_to_check){
@@ -149,6 +125,14 @@ public class Simple_Item_Buffer {
         for(Player player: players){
             existing_player_pos_vec.add(player.getPosition());
         }
+    }
+
+    public void removeItemPos(Vector2 position){
+        int x = (int) position.x;
+        int y = (int) position.y;
+        int x_index = (x-150) / 125;
+        int y_index = (y-150) / 125;
+        itemPosGrid[y_index][x_index] = false;
     }
 }
 

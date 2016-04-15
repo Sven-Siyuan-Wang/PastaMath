@@ -43,16 +43,16 @@ public abstract class Item implements GameObject{
         //this.assign_random_coord(); - to be done in Buffer
         lifeTime = 10 + (new Random()).nextFloat()*10;
         this.ID = String.valueOf(itemID++);
-        width = (int) (75);
-        height = (int) (75);
+        width = 75;
+        height = 75;
 
 
     }
 
     public Item(float x, float y){
         position = new Vector2(x,y);
-        width = (int) (75);
-        height = (int) (75);
+        width = 75;
+        height = 75;
         setBoundingRect();
 
 
@@ -75,12 +75,8 @@ public abstract class Item implements GameObject{
 
 
     public void destroy() {
-        //boundingRect=null;
-        //ORIGINAL
-        //GameWorld.objectsCopy.remove(this);
-        //NEW
         Gdx.app.log("Debug","Item destroyed.");
-        GameWorld.simple_item_buffer.items_currently_appearing.remove(this);
+        GameWorld.items.remove(this);
     }
 
     public void update(float delta) {
@@ -121,18 +117,6 @@ public abstract class Item implements GameObject{
         return new Rectangle(this.boundingRect);
     }
 
-    /*
-    public void assign_random_coord() {
-        //generate a random number (use integer, easier to check for overlap)
-        Random randomizer = new Random();
-        //nextInt gives 0 to n-1
-        float x = randomizer.nextFloat() * (Gdx.graphics.getWidth()- 4) + 2 ;
-        float y = randomizer.nextFloat() * (Gdx.graphics.getHeight() - 4) + 2;
-
-        position.x= x;
-        position.y= y;
-    }
-    */
 
 
 

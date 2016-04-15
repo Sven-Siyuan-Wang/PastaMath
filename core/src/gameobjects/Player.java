@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.MyGdxGame;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -46,6 +47,8 @@ public class Player implements GameObject, Serializable {
     private int currentValue;
     private int collision_count=0; //after 3 collisions, the shield will not work anymore
 
+    private boolean inContact;
+
 
     //constructor for Player class
     public Player(String id){
@@ -60,6 +63,7 @@ public class Player implements GameObject, Serializable {
         velocity = 200;
 
         this.currentValue = 0;
+        inContact = false;
 
     }
     public Player(float x, float y, int width, int height) {
@@ -73,6 +77,7 @@ public class Player implements GameObject, Serializable {
         velocity = 200;
 
         this.currentValue = 0;
+        inContact = false;
     }
 
     public void update(float delta) {
@@ -99,7 +104,6 @@ public class Player implements GameObject, Serializable {
         }
 
 
-
         if(speedUp) {
             if(speedUpCounter>5) {
                 this.speedUpCounter = 0;
@@ -110,16 +114,10 @@ public class Player implements GameObject, Serializable {
             }
         }
 
-        boundingCircle.set(position.x, position.y, 50f);
 
-        //todo: if player is shielded, dont let its score change
-        if(shielded){
-            //do nothing;
-        }
-        else{
-            //change score
-        }
-        //todo: if player collided into something, adjust effects accordingly- change score or speed
+}
+    public void updateBoundingCircle(){
+        boundingCircle.set(position.x, position.y, 50f);
     }
 
     public void onNotClick() {
@@ -147,14 +145,6 @@ public class Player implements GameObject, Serializable {
         }
     }
 
-    public boolean collides(GameObject a) {
-        if(position.x < (a.getX() + a.getWidth())) {
-//            Gdx.app.log("Player", "collided, and x is " + position.x + " and pickup's x is " + pickup.getX() + " and pickup's width is" + pickup.getWidth());
-            return (Intersector.overlaps(boundingCircle, (Rectangle) a.getCollider()));
-
-        }
-        return false;
-    }
 
     public boolean collides(Item item){
         boolean collision = Intersector.overlaps(boundingCircle, item.getCollider());
@@ -165,6 +155,22 @@ public class Player implements GameObject, Serializable {
         return (Intersector.overlaps(boundingCircle, other.boundingCircle));
     }
 
+    public void handleCollsion(){
+        if(!inContact){
+            inContact = true;
+            if(getShielded()) {
+                update_collision_count();
+            }
+            else{
+                decreaseScoreUponKnock();
+                MyGdxGame.playServices.sendToPlayer("SCORE " + getId()+" "+ getCurrentValue());
+            }
+        }
+    }
+
+    public void clearContact(){
+        inContact = false;
+    }
     public void decreaseScoreUponKnock(){
         if (currentValue<= 10){
             currentValue= 0;
@@ -180,9 +186,6 @@ public class Player implements GameObject, Serializable {
     }
     public boolean getShielded(){
         return this.shielded;
-    }
-    public int getCollision_count(){
-        return this.collision_count;
     }
     public void update_collision_count(){
         if(collision_count==3){

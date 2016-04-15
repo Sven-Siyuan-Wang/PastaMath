@@ -85,7 +85,9 @@ public class GameRenderer {
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
-        this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 500*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+
+        String debugTag = GameWorld.isOwner ? "Server: " : "Player: ";
+        this.font.draw(batcher, debugTag + "Get " + myWorld.endScore + " points!", 500*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);
@@ -108,7 +110,7 @@ public class GameRenderer {
         if(list!=null){
             for(Item item: list){
                 batcher.enableBlending();
-                System.out.println("Rendering item: "+item.getName());
+                //System.out.println("Rendering item: "+item.getName());
                 batcher.draw(AssetLoader.textures.get(item.getName()),
                         item.getX() * GameConstants.SCALE_X,
                         item.getY() * GameConstants.SCALE_Y,
