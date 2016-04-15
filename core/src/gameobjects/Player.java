@@ -207,7 +207,7 @@ public class Player implements GameObject, Serializable {
         Sound speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
 
         if(speedUp == true){
-            speedUpPickupSound.play(1.0f);
+            speedUpPickupSound.play(0.5f);
         }
         else{
             //speedUpPickupSound.play(1.0f);
