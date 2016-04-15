@@ -74,12 +74,7 @@ public class GameWorld {
         //all the items are initialized inside the buffer already when it is constructed
 
 
-        penaltyTimer += delta;
-        if(penaltyTimer>5) {
-            collisionPenalty = generateCollisionEffect();
-            penaltyTimer = 0;
-            MyGdxGame.playServices.sendToPlayer("PENALTY "+ collisionPenalty);
-        }
+
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
@@ -94,6 +89,13 @@ public class GameWorld {
         if(isOwner){
             //Server code
             //simple_item_buffer.update_player_pos_vec(players);
+            penaltyTimer += delta;
+            if(penaltyTimer>5) {
+                collisionPenalty = generateCollisionEffect();
+                penaltyTimer = 0;
+                MyGdxGame.playServices.sendToPlayer("PENALTY "+ collisionPenalty);
+            }
+
             if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
 
                 sendAddItem(simple_item_buffer.generate_random_Item());
