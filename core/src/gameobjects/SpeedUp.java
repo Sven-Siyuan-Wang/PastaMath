@@ -15,7 +15,7 @@ public class SpeedUp extends Item {
 
     public SpeedUp(float x, float y){
         position = new Vector2(x,y);
-        setBoundingRect();
+
 
         this.world = GameScreen.world;
         defineItem();

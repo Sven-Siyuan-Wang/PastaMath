@@ -19,9 +19,6 @@ public class Shield extends Item {
     public Shield(float x, float y){
 
         position = new Vector2(x,y);
-        setBoundingRect();
-
-
         this.world = GameScreen.world;
         defineItem();
 
