@@ -86,9 +86,9 @@ public class GameWorld {
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
-                for(Player player2: players) {
-                    player2.resetCurrentValue();
-                }
+//                for(Player player2: players) {
+//                    player2.resetCurrentValue();
+//                }
                 Gdx.app.log("World", "someone has won");
                 win = true;
             }

@@ -252,7 +252,7 @@ public class GameRenderer {
                     (540-100*count) * GameConstants.SCALE_Y,
                     75 * GameConstants.SCALE_X,
                     75 * GameConstants.SCALE_Y);
-            scorefont.draw(batcher, Integer.toString(player.getCurrentValue()), 400*GameConstants.SCALE_X, (570-100*count)*GameConstants.SCALE_Y);
+            scorefont.draw(batcher, Integer.toString(player.getCurrentValue()), 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
             count +=1;
         }
 
