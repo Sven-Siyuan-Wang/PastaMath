@@ -174,15 +174,23 @@ public class GameWorld {
 
             //todo: create bodies for players and items -- ERROR: player size=0...
             //setUserData of corresponding Players
-            for (int i=0; i<2; i++){
-                player_bodies.set(i, createPlayerBody(players.get(i)));
-                player_bodies.get(i).setUserData(players.get(i));
-            }
-            //setUserData of corresponding Items
-            for (int i=0; i<2; i++){
-                current_item_bodies.set(i, createItemBody(items.get(i)));
-                current_item_bodies.get(i).setUserData(items.get(i));
-            }
+
+            //try {
+                for (int i = 0; i < 2; i++) {
+
+                    player_bodies.insert(i, createPlayerBody(players.get(i)));
+                    player_bodies.get(i).setUserData(players.get(i)); //in another loop?
+                }
+                //setUserData of corresponding Items
+                for (int i = 0; i < 2; i++) {
+                    current_item_bodies.insert(i, createItemBody(items.get(i)));
+                    current_item_bodies.get(i).setUserData(items.get(i));
+                }
+            //}
+            //catch (Exception e){
+                //System.out.println("cannot print");
+                //Gdx.app.log("Unable to create player and item bodies");
+            //}
 
             bodies_initialized= true;
         }
