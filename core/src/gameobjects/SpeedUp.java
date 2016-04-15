@@ -1,5 +1,7 @@
 package gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.MyGdxGame;
 
@@ -9,6 +11,7 @@ import java.util.Random;
  * Created by valerie_tan on 3/19/2016.
  */
 public class SpeedUp extends Item {
+
 
     public SpeedUp(float x, float y){
         position = new Vector2(x,y);

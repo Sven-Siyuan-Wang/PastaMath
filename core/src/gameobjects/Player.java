@@ -1,6 +1,7 @@
 package gameobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -45,6 +46,8 @@ public class Player implements GameObject, Serializable {
     private int currentValue;
 
     private boolean inContact;
+
+//    public static
 
 
     //constructor for Player class
@@ -178,6 +181,15 @@ public class Player implements GameObject, Serializable {
     //TODO: methods FOR ITEMS to change player's situation attributes
     public void setShielded(boolean shielded){
         this.shielded= shielded;
+        Sound shieldPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_shield.wav"));
+
+        if(shielded == true){
+            shieldPickupSound.play(1.0f);
+        }
+        else{
+            shieldPickupSound.play(1.0f);
+        }
+
     }
     public boolean getShielded(){
         return this.shielded;
@@ -185,6 +197,14 @@ public class Player implements GameObject, Serializable {
 
     public void setSpeedUp(boolean speedUp){
         this.speedUp = speedUp;
+
+        if(speedUp == true){
+            //play sound
+        }
+        else{
+            //play sound
+        }
+
     }
 
 

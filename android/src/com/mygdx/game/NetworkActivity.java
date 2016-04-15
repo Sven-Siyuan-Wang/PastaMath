@@ -645,6 +645,7 @@ public class NetworkActivity extends AppCompatActivity implements
             String TorF = words[2];
             if(TorF.equals("true")){
                 GameWorld.players.get(playerMap.get(id)).setShielded(true);
+
             }
             else{
                 GameWorld.players.get(playerMap.get(id)).setShielded(false);
