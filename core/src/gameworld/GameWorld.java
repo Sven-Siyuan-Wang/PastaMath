@@ -13,7 +13,6 @@ import gameobjects.Simple_Item_Buffer;
 
 
 
-
 /**
  * Created by Hazel on 28/2/2016.
  */
@@ -33,6 +32,9 @@ public class GameWorld {
 
     public static boolean isOwner;
     public static boolean win = false;
+
+    private float penaltyTimer;
+    public static String collisionPenalty;
 
 
     public GameWorld(Player myself) {
@@ -55,6 +57,10 @@ public class GameWorld {
             simple_item_buffer = new Simple_Item_Buffer();
             items = simple_item_buffer.items_currently_appearing;
 
+            penaltyTimer = 0;
+
+
+
         }
 
     }
@@ -68,6 +74,12 @@ public class GameWorld {
         //all the items are initialized inside the buffer already when it is constructed
 
 
+        penaltyTimer += delta;
+        if(penaltyTimer>5) {
+            collisionPenalty = generateCollisionEffect();
+            penaltyTimer = 0;
+            MyGdxGame.playServices.sendToPlayer("PENALTY "+ collisionPenalty);
+        }
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
@@ -164,6 +176,30 @@ public class GameWorld {
 
     private void sendEndScore(int endScore) {
         MyGdxGame.playServices.sendToPlayer("ENDSCORE "+ endScore);
+    }
+
+    private String generateCollisionEffect(){
+        Random random = new Random();
+        int value= random.nextInt(8)+1;
+        int operand_chooser= random.nextInt(50);
+        String operation;
+        if (operand_chooser<40){
+            operation= "divide";
+        }
+        else{
+            operation= "minus";
+        }
+        //overwrite value cos only need mul2 and mul3
+        if (operation.equals("divide")){
+            int choose_2_or_3= random.nextInt(3);
+            if (choose_2_or_3<2){
+                value=2;
+            }
+            else{
+                value=3;
+            }
+        }
+        return operation + String.valueOf(value);
     }
 
 }

@@ -86,8 +86,9 @@ public class GameRenderer {
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
 
+        String collisionPenalty = GameWorld.collisionPenalty;
         String debugTag = GameWorld.isOwner ? "Server: " : "Player: ";
-        this.font.draw(batcher, debugTag + "Get " + myWorld.endScore + " points!", 500*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        this.font.draw(batcher, collisionPenalty+ " " + debugTag + "Get " + myWorld.endScore + " points!", 100*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);
@@ -198,7 +199,22 @@ public class GameRenderer {
         batcher.enableBlending();
 
         batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.startOverButton, 540*GameConstants.SCALE_X, 360*GameConstants.SCALE_Y, 200*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y);
+        int count = 1;
+        for(Player player:myWorld.getPlayers()) {
+            batcher.draw(AssetLoader.characters.get(count-1),
+                    300 * GameConstants.SCALE_X,
+                    (540-100*count) * GameConstants.SCALE_Y,
+                    75 * GameConstants.SCALE_X,
+                    75 * GameConstants.SCALE_Y);
+            scorefont.draw(batcher, Integer.toString(player.getCurrentValue()), 400*GameConstants.SCALE_X, (570-100*count)*GameConstants.SCALE_Y);
+            count +=1;
+        }
+
+        batcher.draw(AssetLoader.startOverButton,
+                800 * GameConstants.SCALE_X,
+                120 * GameConstants.SCALE_Y,
+                250 * GameConstants.SCALE_X,
+                100 * GameConstants.SCALE_Y);
 
         batcher.end();
     }

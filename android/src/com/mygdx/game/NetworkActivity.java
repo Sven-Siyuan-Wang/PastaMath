@@ -663,6 +663,9 @@ public class NetworkActivity extends AppCompatActivity implements
                 GameWorld.players.get(playerMap.get(id)).setSpeedUp(false);
             }
         }
+        else if(words[0].equals("PENALTY")){
+            GameWorld.collisionPenalty = words[1];
+        }
 
 
     }

@@ -40,8 +40,8 @@ public class NumberAndOperand extends Item { //All these are a form of item
         }
         //overwrite value cos only need mul2 and mul3
         if (operation.equals("mul")){
-            choose_2_or_3= random.nextInt(30);
-            if (choose_2_or_3<=15){
+            choose_2_or_3= random.nextInt(3);
+            if (choose_2_or_3<2){
                 value=2;
             }
             else{
