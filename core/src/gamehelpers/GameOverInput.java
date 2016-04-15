@@ -36,8 +36,8 @@ public class GameOverInput implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         System.out.println("Clicked at " + screenX + ", " + screenY);
-        //x -> from 540 to to 740, y -> 260 to 360
-        if(screenX <= 740* GameConstants.SCALE_X && screenX >= 540*GameConstants.SCALE_X && screenY<=360*GameConstants.SCALE_Y && screenY>=260*GameConstants.SCALE_Y) {
+        //x -> from 515 to to 765, y -> 120 to 220
+        if(screenX <= 765* GameConstants.SCALE_X && screenX >= 515*GameConstants.SCALE_X && screenY<=500*GameConstants.SCALE_Y && screenY>=600*GameConstants.SCALE_Y) {
             try {
                 goscreen.changeScreen();
             } catch (InterruptedException e) {

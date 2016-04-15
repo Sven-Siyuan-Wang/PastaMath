@@ -85,7 +85,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 		myId=room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient()));
 		GameWorld.isOwner = isServer();
-		Log.e("isOwner:",String.valueOf(GameWorld.isOwner));
+//		Log.e("isOwner:",String.valueOf(GameWorld.isOwner));
 		playerMap.put(myId, new Integer(1));
 
 		sendToPlayer("INIT "+myId);

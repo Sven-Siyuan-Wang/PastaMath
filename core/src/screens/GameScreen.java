@@ -94,8 +94,8 @@ public class GameScreen implements Screen {
             thisScreen = false;
             changeScreen("game over");
         }
-        System.out.println("thisScreen is " + thisScreen);
-        System.out.println("gameWorld.win is " + gameWorld.win);
+//        System.out.println("thisScreen is " + thisScreen);
+//        System.out.println("gameWorld.win is " + gameWorld.win);
         thisScreen = true;
         gameWorld.win = false;
         if(thisScreen) {

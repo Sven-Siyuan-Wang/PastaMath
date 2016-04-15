@@ -7,8 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MyGdxGame;
 
+import java.util.ArrayList;
+
 import gamehelpers.GameOverInput;
 import gamehelpers.InputHandler;
+import gameobjects.Player;
 import gameworld.GameRenderer;
 import gameworld.GameWorld;
 
@@ -23,6 +26,7 @@ public class GameOverScreen implements Screen {
     public GameOverScreen(GameRenderer renderer, MyGdxGame game) {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
+
 
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
         Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);

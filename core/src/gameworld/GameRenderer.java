@@ -99,7 +99,7 @@ public class GameRenderer {
 
 
 
-        this.font.draw(batcher, debugTag+ "Get " + myWorld.endScore + " points!", 200*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        this.font.draw(batcher, debugTag+ "Get " + myWorld.endScore + " points!", 10*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
 
@@ -123,7 +123,7 @@ public class GameRenderer {
             for(Item item: list){
                 if(!item.destroyed){
                     batcher.enableBlending();
-                    System.out.println("Rendering item: "+item.getName());
+//                    System.out.println("Rendering item: "+item.getName());
                     batcher.draw(AssetLoader.textures.get(item.getName()),
                             item.getX() * GameConstants.SCALE_X,
                             item.getY() * GameConstants.SCALE_Y,
@@ -166,8 +166,12 @@ public class GameRenderer {
         int count = 1;
         for(Player player: players) {
             batcher.enableBlending();
-            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1120 * GameConstants.SCALE_X, (690-100*count) * GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.characters.get(count-1), 1040 * GameConstants.SCALE_X, (620-100*count) * GameConstants.SCALE_Y, 75 * GameConstants.SCALE_X, 75 * GameConstants.SCALE_Y);
+            font.draw(batcher, Integer.toString(player.getCurrentValue()), 1120 * GameConstants.SCALE_X, (630-100*count) * GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.characters.get(count-1),
+                    1040 * GameConstants.SCALE_X,
+                    (620-100*count) * GameConstants.SCALE_Y,
+                    75 * GameConstants.SCALE_X,
+                    75 * GameConstants.SCALE_Y);
             count += 1;
         }
     }
@@ -176,7 +180,11 @@ public class GameRenderer {
         batcher.begin();
         batcher.enableBlending();
 //            Gdx.app.log("render","y: " +  (joyY+100) * GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.touchBackground, (1030) * GameConstants.SCALE_X, (0) * GameConstants.SCALE_Y, 250 * GameConstants.SCALE_X, 250 * GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.touchBackground,
+                (1030) * GameConstants.SCALE_X,
+                (0) * GameConstants.SCALE_Y,
+                250 * GameConstants.SCALE_X,
+                250 * GameConstants.SCALE_Y);
         batcher.end();
     }
 
@@ -185,10 +193,19 @@ public class GameRenderer {
         batcher.enableBlending();
 
         if(!touched) {
-            batcher.draw(AssetLoader.touchKnob, 1080*GameConstants.SCALE_X, 50*GameConstants.SCALE_Y, 150*GameConstants.SCALE_X, 150*GameConstants.SCALE_Y);
+            batcher.draw(AssetLoader.touchKnob,
+                    1080*GameConstants.SCALE_X,
+                    50*GameConstants.SCALE_Y,
+                    150*GameConstants.SCALE_X,
+                    150*GameConstants.SCALE_Y);
         } else {
             //render joystick knob
-            batcher.draw(AssetLoader.touchKnob, joyX*GameConstants.SCALE_X, (720-joyY)*GameConstants.SCALE_Y, 150 * GameConstants.SCALE_X, 150 * GameConstants.SCALE_Y);
+            Gdx.app.log("Renderer", "rendering joystick knob...");
+            batcher.draw(AssetLoader.touchKnob,
+                    (joyX-75)*GameConstants.SCALE_X,
+                    (720-(joyY+75))*GameConstants.SCALE_Y,
+                    150 * GameConstants.SCALE_X,
+                    150 * GameConstants.SCALE_Y);
         }
         batcher.end();
     }
@@ -197,8 +214,24 @@ public class GameRenderer {
         batcher.begin();
         batcher.enableBlending();
 
-        batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
-        batcher.draw(AssetLoader.startOverButton, 515*GameConstants.SCALE_X, 120*GameConstants.SCALE_Y, 250*GameConstants.SCALE_X, 100*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280 * GameConstants.SCALE_X, 720 * GameConstants.SCALE_Y);
+
+        int count = 1;
+        for(Player player:myWorld.getPlayers()) {
+            batcher.draw(AssetLoader.characters.get(count-1),
+                    500 * GameConstants.SCALE_X,
+                    (540-100*count) * GameConstants.SCALE_Y,
+                    75 * GameConstants.SCALE_X,
+                    75 * GameConstants.SCALE_Y);
+            scorefont.draw(batcher, Integer.toString(player.getCurrentValue()), 600*GameConstants.SCALE_X, (570-100*count)*GameConstants.SCALE_Y);
+            count +=1;
+        }
+
+        batcher.draw(AssetLoader.startOverButton,
+                515 * GameConstants.SCALE_X,
+                120 * GameConstants.SCALE_Y,
+                250 * GameConstants.SCALE_X,
+                100*GameConstants.SCALE_Y);
 
         batcher.end();
     }
