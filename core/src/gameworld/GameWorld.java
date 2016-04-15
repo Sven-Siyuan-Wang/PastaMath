@@ -1,6 +1,7 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class GameWorld {
 
 
     public GameWorld(Player myself) {
+
+        Sound music =  Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
         this.myself = myself;
 
         synchronized (players){

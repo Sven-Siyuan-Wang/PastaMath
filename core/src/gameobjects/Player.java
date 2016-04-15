@@ -193,7 +193,7 @@ public class Player implements GameObject, Serializable {
             shieldPickupSound.play(1.0f);
         }
         else{
-            shieldPickupSound.play(1.0f);
+            //shieldPickupSound.play(1.0f);
         }
 
     }
@@ -204,11 +204,13 @@ public class Player implements GameObject, Serializable {
     public void setSpeedUp(boolean speedUp){
         this.speedUp = speedUp;
 
+        Sound speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
+
         if(speedUp == true){
-            //play sound
+            speedUpPickupSound.play(1.0f);
         }
         else{
-            //play sound
+            //speedUpPickupSound.play(1.0f);
         }
 
     }
@@ -216,12 +218,16 @@ public class Player implements GameObject, Serializable {
 
 
     public void setCurrentValue(int number, String operand){
+        Sound addPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_add.wav"));
+        Sound multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
         if (operand.equals("plus")){
             currentValue+= number;
+            addPickupSound.play();
         }
 
         if(operand.equals("mul")){
             currentValue*= number;
+            multiplyUpPickupSound.play();
         }
     }
 
