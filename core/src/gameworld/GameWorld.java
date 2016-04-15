@@ -1,6 +1,7 @@
 package gameworld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.mygdx.game.MyGdxGame;
 
@@ -35,12 +36,15 @@ public class GameWorld {
     public static boolean win = false;
 
     private float penaltyTimer;
-    public static String collisionPenalty;
+    public static String collisionPenalty = "";
+    public static Music music;
+    public static boolean musicLooped = false;
 
 
     public GameWorld(Player myself) {
 
-        Sound music =  Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
+        music =  Gdx.audio.newMusic(Gdx.files.internal("data/background.mp3"));
+
         this.myself = myself;
 
         synchronized (players){
@@ -75,20 +79,18 @@ public class GameWorld {
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
         //all the items are initialized inside the buffer already when it is constructed
-
-
-        penaltyTimer += delta;
-        if(penaltyTimer>5) {
-            collisionPenalty = generateCollisionEffect();
-            penaltyTimer = 0;
-            MyGdxGame.playServices.sendToPlayer("PENALTY "+ collisionPenalty);
+        if(!musicLooped) {
+            music.play();
+            musicLooped = true;
         }
+
+
 
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
-//                for(Player player2: players) {
-//                    player2.resetCurrentValue();
-//                }
+                for(Player player2: players) {
+                    player2.resetCurrentValue();
+                }
                 Gdx.app.log("World", "someone has won");
                 win = true;
             }
@@ -101,6 +103,15 @@ public class GameWorld {
 
                 sendAddItem(simple_item_buffer.generate_random_Item());
             }
+
+
+            if(penaltyTimer>500 || penaltyTimer == 0) {
+                collisionPenalty = generateCollisionEffect();
+                penaltyTimer = 0;
+                MyGdxGame.playServices.sendToPlayer("PENALTY " + collisionPenalty);
+            }
+            penaltyTimer += 1;
+
             //TODO: PLAYER RESPONSES TO COLLISION
             for(Player each_player: players){
 
@@ -184,9 +195,9 @@ public class GameWorld {
     private String generateCollisionEffect(){
         Random random = new Random();
         int value= random.nextInt(8)+1;
-        int operand_chooser= random.nextInt(50);
+        int operand_chooser = random.nextInt(50);
         String operation;
-        if (operand_chooser<40){
+        if (operand_chooser<30){
             operation= "divide";
         }
         else{
@@ -194,7 +205,7 @@ public class GameWorld {
         }
         //overwrite value cos only need mul2 and mul3
         if (operation.equals("divide")){
-            int choose_2_or_3= random.nextInt(3);
+            int choose_2_or_3 = random.nextInt(3);
             if (choose_2_or_3<2){
                 value=2;
             }
