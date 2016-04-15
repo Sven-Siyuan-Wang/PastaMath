@@ -57,9 +57,6 @@ public class GameWorld {
         }
 
 
-        //intialize buffer of items and pickups
-        simple_item_buffer= new Simple_Item_Buffer();
-
 
         //all the items are initialized inside the buffer already when it is constructed
 
@@ -68,6 +65,10 @@ public class GameWorld {
         if(isOwner) {
             endScore = new Random().nextInt(100) + 50;
             sendEndScore(endScore);
+
+            //intialize buffer of items and pickups
+            simple_item_buffer= new Simple_Item_Buffer();
+
             items = simple_item_buffer.items_currently_appearing;
             numberOfActiveItems = 0;
 
