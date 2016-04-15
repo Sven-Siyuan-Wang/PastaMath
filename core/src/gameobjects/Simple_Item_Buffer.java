@@ -16,7 +16,7 @@ public class Simple_Item_Buffer {
     //THIS CLASS HANDLES ALL KINDS OF ITEMS: NUMBERS WITH OPERATIONS, BUFFS.
 
     public ArrayList<Item> items_currently_appearing; //static ArrayList in buffer class
-    public static int max_items_capacity = 3;
+    public static int max_items_capacity = 6;
     private int random_item_chooser;
 
 

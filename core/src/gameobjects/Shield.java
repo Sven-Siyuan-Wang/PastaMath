@@ -1,6 +1,7 @@
 package gameobjects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.MyGdxGame;
 
 import java.util.Random;
 
@@ -22,7 +23,10 @@ public class Shield extends Item {
 
     public void update_player_situation(Player player){
         player.setShielded(true);
-    };
+        MyGdxGame.playServices.sendToPlayer("SHIELDED "+player.getId()+" true");
+        
+
+    }
 
     public String getName(){
         return "shield";

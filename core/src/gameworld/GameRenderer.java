@@ -130,7 +130,7 @@ public class GameRenderer {
                         player.getWidth() * GameConstants.SCALE_X,
                         player.getHeight() * GameConstants.SCALE_Y);
             } else if (player.getShield()) {
-                batcher.draw(AssetLoader.characterAnimations.get((count++)+4).getKeyFrame(runTime),
+                batcher.draw(AssetLoader.characterAnimations.get((count++)+8).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,
                         player.getY() * GameConstants.SCALE_Y,
                         player.getWidth() * GameConstants.SCALE_X,

@@ -112,19 +112,17 @@ public class GameWorld {
                     }
                 }
                 //check if a player collided into another player
+                boolean inContact = false;
                 for(Player other_player: players){
                     if (!other_player.equals(each_player)){ //you can't knock into yourself
                         if (each_player.knock_into(other_player)){
                             each_player.handleCollsion();
-                        }
-                        else{
-                            each_player.clearContact();
+                            inContact = true;
                         }
                     }
                 }
+                if(!inContact) each_player.clearContact();
             }
-
-
         }
 
         //my player

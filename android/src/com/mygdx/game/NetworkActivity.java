@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -636,6 +637,30 @@ public class NetworkActivity extends AppCompatActivity implements
         else if(words[0].equals("ENDSCORE")){
             int endscore = Integer.parseInt(words[1]);
             GameWorld.endScore = endscore;
+        }
+
+        else if(words[0].equals("SHIELDED")){
+            Log.d(TAG, msg);
+            String id = words[1];
+            String TorF = words[2];
+            if(TorF.equals("true")){
+                GameWorld.players.get(playerMap.get(id)).setShielded(true);
+            }
+            else{
+                GameWorld.players.get(playerMap.get(id)).setShielded(false);
+            }
+        }
+
+        else if(words[0].equals("SPEEDUP")){
+            Log.d(TAG, msg);
+            String id = words[1];
+            String TorF = words[2];
+            if(TorF.equals("true")){
+                GameWorld.players.get(playerMap.get(id)).setSpeedUp(true);
+            }
+            else{
+                GameWorld.players.get(playerMap.get(id)).setSpeedUp(false);
+            }
         }
 
 

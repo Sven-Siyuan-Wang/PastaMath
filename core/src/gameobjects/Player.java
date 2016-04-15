@@ -26,9 +26,6 @@ public class Player implements GameObject, Serializable {
     private String id;
     private Vector2 position;
     private float velocity;
-    private Vector2 acceleration;
-
-    private float rotation;
     private int width;
     private int height;
 
@@ -41,11 +38,11 @@ public class Player implements GameObject, Serializable {
     private boolean speedUp;
 
     float speedUpCounter = 0;
+    public static final int speedValue = 200;
 
     //todo: initialize booleans for other attributes(to change upon collision)
-    private boolean shielded= false; //its score won't be affected
+    private boolean shielded = false; //its score won't be affected
     private int currentValue;
-    private int collision_count=0; //after 3 collisions, the shield will not work anymore
 
     private boolean inContact;
 
@@ -60,7 +57,7 @@ public class Player implements GameObject, Serializable {
         this.height = 100;
         this.boundingCircle = new Circle();
 
-        velocity = 200;
+        velocity = speedValue;
 
         this.currentValue = 0;
         inContact = false;
@@ -74,7 +71,7 @@ public class Player implements GameObject, Serializable {
         this.height = height;
         this.boundingCircle = new Circle();
 
-        velocity = 200;
+        velocity = speedValue;
 
         this.currentValue = 0;
         inContact = false;
@@ -82,7 +79,6 @@ public class Player implements GameObject, Serializable {
 
     public void update(float delta) {
 
-//        Gdx.app.log("delta", Float.toString(delta));
         if(up) {
             if(!(position.y <= 0)) {
                 position.y -= velocity*delta;
@@ -103,7 +99,6 @@ public class Player implements GameObject, Serializable {
             }
         }
 
-
         if(speedUp) {
             if(speedUpCounter>5) {
                 this.speedUpCounter = 0;
@@ -113,8 +108,6 @@ public class Player implements GameObject, Serializable {
 //                Gdx.app.log("Player", "speedUpCounter is " + this.speedUpCounter + " and delta is " + delta);
             }
         }
-
-
 }
     public void updateBoundingCircle(){
         boundingCircle.set(position.x, position.y, 50f);
@@ -139,9 +132,10 @@ public class Player implements GameObject, Serializable {
 
     public void speedDown() {
         if(speedUp) {
-            this.velocity /= 2;
+            this.velocity = speedValue;
             Gdx.app.log("Player", "sped down");
             speedUp = false;
+            MyGdxGame.playServices.sendToPlayer("SPEEDUP "+getId()+" false");
         }
     }
 
@@ -159,7 +153,8 @@ public class Player implements GameObject, Serializable {
         if(!inContact){
             inContact = true;
             if(getShielded()) {
-                update_collision_count();
+                shielded = false;
+                MyGdxGame.playServices.sendToPlayer("SHIELDED "+getId()+" false");
             }
             else{
                 decreaseScoreUponKnock();
@@ -187,18 +182,12 @@ public class Player implements GameObject, Serializable {
     public boolean getShielded(){
         return this.shielded;
     }
-    public void update_collision_count(){
-        if(collision_count==3){
-            resetCollision_count();
-            setShielded(false); //player loses shield after colliding for 3 times
-        }
-        else{
-            collision_count++; //will only start counting if the person has a shield
-        }
+
+    public void setSpeedUp(boolean speedUp){
+        this.speedUp = speedUp;
     }
-    public void resetCollision_count(){
-        this.collision_count=0;
-    }
+
+
 
     public void setCurrentValue(int number, String operand){
         if (operand.equals("plus")){
@@ -276,9 +265,6 @@ public class Player implements GameObject, Serializable {
         return this.height;
     }
 
-    public float getRotation() {
-        return this.rotation;
-    }
 
     public Circle getCollider() { return this.boundingCircle; }
 
