@@ -86,8 +86,9 @@ public class GameRenderer {
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
 
+        String collisionPenalty = GameWorld.collisionPenalty;
         String debugTag = GameWorld.isOwner ? "Server: " : "Player: ";
-        this.font.draw(batcher, debugTag + "Get " + myWorld.endScore + " points!", 500*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        this.font.draw(batcher, collisionPenalty+ " " + debugTag + "Get " + myWorld.endScore + " points!", 100*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         renderItems(new ArrayList<Item>(myWorld.items));
         renderPlayers(players);

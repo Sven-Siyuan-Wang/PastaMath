@@ -1,5 +1,6 @@
 package gameobjects;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -13,6 +14,7 @@ import java.util.Random;
 import gameconstants.GameConstants;
 import gameworld.GameObject;
 import gameworld.GameRenderer;
+import gameworld.GameWorld;
 
 /**
  * Created by Hazel on 28/2/2016.
@@ -79,6 +81,7 @@ public class Player implements GameObject, Serializable {
 
     public void update(float delta) {
 
+       // if(!inContact || contactTimer)
         if(up) {
             if(!(position.y <= 0)) {
                 position.y -= velocity*delta;
@@ -167,13 +170,16 @@ public class Player implements GameObject, Serializable {
         inContact = false;
     }
     public void decreaseScoreUponKnock(){
-        if (currentValue<= 10){
-            currentValue= 0;
-        }
-        else {
-            currentValue -= 10;
-        }
+        String penalty = GameWorld.collisionPenalty;
+
+        String operation = penalty.substring(0,penalty.length()-1);
+        int value = Character.getNumericValue(penalty.charAt(penalty.length() - 1));
+
+        if(operation.equals("divide")) currentValue /= value;
+        else currentValue -= value;
     }
+
+
 
     //TODO: methods FOR ITEMS to change player's situation attributes
     public void setShielded(boolean shielded){
