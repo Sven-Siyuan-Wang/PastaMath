@@ -4,24 +4,44 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@drawable/startscreenbg">
+    android:background="@drawable/startscreenbg"><![CDATA[
     tools:context="com.mygdx.game.NetworkActivity">
 
-    <TextView android:text="@string/hello_world"
-        android:layout_width="wrap_content"
+    ]]>
+    <!-- android:text="Quick Game"
+     android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quick Game"
+        android:layout_height="30dip"
+        android:adjustViewBounds = "true"-->
+    <ImageButton
+        android:layout_width="160dp"
+        android:layout_height="64dp"
+        android:adjustViewBounds = "true"
+        android:scaleType="fitXY"
         android:id="@+id/quickgamebutton"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="35dp"
-        android:onClick="startQuickGame" />
+        android:onClick="startQuickGame"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/quickgamebutton"
+        android:background="@android:color/transparent" />
+
+    <ImageButton
+        android:layout_width="160dp"
+        android:layout_height="64dp"
+        android:adjustViewBounds = "true"
+        android:scaleType="fitXY"
+        android:id="@+id/rulesbutton"
+        android:onClick="startQuickGame"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/rulesbutton"
+        android:background="@android:color/transparent" />
 
     <Button
         android:layout_width="wrap_content"

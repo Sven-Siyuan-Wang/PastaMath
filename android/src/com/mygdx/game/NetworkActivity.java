@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
@@ -367,7 +368,7 @@ public class NetworkActivity extends AppCompatActivity implements
     public void startQuickGame(View view) {
         Log.d(TAG, "StartQuickGame Entered");
         // auto-match criteria to invite one random automatch opponent.
-        final int minNumOfOpponents = 2;
+        final int minNumOfOpponents = 1;
         final int maxNumOfOpponents = 3;
         Bundle am = RoomConfig.createAutoMatchCriteria(minNumOfOpponents, maxNumOfOpponents, 0);
 
