@@ -101,6 +101,7 @@ public class GameWorld {
         }
 
         if(!musicLooped) {
+            music.setLooping(true);
             music.play();
             musicLooped = true;
         }

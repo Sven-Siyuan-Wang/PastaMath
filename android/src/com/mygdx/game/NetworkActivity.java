@@ -10,9 +10,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroupOverlay;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.badlogic.gdx.Game;
 import com.google.android.gms.common.ConnectionResult;
@@ -63,12 +65,25 @@ public class NetworkActivity extends AppCompatActivity implements
     private  static HashMap<String, Item> itemMap = new HashMap<>();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try{
             Log.d(TAG, "onCreate start");
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_network);
+
+            ImageView rule1 = (ImageView)findViewById(R.id.rule1imageview);
+            ImageView rule2 = (ImageView)findViewById(R.id.rule2imageview);
+            ImageView rule3 = (ImageView)findViewById(R.id.rule3imageview);
+
+            rule1.setVisibility(View.GONE);
+            rule2.setVisibility(View.GONE);
+            rule3.setVisibility(View.GONE);
+
+            rule1.setClickable(false);
+            rule2.setClickable(false);
+            rule3.setClickable(false);
 
             myApp = ((MyAppApplication)getApplicationContext());
 
@@ -141,6 +156,38 @@ public class NetworkActivity extends AppCompatActivity implements
         // The player is signed in. Hide the sign-in button and allow the
         // player to proceed.
         Log.d(TAG, "onConnected end");
+    }
+
+    public void rulesButton(View view){
+         ImageView rule1 = (ImageView)findViewById(R.id.rule1imageview);
+        rule1.setVisibility(View.VISIBLE);
+        rule1.setClickable(true);
+        Log.d(TAG,"rules button pressed");
+    }
+    public void rules2(View view){
+        ImageView rule2 = (ImageView)findViewById(R.id.rule2imageview);
+        rule2.setVisibility(View.VISIBLE);
+        rule2.setClickable(true);
+        Log.d(TAG, "rule1 pressed");
+    }
+    public void rules3(View view){
+        ImageView rule3 = (ImageView)findViewById(R.id.rule3imageview);
+        rule3.setVisibility(View.VISIBLE);
+        rule3.setClickable(true);
+        Log.d(TAG, "rule2 pressed");
+    }
+    public void closeRules(View view){
+        Log.d(TAG, "rule3 pressed");
+        ImageView rule1 = (ImageView)findViewById(R.id.rule1imageview);
+        rule1.setVisibility(View.GONE);
+        rule1.setClickable(false);
+        ImageView rule2 = (ImageView)findViewById(R.id.rule2imageview);
+        rule2.setVisibility(View.GONE);
+        rule2.setClickable(false);
+        ImageView rule3 = (ImageView)findViewById(R.id.rule3imageview);
+        rule3.setVisibility(View.GONE);
+        rule3.setClickable(false);
+
     }
 
 
@@ -620,7 +667,7 @@ public class NetworkActivity extends AppCompatActivity implements
                     int value = Character.getNumericValue(type.charAt(type.length() - 1));
                     toAdd = new NumberAndOperand(operation,value,x,y);
                 }
-                itemMap.put(id,toAdd);
+                itemMap.put(id, toAdd);
                 synchronized (GameWorld.items){
                     GameWorld.items.add(toAdd);
                 }
