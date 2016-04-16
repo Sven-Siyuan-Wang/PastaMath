@@ -52,13 +52,16 @@ public class NumberAndOperand extends Item { //All these are a form of item
     }
 
     public void update_player_situation(Player player){
-        player.setCurrentValue(value, operation);
+        player.calculateCurrentValue(value, operation);
     }
 
 
 
     public String getName(){
         return number_n_operand;
+    }
+    public String getOperation() {
+        return operation;
     }
 
 

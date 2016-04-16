@@ -628,10 +628,11 @@ public class NetworkActivity extends AppCompatActivity implements
         //Update score
         else if(words[0].equals("SCORE")){
             String id = words[1];
-            Log.d(TAG,"SCORE PLAYER ID: "+id);
+            Log.d(TAG, msg);
             int score = Integer.parseInt(words[2]);
             Player player = GameWorld.players.get(playerMap.get(id));
-            player.setCurrentValue(score);
+            String operation = words[3];
+            player.setCurrentValue(score, operation);
 
         }
 

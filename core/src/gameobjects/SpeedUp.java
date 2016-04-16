@@ -27,7 +27,7 @@ public class SpeedUp extends Item {
     }
 
     public void update_player_situation(Player player){
-        player.speedUp();
+        player.setSpeedUp(true);
         MyGdxGame.playServices.sendToPlayer("SPEEDUP "+player.getId()+" true");
     }
 

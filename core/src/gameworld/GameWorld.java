@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import gameobjects.Item;
+import gameobjects.NumberAndOperand;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
 
@@ -153,7 +154,9 @@ public class GameWorld {
                         //remove corresponding coords
                         simple_item_buffer.removeItemPos(item.getPosition());
                         item.update_player_situation(each_player);
-                        sendPlayerScore(each_player);
+                        if(item instanceof NumberAndOperand) {
+                            sendPlayerScore(each_player, ((NumberAndOperand) item).getOperation());
+                        }
 
                     }
                 }
@@ -204,8 +207,8 @@ public class GameWorld {
         MyGdxGame.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY());
     }
 
-    public void sendPlayerScore(Player player){
-        MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue());
+    public void sendPlayerScore(Player player, String operation){
+        MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue() + " "+ operation);
     }
 
     private void sendEndScore(int endScore) {
