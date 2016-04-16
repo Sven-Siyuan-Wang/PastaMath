@@ -6,13 +6,13 @@ import com.badlogic.gdx.audio.Sound;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
 import gameobjects.Item;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
-
 
 
 /**
@@ -34,11 +34,14 @@ public class GameWorld {
 
     public static boolean isOwner;
     public static boolean win = false;
+    public static int numberOfPlayers = 0;
+    private static boolean allInitialized = false;
 
     private float penaltyTimer;
     public static String collisionPenalty = "";
+    public static final int[] minusValues = new int[]{2, 5, 10, 20, 50};
 
-    public static int[] scoreForGameOver;
+    public static int[] scoreForGameOver = new int[4];
 
     public static Music music;
     public static boolean musicLooped = false;
@@ -79,7 +82,19 @@ public class GameWorld {
 
     //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
-        //all the items are initialized inside the buffer already when it is constructed
+
+
+
+        if(players.size()==numberOfPlayers && !allInitialized){
+            ArrayList<Player> sortPlayers = new ArrayList<Player>(players);
+            Collections.sort(sortPlayers);
+            int index = 0;
+            for(Player player: sortPlayers){
+                player.setIndex(index++);
+            }
+            allInitialized = true;
+        }
+
         if(!musicLooped) {
             music.play();
             musicLooped = true;
@@ -87,6 +102,7 @@ public class GameWorld {
 
 
 
+        // check for winning
         for(Player player: players) {
             if(player.getCurrentValue()==this.endScore) {
                 int count = 0;
@@ -197,17 +213,18 @@ public class GameWorld {
 
     private String generateCollisionEffect(){
         Random random = new Random();
-        int value= random.nextInt(8)+1;
+        int index = random.nextInt(5);
+        int value = minusValues[index];
         int operand_chooser = random.nextInt(50);
         String operation;
         if (operand_chooser<30){
-            operation= "divide";
+            operation= "/";
         }
         else{
-            operation= "minus";
+            operation= "-";
         }
         //overwrite value cos only need mul2 and mul3
-        if (operation.equals("divide")){
+        if (operation.equals("/")){
             int choose_2_or_3 = random.nextInt(3);
             if (choose_2_or_3<2){
                 value=2;

@@ -125,23 +125,23 @@ public class GameRenderer {
     }
 
     public void renderPlayers(ArrayList<Player> players){
-        int count = 0;
+
         for(Player player: players) {
             batcher.enableBlending();
             if (player.getSpeedUp()) {
-                batcher.draw(AssetLoader.characterAnimations.get((count++)+4).getKeyFrame(runTime),
+                batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+4).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,
                         player.getY() * GameConstants.SCALE_Y,
                         player.getWidth() * GameConstants.SCALE_X,
                         player.getHeight() * GameConstants.SCALE_Y);
             } else if (player.getShield()) {
-                batcher.draw(AssetLoader.characterAnimations.get((count++)+8).getKeyFrame(runTime),
+                batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+8).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,
                         player.getY() * GameConstants.SCALE_Y,
                         player.getWidth() * GameConstants.SCALE_X,
                         player.getHeight() * GameConstants.SCALE_Y);
             } else {
-                batcher.draw(AssetLoader.characterAnimations.get(count++).getKeyFrame(runTime),
+                batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,
                         player.getY() * GameConstants.SCALE_Y,
                         player.getWidth() * GameConstants.SCALE_X,
@@ -159,7 +159,7 @@ public class GameRenderer {
             font.draw(batcher, Integer.toString(player.getCurrentValue()),
                     1120 * GameConstants.SCALE_X,
                     (690-100*count) * GameConstants.SCALE_Y);
-            batcher.draw(AssetLoader.characters.get(count-1),
+            batcher.draw(AssetLoader.characters.get(player.getIndex()),
                     1040 * GameConstants.SCALE_X,
                     (620-100*count) * GameConstants.SCALE_Y,
                     75 * GameConstants.SCALE_X,
