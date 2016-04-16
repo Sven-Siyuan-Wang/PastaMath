@@ -5,16 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.MyGdxGame;
 
 import java.io.Serializable;
 import java.util.Random;
 
-import gameconstants.GameConstants;
 import gameworld.GameObject;
-import gameworld.GameRenderer;
 import gameworld.GameWorld;
 
 /**
@@ -53,7 +50,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     public boolean frozen = false;
     private float contactTimer = 0;
 
-//    public static
+
 
 
     //constructor for Player class
@@ -84,6 +81,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
         this.currentValue = 0;
         inContact = false;
+
     }
 
     public void update(float delta) {
@@ -167,8 +165,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
                 MyGdxGame.playServices.sendToPlayer("SHIELDED "+getId()+" false");
             }
             else{
-                Sound multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav")); //only play when myself is in collision
-                if(this.equals(GameWorld.myself)) multiplyUpPickupSound.play();
+
+                if(this.equals(GameWorld.myself)) GameWorld.multiplyUpPickupSound.play();
                 decreaseScoreUponKnock();
                 MyGdxGame.playServices.sendToPlayer("SCORE " + getId()+" "+ getCurrentValue() + " collision");
                 frozen = true;
@@ -224,37 +222,35 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
 
     public void calculateCurrentValue(int number, String operand){
-        Sound addPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_add.wav"));
-        Sound multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
+
         if (operand.equals("plus")){
             currentValue+= number;
-            if(this.equals(GameWorld.myself)) addPickupSound.play();
-            else addPickupSound.play(0.3f);
+            if(this.equals(GameWorld.myself)) GameWorld.addPickupSound.play();
+            else GameWorld.addPickupSound.play(0.3f);
         }
 
         if(operand.equals("mul")){
             currentValue*= number;
-            if(this.equals(GameWorld.myself)) multiplyUpPickupSound.play();
-            else multiplyUpPickupSound.play(0.3f);
+            if(this.equals(GameWorld.myself)) GameWorld.multiplyUpPickupSound.play();
+            else GameWorld.multiplyUpPickupSound.play(0.3f);
         }
     }
 
     public void setCurrentValue(int value, String operation){
-        Sound addPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_add.wav"));
-        Sound multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
+
         currentValue = value;
         if (operation.equals("plus")){
-            if(this.equals(GameWorld.myself)) addPickupSound.play();
-            else addPickupSound.play(0.3f);
+            if(this.equals(GameWorld.myself)) GameWorld.addPickupSound.play();
+            else GameWorld.addPickupSound.play(0.3f);
         }
 
         else if(operation.equals("mul")){
-            if(this.equals(GameWorld.myself)) multiplyUpPickupSound.play();
-            else multiplyUpPickupSound.play(0.3f);
+            if(this.equals(GameWorld.myself)) GameWorld.multiplyUpPickupSound.play();
+            else GameWorld.multiplyUpPickupSound.play(0.3f);
         }
         else  if(operation.equals("collision")){
             if(this.equals(GameWorld.myself)) {
-                multiplyUpPickupSound.play(); // only play when myself is in collision
+                GameWorld.multiplyUpPickupSound.play(); // only play when myself is in collision
                 contactTimer = 0;
                 frozen = true;
             }

@@ -15,6 +15,7 @@ import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMultiplayer;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
@@ -232,57 +233,6 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 
 	@Override
 	public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
-		Log.d(TAG,"Received: "+realTimeMessage);
-        String msg = new String(realTimeMessage.getMessageData());
-        String[] words = msg.split(" ");
-
-        //general message
-        if(words[0].equals("INIT")){
-            String id = words[1];
-            Player player = new Player(id);
-            playerMap.put(id, GameWorld.players.size());
-            GameWorld.players.add(player);
-        }
-
-        //sent to both player and server
-		//Example: PLAYER ID X Y
-        else if(words[0].equals("PLAYER")){
-            String id = words[1];
-            float x = Float.parseFloat(words[2]);
-            float y = Float.parseFloat(words[3]);
-            Player player = GameWorld.players.get(playerMap.get(id));
-            player.setX(x);
-            player.setY(y);
-        }
-
-        //TODO: ONE MORE CASE
-        //ITEM ID X Y TYPE
-		//TYPE: shield, speedUp, plus1, mul2
-        //ITEM ID RM
-		else if(words[0].equals("ITEM")){
-			String id = words[1];
-			if(words[2].equals("RM")){
-				Item toRemove = itemMap.get(id);
-				itemMap.remove(id);
-				toRemove.destroy();
-			}
-			else{
-				float x = Float.parseFloat(words[2]);
-				float y = Float.parseFloat(words[3]);
-				String type = words[4];
-				Item toAdd;
-				if(type.equals("SHIELD")) toAdd = new Shield(x,y);
-				else if(type.equals("SPEEDUP")) toAdd =new SpeedUp(x,y);
-				else {
-					String operation = type.substring(0,type.length()-1);
-					int value = Character.getNumericValue(type.charAt(type.length() - 1));
-					toAdd = new NumberAndOperand(operation,value,x,y);
-				}
-				GameWorld.items.add(toAdd);
-				Log.d(TAG,"RECEIVE: item added");
-			}
-
-		}
 
 	}
 
@@ -295,6 +245,17 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	public void sendToPlayer(String message){
 		Log.d(TAG, "SENDTOPLAYER"+message);
 		byte[] mMsgBuf = message.getBytes();
+
+//		if(message.split(" ")[0].equals("ITEM")){
+//			if (mParticipants!=null){
+//				for (Participant p:mParticipants){
+//					if (!p.getParticipantId().equals(myId)){
+//						Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null ,mMsgBuf,mRoomId, p.getParticipantId());
+//					}
+//				}
+//			}
+//		}
+
 		if (mParticipants!=null){
 			for (Participant p:mParticipants){
 				if (!p.getParticipantId().equals(myId)){
@@ -303,6 +264,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 				}
 			}
 		}
+
+
 	}
 
 	@Override
@@ -435,6 +398,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		}
 		return true;
 	}
+
 
 }
 

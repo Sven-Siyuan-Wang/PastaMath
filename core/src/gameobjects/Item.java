@@ -76,7 +76,10 @@ public abstract class Item implements GameObject{
 
     public void destroy() {
         Gdx.app.log("Debug","Item destroyed.");
+
         GameWorld.items.remove(this);
+
+
     }
 
     public void update(float delta) {

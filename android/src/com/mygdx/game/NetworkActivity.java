@@ -3,6 +3,7 @@ package com.mygdx.game;
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.Tag;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -594,11 +595,13 @@ public class NetworkActivity extends AppCompatActivity implements
         else if(words[0].equals("ITEM")){
             String id = words[1];
             if(words[2].equals("RM")){
-                Log.d(TAG,"RM CONDITION");
+                Log.d(TAG, "RM CONDITION");
                 try{
                     Item toRemove = itemMap.get(id);
                     itemMap.remove(id);
-                    toRemove.destroy();
+                    synchronized (GameWorld.items){
+                        toRemove.destroy();
+                    }
                     Log.d(TAG,"REMOVE ITEM");
                 }catch(NullPointerException e){
                     Log.getStackTraceString(e);
@@ -618,7 +621,9 @@ public class NetworkActivity extends AppCompatActivity implements
                     toAdd = new NumberAndOperand(operation,value,x,y);
                 }
                 itemMap.put(id,toAdd);
-                GameWorld.items.add(toAdd);
+                synchronized (GameWorld.items){
+                    GameWorld.items.add(toAdd);
+                }
 
                 Log.d(TAG,"RECEIVE: item added");
             }

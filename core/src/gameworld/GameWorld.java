@@ -46,11 +46,15 @@ public class GameWorld {
 
     public static Music music;
     public static boolean musicLooped = false;
+    public static Sound addPickupSound;
+    public static Sound multiplyUpPickupSound;
 
 
     public GameWorld(Player myself) {
 
         music =  Gdx.audio.newMusic(Gdx.files.internal("data/background.mp3"));
+        addPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_add.wav"));
+        multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
 
         this.myself = myself;
 
@@ -200,6 +204,8 @@ public class GameWorld {
 
     public void sendRemoveItem(Item item){
         MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
+        MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
+
     }
 
     //PLAYER ID X Y
