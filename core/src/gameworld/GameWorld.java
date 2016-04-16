@@ -66,8 +66,6 @@ public class GameWorld {
 
             penaltyTimer = 0;
 
-
-
         }
 
     }
