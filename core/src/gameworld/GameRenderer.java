@@ -240,19 +240,19 @@ public class GameRenderer {
         batcher.end();
     }
 
-    public void renderGameOverScreen() {
+    public void renderGameOverScreen(int[] scores) {
         batcher.begin();
         batcher.enableBlending();
 
         batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
         int count = 1;
-        for(Player player:myWorld.getPlayers()) {
+        for(int i:scores) {
             batcher.draw(AssetLoader.characters.get(count-1),
                     300 * GameConstants.SCALE_X,
                     (540-100*count) * GameConstants.SCALE_Y,
                     75 * GameConstants.SCALE_X,
                     75 * GameConstants.SCALE_Y);
-            scorefont.draw(batcher, Integer.toString(player.getCurrentValue()), 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
+            scorefont.draw(batcher, Integer.toString(i), 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
             count +=1;
         }
 

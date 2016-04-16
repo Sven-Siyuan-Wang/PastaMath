@@ -19,10 +19,13 @@ public class GameOverScreen implements Screen {
     private GameRenderer renderer;
     private GameOverInput myInput;
     private MyGdxGame game;
+    private int[] scores;
 
-    public GameOverScreen(GameRenderer renderer, MyGdxGame game) {
+    public GameOverScreen(GameRenderer renderer, MyGdxGame game, int[] scores) {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
+
+        this.scores = scores;
 
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
         Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
@@ -47,7 +50,7 @@ public class GameOverScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        renderer.renderGameOverScreen();
+        renderer.renderGameOverScreen(this.scores);
 
     }
 
