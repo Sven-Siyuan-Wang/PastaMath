@@ -45,7 +45,7 @@ public class Player implements GameObject, Serializable {
 
     //todo: initialize booleans for other attributes(to change upon collision)
     private boolean shielded = false; //its score won't be affected
-    private int currentValue;
+    private int currentValue = 0;
 
     private boolean inContact;
 
