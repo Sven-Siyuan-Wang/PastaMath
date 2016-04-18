@@ -233,7 +233,7 @@ public class GameWorld {
         int operand_chooser = random.nextInt(50);
         String operation;
         if (operand_chooser<30){
-            operation= "/";
+            operation= "÷";
         }
         else{
             operation= "-";
