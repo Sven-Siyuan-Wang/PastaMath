@@ -2,7 +2,6 @@ package gameobjects;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
@@ -193,14 +192,12 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     //TODO: methods FOR ITEMS to change player's situation attributes
     public void setShielded(boolean shielded){
         this.shielded= shielded;
-        Sound shieldPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_shield.wav"));
+
 
         if(shielded == true){
-            shieldPickupSound.play(1.0f);
+            GameWorld.shieldPickupSound.play(1.0f);
         }
-        else{
-            //shieldPickupSound.play(1.0f);
-        }
+
 
     }
     public boolean getShielded(){
@@ -210,11 +207,11 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     public void setSpeedUp(boolean speedUp){
         this.speedUp = speedUp;
 
-        Sound speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
+
 
         if(speedUp == true){
-            if(this.equals(GameWorld.myself)) speedUpPickupSound.play();
-            else speedUpPickupSound.play(0.3f);
+            if(this.equals(GameWorld.myself)) GameWorld.speedUpPickupSound.play();
+            else GameWorld.speedUpPickupSound.play(0.3f);
         }
 
     }

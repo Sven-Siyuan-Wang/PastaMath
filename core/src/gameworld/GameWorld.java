@@ -48,6 +48,8 @@ public class GameWorld {
     public static boolean musicLooped = false;
     public static Sound addPickupSound;
     public static Sound multiplyUpPickupSound;
+    public static Sound shieldPickupSound;
+    public static Sound speedUpPickupSound;
 
 
     public GameWorld(Player myself) {
@@ -55,6 +57,8 @@ public class GameWorld {
         music =  Gdx.audio.newMusic(Gdx.files.internal("data/background.mp3"));
         addPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_add.wav"));
         multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
+        shieldPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_shield.wav"));
+        speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
 
         this.myself = myself;
 
