@@ -646,16 +646,15 @@ public class NetworkActivity extends AppCompatActivity implements
                 try{
                     Item toRemove = itemMap.get(id);
                     itemMap.remove(id);
-                    synchronized (GameWorld.items){
-                        toRemove.destroy();
-                    }
+                    toRemove.destroy();
+
                     Log.d(TAG,"REMOVE ITEM");
                 }catch(NullPointerException e){
                     Log.getStackTraceString(e);
                 }
 
             }
-            else{
+            else if(!itemMap.containsKey(id)){
                 float x = Float.parseFloat(words[2]);
                 float y = Float.parseFloat(words[3]);
                 String type = words[4];
@@ -668,10 +667,7 @@ public class NetworkActivity extends AppCompatActivity implements
                     toAdd = new NumberAndOperand(operation,value,x,y);
                 }
                 itemMap.put(id, toAdd);
-                synchronized (GameWorld.items){
-                    GameWorld.items.add(toAdd);
-                }
-
+                GameWorld.items.add(toAdd);
                 Log.d(TAG,"RECEIVE: item added");
             }
 
@@ -724,6 +720,18 @@ public class NetworkActivity extends AppCompatActivity implements
         else if(words[0].equals("UNFREEZE")){
             String id = words[1];
             GameWorld.players.get(playerMap.get(id)).frozen = false;
+        }
+
+        else if(words[0].equals("ITEMLIST")){
+            List<String> ids = Arrays.asList(words);
+            for(String id: itemMap.keySet()){
+                if(!ids.contains(id)) {
+                    itemMap.get(id).destroy();
+                    Log.d(TAG, "force removed an item");
+                }
+
+            }
+
         }
 
 

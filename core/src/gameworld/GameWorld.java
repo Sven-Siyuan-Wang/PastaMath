@@ -31,6 +31,7 @@ public class GameWorld {
 
     public static ArrayList<Item> items = new ArrayList<Item>();  // items for server to update
 
+
     public static int endScore = 999;
 
     public static boolean isOwner;
@@ -38,7 +39,8 @@ public class GameWorld {
     public static int numberOfPlayers = 0;
     private static boolean allInitialized = false;
 
-    private float penaltyTimer;
+    private int removalTimer;
+    private int penaltyTimer;
     public static String collisionPenalty = "";
     public static final int[] minusValues = new int[]{2, 5, 10, 20, 50};
 
@@ -71,6 +73,10 @@ public class GameWorld {
             }
         }
 
+        //Send ready message to other players
+
+        MyGdxGame.playServices.sendToPlayer("INIT " + myself.getId());
+
 
         if(isOwner) {
             endScore = new Random().nextInt(100) + 50;
@@ -80,6 +86,7 @@ public class GameWorld {
             items = simple_item_buffer.items_currently_appearing;
 
             penaltyTimer = 0;
+            removalTimer = 0;
 
         }
 
@@ -87,9 +94,6 @@ public class GameWorld {
 
 
 
-    //TODO(Extra): consider doing thread version? (complicated)
-
-    //TODO: do all the "threading"- ADD items every few seconds
     public void update(float delta) {
 
 
@@ -104,91 +108,105 @@ public class GameWorld {
             allInitialized = true;
         }
 
-        if(!musicLooped) {
-            music.setLooping(true);
-            music.play();
-            musicLooped = true;
-        }
-
-
-
-        for(Player player: players) {
-            int count = 0;
-
-            if(player.getCurrentValue()==this.endScore) {
-                for(Player player2: players) {
-                    scoreForGameOver[count] = player.getCurrentValue();
-                    count +=1;
-                    player2.resetCurrentValue();
-                }
-                Gdx.app.log("World", "someone has won");
-                win = true;
-            }
-        }
-
-        if(isOwner){
-            //Server code
-            //simple_item_buffer.update_player_pos_vec(players);
-            if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
-
-                sendAddItem(simple_item_buffer.generate_random_Item());
+        else{
+            if(!musicLooped) {
+                music.setLooping(true);
+                music.play();
+                musicLooped = true;
             }
 
 
-            if(penaltyTimer>500 || penaltyTimer == 0) {
-                collisionPenalty = generateCollisionEffect();
-                penaltyTimer = 0;
-                MyGdxGame.playServices.sendToPlayer("PENALTY " + collisionPenalty);
-            }
-            penaltyTimer += 1;
 
-            //TODO: PLAYER RESPONSES TO COLLISION
-            for(Player each_player: players){
+            for(Player player: players) {
+                int count = 0;
 
-                each_player.updateBoundingCircle();
-
-                for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
-
-                    Item item = iterator.next();
-                    item.decreaseLife(delta);
-                    if(item.expired()) {
-                        iterator.remove();
-                        sendRemoveItem(item);
-                        simple_item_buffer.removeItemPos(item.getPosition());
+                if(player.getCurrentValue()==this.endScore) {
+                    for(Player player2: players) {
+                        scoreForGameOver[count] = player.getCurrentValue();
+                        count +=1;
+                        player2.resetCurrentValue();
                     }
-                    else if(each_player.collides(item)){
-                        Gdx.app.log("GameWorld", "Player-Item collision");
-                        iterator.remove();
-                        sendRemoveItem(item);
-                        //remove corresponding coords
-                        simple_item_buffer.removeItemPos(item.getPosition());
-                        item.update_player_situation(each_player);
-                        if(item instanceof NumberAndOperand) {
-                            sendPlayerScore(each_player, ((NumberAndOperand) item).getOperation());
+                    Gdx.app.log("World", "someone has won");
+                    win = true;
+                }
+            }
+
+            if(isOwner){
+                //Server code
+
+                // GENERATE ITEMS
+                if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
+                    sendAddItem(simple_item_buffer.generate_random_Item());
+                }
+
+
+                // UPDATE COLLISION PENALTY
+                if(penaltyTimer>500 || penaltyTimer == 0) {
+                    collisionPenalty = generateCollisionEffect();
+                    penaltyTimer = 0;
+                    MyGdxGame.playServices.sendToPlayer("PENALTY " + collisionPenalty);
+                }
+                penaltyTimer += 1;
+
+                // PLAYER RESPONSES TO COLLISION
+                for(Player each_player: players){
+
+                    each_player.updateBoundingCircle();
+
+                    for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
+
+                        Item item = iterator.next();
+                        item.decreaseLife(delta);
+                        if(item.expired()) {
+                            iterator.remove();
+                            sendRemoveItem(item);
+                            simple_item_buffer.removeItemPos(item.getPosition());
                         }
+                        else if(each_player.collides(item)){
+                            Gdx.app.log("GameWorld", "Player-Item collision");
+                            iterator.remove();
+                            sendRemoveItem(item);
+                            //remove corresponding coords
+                            simple_item_buffer.removeItemPos(item.getPosition());
+                            item.update_player_situation(each_player);
+                            if(item instanceof NumberAndOperand) {
+                                sendPlayerScore(each_player, ((NumberAndOperand) item).getOperation());
+                            }
 
-                    }
-                }
-                //check if a player collided into another player
-                boolean inContact = false;
-                for(Player other_player: players){
-                    if (!other_player.equals(each_player)){ //you can't knock into yourself
-                        if (each_player.knock_into(other_player)){
-                            each_player.handleCollsion();
-                            inContact = true;
                         }
                     }
+                    //check if a player collided into another player
+                    boolean inContact = false;
+                    for(Player other_player: players){
+                        if (!other_player.equals(each_player)){ //you can't knock into yourself
+                            if (each_player.knock_into(other_player)){
+                                each_player.handleCollsion();
+                                inContact = true;
+                            }
+                        }
+                    }
+                    if(!inContact) each_player.clearContact();
                 }
-                if(!inContact) each_player.clearContact();
+
+                //sync item list every 5 seconds
+                if(removalTimer>300){
+                    removalTimer = 0;
+                    sendItemList();
+                }
+                removalTimer++;
+
             }
+
+            //my player update
+            myself.update(delta);
+            sendMyLocation();
+            Gdx.app.log("FrameRate ", Float.toString(1/delta));
+
         }
-
-        //my player
-        myself.update(delta);
-        sendMyLocation();
-
-
     }
+
+
+
     public ArrayList<Player> getPlayers() {
         return players;
     }
@@ -208,9 +226,17 @@ public class GameWorld {
     }
 
     public void sendRemoveItem(Item item){
-        MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
+        //MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
         MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
 
+    }
+
+    public void sendItemList(){
+        String msg = "ITEMLIST";
+        for(Item item: items){
+            msg += " "+item.getID();
+        }
+        MyGdxGame.playServices.sendToPlayer(msg);
     }
 
     //PLAYER ID X Y

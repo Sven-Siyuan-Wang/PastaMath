@@ -85,7 +85,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		playerMap.put(myId, 1);
 		GameWorld.numberOfPlayers = mParticipants.size();
 
-		sendToPlayer("INIT " + myId);
+
 
 		Log.e(TAG, "onCreate ends");
 
@@ -246,24 +246,15 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		Log.d(TAG, "SENDTOPLAYER"+message);
 		byte[] mMsgBuf = message.getBytes();
 
-//		if(message.split(" ")[0].equals("ITEM")){
-//			if (mParticipants!=null){
-//				for (Participant p:mParticipants){
-//					if (!p.getParticipantId().equals(myId)){
-//						Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null ,mMsgBuf,mRoomId, p.getParticipantId());
-//					}
-//				}
-//			}
-//		}
-
 		if (mParticipants!=null){
 			for (Participant p:mParticipants){
 				if (!p.getParticipantId().equals(myId)){
-					Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient,mMsgBuf,mRoomId,
-							p.getParticipantId());
+					Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient,mMsgBuf,mRoomId, p.getParticipantId());
 				}
 			}
 		}
+
+
 
 
 	}
