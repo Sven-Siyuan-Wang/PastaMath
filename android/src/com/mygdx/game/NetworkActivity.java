@@ -721,6 +721,11 @@ public class NetworkActivity extends AppCompatActivity implements
             GameWorld.collisionPenalty = words[1];
         }
 
+        else if(words[0].equals("UNFREEZE")){
+            String id = words[1];
+            GameWorld.players.get(playerMap.get(id)).frozen = false;
+        }
+
 
     }
 

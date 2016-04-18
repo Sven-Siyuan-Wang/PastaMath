@@ -87,7 +87,10 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
         if(frozen){
             contactTimer += delta;
-            if(contactTimer > 1) frozen = false;
+            if(contactTimer > 1) {
+                frozen = false;
+                MyGdxGame.playServices.sendToPlayer("UNFREEZE "+getId());
+            }
         }
         else{
             if(up) {
@@ -165,17 +168,23 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
             }
             else{
 
-                if(this.equals(GameWorld.myself)) GameWorld.multiplyUpPickupSound.play();
+                if(this.equals(GameWorld.myself)) {
+                    GameWorld.multiplyUpPickupSound.play();
+                    contactTimer = 0;
+                }
                 decreaseScoreUponKnock();
                 MyGdxGame.playServices.sendToPlayer("SCORE " + getId()+" "+ getCurrentValue() + " collision");
                 frozen = true;
-                contactTimer = 0;
+
             }
         }
     }
 
     public void clearContact(){
         inContact = false;
+        if(frozen) MyGdxGame.playServices.sendToPlayer("UNFREEZE "+getId());
+        frozen = false;
+
     }
     public void decreaseScoreUponKnock(){
         String penalty = GameWorld.collisionPenalty;
@@ -183,7 +192,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
         char operation = penalty.charAt(0);
         int value = Integer.parseInt(penalty.substring(1));
 
-        if(operation=='/') currentValue /= value;
+        if(operation=='÷') currentValue /= value;
         else currentValue -= value;
     }
 
@@ -249,8 +258,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
             if(this.equals(GameWorld.myself)) {
                 GameWorld.multiplyUpPickupSound.play(); // only play when myself is in collision
                 contactTimer = 0;
-                frozen = true;
             }
+            frozen = true; // for any player, which is unfrozen by clearContact
         }
     }
 
