@@ -128,7 +128,13 @@ public class GameRenderer {
 
         for(Player player: players) {
             batcher.enableBlending();
-            if (player.getSpeedUp()) {
+            if(player.getSpeedUp() && player.getShield()) {
+                batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+12).getKeyFrame(runTime),
+                        player.getX() * GameConstants.SCALE_X,
+                        player.getY() * GameConstants.SCALE_Y,
+                        player.getWidth() * GameConstants.SCALE_X,
+                        player.getHeight() * GameConstants.SCALE_Y);
+            } else if (player.getSpeedUp()) {
                 batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+4).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,
                         player.getY() * GameConstants.SCALE_Y,
@@ -140,12 +146,18 @@ public class GameRenderer {
                         player.getY() * GameConstants.SCALE_Y,
                         player.getWidth() * GameConstants.SCALE_X,
                         player.getHeight() * GameConstants.SCALE_Y);
-            } else {
-                batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()).getKeyFrame(runTime),
+            } else if (player.frozen) {
+                batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+16).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,
                         player.getY() * GameConstants.SCALE_Y,
                         player.getWidth() * GameConstants.SCALE_X,
                         player.getHeight() * GameConstants.SCALE_Y);
+            } else {
+                    batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()).getKeyFrame(runTime),
+                            player.getX() * GameConstants.SCALE_X,
+                            player.getY() * GameConstants.SCALE_Y,
+                            player.getWidth() * GameConstants.SCALE_X,
+                            player.getHeight() * GameConstants.SCALE_Y);
 //            batcher.draw(AssetLoader.characters.get(count++), player.getX()*GameConstants.SCALE_X, player.getY()*GameConstants.SCALE_Y, player.getWidth()*GameConstants.SCALE_X, player.getHeight()*GameConstants.SCALE_Y);
             }
         }

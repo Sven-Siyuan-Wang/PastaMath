@@ -44,6 +44,20 @@ public class AssetLoader {
 
     public static Animation char1shieldAnimation, char2shieldAnimation, char3shieldAnimation, char4shieldAnimation;
 
+    public static TextureRegion char1ss_1, char1ss_2, char1ss_3, char1ss_4, char1ss_5, char1ss_6;
+    public static TextureRegion char2ss_1, char2ss_2, char2ss_3, char2ss_4, char2ss_5, char2ss_6;
+    public static TextureRegion char3ss_1, char3ss_2, char3ss_3, char3ss_4, char3ss_5, char3ss_6;
+    public static TextureRegion char4ss_1, char4ss_2, char4ss_3, char4ss_4, char4ss_5, char4ss_6;
+
+    public static Animation char1ssAnimation, char2ssAnimation, char3ssAnimation, char4ssAnimation;
+
+    public static TextureRegion char1frozen_1, char1frozen_2, char1frozen_3, char1frozen_4, char1frozen_5, char1frozen_6;
+    public static TextureRegion char2frozen_1, char2frozen_2, char2frozen_3, char2frozen_4, char2frozen_5, char2frozen_6;
+    public static TextureRegion char3frozen_1, char3frozen_2, char3frozen_3, char3frozen_4, char3frozen_5, char3frozen_6;
+    public static TextureRegion char4frozen_1, char4frozen_2, char4frozen_3, char4frozen_4, char4frozen_5, char4frozen_6;
+
+    public static Animation char1frozenAnimation, char2frozenAnimation, char3frozenAnimation, char4frozenAnimation;
+
     public static HashMap<String,Texture> textures = new HashMap();
 
     public static ArrayList<Texture> characters = new ArrayList<Texture>();
@@ -127,6 +141,16 @@ public class AssetLoader {
         TextureRegion[] char3shield = {char3shield_1, char3shield_2, char3shield_3, char3shield_4, char3shield_5, char3shield_6};
         TextureRegion[] char4shield = {char4shield_1, char4shield_2, char4shield_3, char4shield_4, char4shield_5, char4shield_6};
 
+        TextureRegion[] char1ss = {char1ss_1, char1ss_2, char1ss_3, char1ss_4, char1ss_5, char1ss_6};
+        TextureRegion[] char2ss = {char2ss_1, char2ss_2, char2ss_3, char2ss_4, char2ss_5, char2ss_6};
+        TextureRegion[] char3ss = {char3ss_1, char3ss_2, char3ss_3, char3ss_4, char3ss_5, char3ss_6};
+        TextureRegion[] char4ss = {char4ss_1, char4ss_2, char4ss_3, char4ss_4, char4ss_5, char4ss_6};
+
+        TextureRegion[] char1frozen = {char1frozen_1, char1frozen_2, char1frozen_3, char1frozen_4, char1frozen_5, char1frozen_6};
+        TextureRegion[] char2frozen = {char2frozen_1, char2frozen_2, char2frozen_3, char2frozen_4, char2frozen_5, char2frozen_6};
+        TextureRegion[] char3frozen = {char3frozen_1, char3frozen_2, char3frozen_3, char3frozen_4, char3frozen_5, char3frozen_6};
+        TextureRegion[] char4frozen = {char4frozen_1, char4frozen_2, char4frozen_3, char4frozen_4, char4frozen_5, char4frozen_6};
+
         int count = 0;
         for(int i = 0; i<6; i++) {
             char1[i] = new TextureRegion(spriteSheet, count, 0, 100, 100);
@@ -141,6 +165,14 @@ public class AssetLoader {
             char2shield[i] = new TextureRegion(spriteSheet, count, 900, 100, 100);
             char3shield[i] = new TextureRegion(spriteSheet, count, 1000, 100, 100);
             char4shield[i] = new TextureRegion(spriteSheet, count, 1100, 100, 100);
+            char1ss[i] = new TextureRegion(spriteSheet, count, 1200, 100, 100);
+            char2ss[i] = new TextureRegion(spriteSheet, count, 1300, 100, 100);
+            char3ss[i] = new TextureRegion(spriteSheet, count, 1400, 100, 100);
+            char4ss[i] = new TextureRegion(spriteSheet, count, 1500, 100, 100);
+            char1frozen[i] = new TextureRegion(spriteSheet, count, 1600, 100, 100);
+            char2frozen[i] = new TextureRegion(spriteSheet, count, 1700, 100, 100);
+            char3frozen[i] = new TextureRegion(spriteSheet, count, 1800, 100, 100);
+            char4frozen[i] = new TextureRegion(spriteSheet, count, 1900, 100, 100);
             count +=100;
         }
 
@@ -161,6 +193,15 @@ public class AssetLoader {
         char3shieldAnimation = new Animation(frameTime, char3shield);
         char4shieldAnimation = new Animation(frameTime, char4shield);
 
+        char1ssAnimation = new Animation(frameTime, char1ss);
+        char2ssAnimation = new Animation(frameTime, char2ss);
+        char3ssAnimation = new Animation(frameTime, char3ss);
+        char4ssAnimation = new Animation(frameTime, char4ss);
+
+        char1frozenAnimation = new Animation(frameTime, char1frozen);
+        char2frozenAnimation = new Animation(frameTime, char2frozen);
+        char3frozenAnimation = new Animation(frameTime, char3frozen);
+        char4frozenAnimation = new Animation(frameTime, char4frozen);
 
         characterAnimations.add(char1Animation);
         characterAnimations.add(char2Animation);
@@ -174,6 +215,14 @@ public class AssetLoader {
         characterAnimations.add(char2shieldAnimation);
         characterAnimations.add(char3shieldAnimation);
         characterAnimations.add(char4shieldAnimation);
+        characterAnimations.add(char1ssAnimation);
+        characterAnimations.add(char2ssAnimation);
+        characterAnimations.add(char3ssAnimation);
+        characterAnimations.add(char4ssAnimation);
+        characterAnimations.add(char1frozenAnimation);
+        characterAnimations.add(char2frozenAnimation);
+        characterAnimations.add(char3frozenAnimation);
+        characterAnimations.add(char4frozenAnimation);
 
         char1Animation.setPlayMode(Animation.PlayMode.LOOP);
         char2Animation.setPlayMode(Animation.PlayMode.LOOP);
@@ -187,6 +236,15 @@ public class AssetLoader {
         char2shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
         char3shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
         char4shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char1ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char2ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char3ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char4ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char1frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char2frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char3frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        char4frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
 
     }
 
