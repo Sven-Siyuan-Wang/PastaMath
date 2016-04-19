@@ -103,12 +103,12 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
                 }
             } else if(down) {
-                if(!(position.y >= 520+720)) {
+                if(!(position.y >= 520)) {
                     position.y += velocity*delta;
                 }
             }
             if(right) {
-                if(!(position.x >=930+1280)) {
+                if(!(position.x >=930)) {
                     position.x += velocity * delta;
                 }
             } else if(left) {
@@ -200,6 +200,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
             if(operation=='÷') currentValue /= value;
             else currentValue -= value;
+            if(currentValue < 0) currentValue = 0;
+
         }
 
     }
@@ -248,6 +250,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
             if(this.equals(GameWorld.myself)) GameWorld.multiplyUpPickupSound.play();
             else GameWorld.multiplyUpPickupSound.play(0.3f);
         }
+        if(currentValue>999) currentValue = 999;
     }
 
     public void setCurrentValue(int value, String operation){

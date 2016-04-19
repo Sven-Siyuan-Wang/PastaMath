@@ -261,28 +261,28 @@ public class GameRenderer {
 
         batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
         int count = 1;
-//        for(int i:scores) {
-//            batcher.draw(AssetLoader.characters.get(count-1),
-//                    300 * GameConstants.SCALE_X,
-//                    (540-100*count) * GameConstants.SCALE_Y,
-//                    75 * GameConstants.SCALE_X,
-//                    75 * GameConstants.SCALE_Y);
-//
-//        }
+
         for(Player player: GameWorld.players){
             batcher.draw(AssetLoader.characters.get(player.getIndex()),
                     300 * GameConstants.SCALE_X,
-                    (540-100*count) * GameConstants.SCALE_Y,
+                    (440-100*count) * GameConstants.SCALE_Y,
                     75 * GameConstants.SCALE_X,
                     75 * GameConstants.SCALE_Y);
-            scorefont.draw(batcher, Integer.toString(player.getCurrentValue())+player.isWinner, 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
-            count +=1;
+            if(player.isWinner) {
+                scorefont.draw(batcher, Integer.toString(player.getCurrentValue())+" *WINNER!*", 400*GameConstants.SCALE_X, (500-100*count)*GameConstants.SCALE_Y);
+
+            } else {
+                scorefont.draw(batcher, Integer.toString(player.getCurrentValue()), 400 * GameConstants.SCALE_X, (500 - 100 * count) * GameConstants.SCALE_Y);
+            }
+                count +=1;
         }
         if(GameWorld.myself.isWinner){
             //Congratulations!
+            scorefont.draw(batcher, "YOU WIN! :D", 400*GameConstants.SCALE_X, 500*GameConstants.SCALE_Y);
         }
         else{
             //You lose...
+            scorefont.draw(batcher, "YOU LOSE...", 400*GameConstants.SCALE_X, 500*GameConstants.SCALE_Y);
         }
 
         batcher.draw(AssetLoader.startOverButton,

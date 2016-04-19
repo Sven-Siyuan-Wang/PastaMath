@@ -61,6 +61,8 @@ public class GameWorld {
 
 
 
+
+
     public GameWorld(Player myself) {
 
         music =  Gdx.audio.newMusic(Gdx.files.internal("data/background.mp3"));
@@ -118,6 +120,24 @@ public class GameWorld {
                 player.setIndex(index++);
             }
             allInitialized = true;
+            switch (myself.getIndex()){
+                case 0:
+                    myself.setX(0);
+                    myself.setY(0);
+                    break;
+                case 1:
+                    myself.setX(930);
+                    myself.setY(520);
+                    break;
+                case 2:
+                    myself.setX(0);
+                    myself.setY(520);
+                    break;
+                case 3:
+                    myself.setX(930);
+                    myself.setY(0);
+                    break;
+            }
         }
 
         else{
@@ -129,7 +149,7 @@ public class GameWorld {
 
             //check for winner
             for(Player player: players) {
-                if(player.getCurrentValue() > this.endScore) {
+                if(player.getCurrentValue() == this.endScore) {
                     Gdx.app.log("World", "someone has won");
                     win = true;
                     player.isWinner = true;
@@ -144,7 +164,7 @@ public class GameWorld {
                 //Server code
 
 
-                if(gameTimer>3600){
+                if(gameTimer>7200){
                     MyGdxGame.playServices.sendToPlayer("GAMEOVER");
                     MyGdxGame.playServices.sendToPlayer("GAMEOVER");
                     Player winner = getWinner();
