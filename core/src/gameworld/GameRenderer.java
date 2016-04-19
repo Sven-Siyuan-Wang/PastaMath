@@ -90,7 +90,7 @@ public class GameRenderer {
         String collisionPenalty = GameWorld.collisionPenalty;
         String debugTag = GameWorld.isOwner ? "Server: " : "Player: " ;
         this.font.draw(batcher, debugTag + "Get " + myWorld.endScore + " points!", 10*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
-        this.font.draw(batcher, ""+GameWorld.gameTimer/60,950*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        this.penaltyfont.draw(batcher, ""+(120-(GameWorld.gameTimer/60)),950*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
 
         this.penaltyfont.draw(batcher, collisionPenalty + " points", 1030 * GameConstants.SCALE_X, 700 * GameConstants.SCALE_Y);
 
@@ -127,9 +127,15 @@ public class GameRenderer {
     }
 
     public void renderPlayers(ArrayList<Player> players){
-
+        
         for(Player player: players) {
             batcher.enableBlending();
+            if(player== GameWorld.myself) {
+                batcher.draw(AssetLoader.characterOverlay,
+                        (player.getX()-5)*GameConstants.SCALE_X,
+                        player.getY()*GameConstants.SCALE_Y,
+                        160, 150);
+            }
             if (player.frozen) {
                 batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+16).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,

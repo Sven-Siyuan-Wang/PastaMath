@@ -22,6 +22,7 @@ public class AssetLoader {
     public static Texture downright, downleft, upright, upleft, up, down, left, right;
 
     public static Texture spriteSheet;
+    public static Texture characterOverlay;
 
     public static TextureRegion char1_1, char1_2, char1_3, char1_4, char1_5, char1_6;
     public static TextureRegion char2_1, char2_2, char2_3, char2_4, char2_5, char2_6;
@@ -76,6 +77,7 @@ public class AssetLoader {
         Texture player4 = new Texture(Gdx.files.internal("data/Character/Character4.png"));
         characters.add(player4);
 
+        characterOverlay = new Texture(Gdx.files.internal("data/Character/characteroverlay.png"));
 
         speedUp = new Texture(Gdx.files.internal("data/speedup.png"));
         textures.put("speedUp",speedUp);
