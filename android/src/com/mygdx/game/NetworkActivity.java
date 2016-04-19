@@ -99,20 +99,7 @@ public class NetworkActivity extends AppCompatActivity implements
             rule2.setClickable(false);
             rule3.setClickable(false);
 
-//            VideoView loadinggif = (VideoView)findViewById(R.id.loadinggif);
-//            loadinggif.setVisibility(View.GONE);
             loadinggif = (ImageView)findViewById(R.id.loadinggif);
-
-//            try{
-//                InputStream istr;
-//                istr = getAssets().open("data/loading screen images/loadinggif.gif");
-//                Bitmap bmp = BitmapFactory.decodeStream(istr);
-//                loadinggif.setImageBitmap(bmp);
-//                istr.close();
-//            }
-//            catch(Exception e){
-//                Log.e(TAG, ".gif encoding error");
-//            }
             loadinggif.setVisibility(View.GONE);
 
 
@@ -163,8 +150,6 @@ public class NetworkActivity extends AppCompatActivity implements
     protected void onPause(){
         Log.d(TAG, "onPause entered");
         super.onPause();
-        //loadinggif = (ImageView)findViewById(R.id.loadinggif);
-        //loadinggif.removeCallbacks(runnable);
         loadinggif.setVisibility(View.GONE);
         Log.d(TAG, "onPause ended");
     }
@@ -471,32 +456,12 @@ public class NetworkActivity extends AppCompatActivity implements
         Bundle am = RoomConfig.createAutoMatchCriteria(minNumOfOpponents, maxNumOfOpponents, 0);
 
         //loading screen stuff
-//        VideoView loadingAnimation = (VideoView)findViewById(R.id.loadinggif);
-//        loadingAnimation.setVisibility(View.VISIBLE);
-//        loadingAnimation.start();
-
-        //ImageView loadingAnimation = (ImageView)findViewById(R.id.loadinggif);
 
         loadinggif = (ImageView)findViewById(R.id.loadinggif);
         loadinggif.setVisibility(View.VISIBLE);
 
-//        try{
-//            Log.d(TAG, "gif try");
-//            InputStream istr;
-//            istr = getAssets().open("data/loading screen images/loadinggif.gif");
-//            Bitmap bmp = BitmapFactory.decodeStream(istr);
-//            loadinggif.setImageBitmap(bmp);
-//            //istr.close();
-//        }
-//        catch(Exception e){
-//            Log.d(TAG, ".gif encoding error");
-//        }
-//        loadinggif.setVisibility(View.VISIBLE);
-
-
         loadinggif.setImageBitmap(null);
         loadinggif.setBackgroundResource(R.drawable.loadinggifanim);
-
 
         runnable = new Runnable() {
             @Override
@@ -509,15 +474,6 @@ public class NetworkActivity extends AppCompatActivity implements
         };
         loadinggif.post(runnable);
 
-//        loadinggif.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                AnimationDrawable loadingAnim = (AnimationDrawable) loadinggif.getBackground();
-//                if(!loadingAnim.isRunning()){
-//                    loadingAnim.start();
-//                }
-//            }
-//        });
 
 
 
