@@ -48,8 +48,7 @@ public class GameRenderer {
         this.batcher = new SpriteBatch();
 
         this.cam = new OrthographicCamera();
-        this.cam.setToOrtho(false, gameWidth*GameConstants.SCALE_X, gameHeight*GameConstants.SCALE_Y);
-        this.cam.position.set(gameWidth / 2 * GameConstants.SCALE_X, gameHeight / 2 *GameConstants.SCALE_X, 0);
+        this.cam.setToOrtho(true, gameWidth*GameConstants.SCALE_X, gameHeight*GameConstants.SCALE_Y);
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
@@ -78,14 +77,13 @@ public class GameRenderer {
 
 
         //begin SpriteBatch
-        batcher.setProjectionMatrix(cam.combined);
         batcher.begin();
 
         batcher.enableBlending();
 
 
         //render background!
-        batcher.draw(AssetLoader.gameBackground, 0, 0, 2*1280*GameConstants.SCALE_X, 2*720*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
 
         String collisionPenalty = GameWorld.collisionPenalty;
@@ -260,7 +258,6 @@ public class GameRenderer {
         batcher.enableBlending();
 
         batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
-        int count = 1;
         for(int i:scores) {
             batcher.draw(AssetLoader.characters.get(count-1),
                     300 * GameConstants.SCALE_X,

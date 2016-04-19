@@ -47,7 +47,6 @@ public class GameWorld {
     public static String collisionPenalty = "";
     public static final int[] minusValues = new int[]{2, 5, 10, 20, 50};
 
-    public static int[] scoreForGameOver = new int[4];
 
     public static Music music;
     public static boolean musicLooped = false;
@@ -59,8 +58,7 @@ public class GameWorld {
 
     private float screenWidth = 1280;
     private float screenHeight = 720;
-    public static final int mapWidth = 2*1280;
-    public static final int mapHeight = 2*720;
+
 
 
     public GameWorld(Player myself) {
@@ -135,14 +133,8 @@ public class GameWorld {
 
 
             for(Player player: players) {
-                int count = 0;
 
-                if(player.getCurrentValue()==this.endScore) {
-                    for(Player player2: players) {
-                        scoreForGameOver[count] = player.getCurrentValue();
-                        count +=1;
-                        player2.resetCurrentValue();
-                    }
+                if(player.getCurrentValue() > this.endScore) {
                     Gdx.app.log("World", "someone has won");
                     win = true;
                 }
@@ -223,26 +215,6 @@ public class GameWorld {
             //my player update
             myself.update(delta);
             sendMyLocation();
-
-            //update gamecam
-
-            if(myself.getX() < screenWidth / 2)
-                GameRenderer.cam.position.x = screenWidth/2;
-            else if (myself.getX() > mapWidth - screenWidth/2)
-                GameRenderer.cam.position.x = mapWidth - screenWidth/2;
-            else
-                GameRenderer.cam.position.x = myself.getX();
-
-            if(myself.getY() < screenHeight / 2)
-                GameRenderer.cam.position.y = screenHeight/2;
-            else if(myself.getY() > mapHeight - screenHeight/2)
-                GameRenderer.cam.position.y = mapHeight - screenHeight/2;
-            else
-                GameRenderer.cam.position.y = myself.getY() ;
-
-            GameRenderer.cam.position.x *= GameConstants.SCALE_X;
-            GameRenderer.cam.position.y *= GameConstants.SCALE_Y;
-            GameRenderer.cam.update();
 
             Gdx.app.log("FrameRate ", Float.toString(1/delta));
 
