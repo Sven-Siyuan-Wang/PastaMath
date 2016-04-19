@@ -3,6 +3,7 @@ package gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
@@ -10,10 +11,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
+import gameconstants.GameConstants;
 import gameobjects.Item;
 import gameobjects.NumberAndOperand;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
+import screens.GameScreen;
 
 
 /**
@@ -44,7 +47,6 @@ public class GameWorld {
     public static String collisionPenalty = "";
     public static final int[] minusValues = new int[]{2, 5, 10, 20, 50};
 
-    public static int[] scoreForGameOver = new int[4];
 
     public static Music music;
     public static boolean musicLooped = false;
@@ -52,6 +54,11 @@ public class GameWorld {
     public static Sound multiplyUpPickupSound;
     public static Sound shieldPickupSound;
     public static Sound speedUpPickupSound;
+    public static Sound[] catSounds = new Sound[4];
+
+    private float screenWidth = 1280;
+    private float screenHeight = 720;
+
 
 
     public GameWorld(Player myself) {
@@ -61,6 +68,12 @@ public class GameWorld {
         multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
         shieldPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_shield.wav"));
         speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
+        catSounds[0] = Gdx.audio.newSound(Gdx.files.internal("data/cat1.wav"));
+        catSounds[1] = Gdx.audio.newSound(Gdx.files.internal("data/cat2.wav"));
+        catSounds[2] = Gdx.audio.newSound(Gdx.files.internal("data/cat3.wav"));
+        catSounds[3] = Gdx.audio.newSound(Gdx.files.internal("data/cat4.wav"));
+
+
 
         this.myself = myself;
 
@@ -90,6 +103,8 @@ public class GameWorld {
 
         }
 
+
+
     }
 
 
@@ -118,16 +133,11 @@ public class GameWorld {
 
 
             for(Player player: players) {
-                int count = 0;
 
-                if(player.getCurrentValue()==this.endScore) {
-                    for(Player player2: players) {
-                        scoreForGameOver[count] = player.getCurrentValue();
-                        count +=1;
-                        player2.resetCurrentValue();
-                    }
+                if(player.getCurrentValue() > this.endScore) {
                     Gdx.app.log("World", "someone has won");
                     win = true;
+                    player.isWinner = true;
                 }
             }
 
@@ -136,7 +146,9 @@ public class GameWorld {
 
                 // GENERATE ITEMS
                 if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
-                    sendAddItem(simple_item_buffer.generate_random_Item());
+                    synchronized (items){
+                        sendAddItem(simple_item_buffer.generate_random_Item());
+                    }
                 }
 
 
@@ -158,13 +170,17 @@ public class GameWorld {
                         Item item = iterator.next();
                         item.decreaseLife(delta);
                         if(item.expired()) {
-                            iterator.remove();
+                            synchronized (items){
+                                iterator.remove();
+                            }
                             sendRemoveItem(item);
                             simple_item_buffer.removeItemPos(item.getPosition());
                         }
                         else if(each_player.collides(item)){
                             Gdx.app.log("GameWorld", "Player-Item collision");
-                            iterator.remove();
+                            synchronized (items){
+                                iterator.remove();
+                            }
                             sendRemoveItem(item);
                             //remove corresponding coords
                             simple_item_buffer.removeItemPos(item.getPosition());
@@ -200,6 +216,7 @@ public class GameWorld {
             //my player update
             myself.update(delta);
             sendMyLocation();
+
             Gdx.app.log("FrameRate ", Float.toString(1/delta));
 
         }
@@ -265,7 +282,7 @@ public class GameWorld {
             operation= "-";
         }
         //overwrite value cos only need mul2 and mul3
-        if (operation.equals("/")){
+        if (operation.equals("÷")){
             int choose_2_or_3 = random.nextInt(3);
             if (choose_2_or_3<2){
                 value=2;

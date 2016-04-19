@@ -27,7 +27,7 @@ public class InputHandler implements InputProcessor {
 
 
 
-    public InputHandler(Player player, Stage stage, GameRenderer renderer) {
+    public InputHandler(Player player, GameRenderer renderer) {
         this.myPlayer = player;
         this.renderer = renderer;
 

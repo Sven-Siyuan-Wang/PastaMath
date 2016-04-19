@@ -22,7 +22,7 @@ import gameobjects.Player;
 public class GameRenderer {
     //720*1280
     private GameWorld myWorld;
-    private OrthographicCamera cam;
+    public static OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
 
     public SpriteBatch batcher;
@@ -31,6 +31,7 @@ public class GameRenderer {
     private int gameHeight;
     private int gameWidth;
     private float aspect_ratio;
+
 
     private BitmapFont font, scorefont, penaltyfont;
 
@@ -48,8 +49,8 @@ public class GameRenderer {
         this.batcher = new SpriteBatch();
 
         this.cam = new OrthographicCamera();
-        this.cam.setToOrtho(true, 1280, 720);
-        this.cam.update();
+        this.cam.setToOrtho(true, gameWidth*GameConstants.SCALE_X, gameHeight*GameConstants.SCALE_Y);
+
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 
@@ -68,21 +69,19 @@ public class GameRenderer {
     }
 
     public void render(float runTime) {
+
         this.runTime = runTime;
-//        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        
 
-
-        //Todo: keep getting Players and Items
+        // keep getting Players and Items
         ArrayList<Player> players= myWorld.getPlayers();
-        //todo:use one hard-coded player for testing- remove later
-        
+
 
         //begin SpriteBatch
         batcher.begin();
 
         batcher.enableBlending();
+
 
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
@@ -94,7 +93,9 @@ public class GameRenderer {
 
         this.penaltyfont.draw(batcher, collisionPenalty + " points", 1030*GameConstants.SCALE_X, 700*GameConstants.SCALE_Y);
 
-        renderItems(new ArrayList<Item>(myWorld.items));
+        synchronized (GameWorld.items){
+            renderItems(myWorld.items);
+        }
         renderPlayers(players);
         renderSideBar(players);
 
@@ -253,20 +254,34 @@ public class GameRenderer {
         batcher.end();
     }
 
-    public void renderGameOverScreen(int[] scores) {
+    public void renderGameOverScreen() {
         batcher.begin();
         batcher.enableBlending();
 
-        batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.gameOverBackground, 0, 0, gameWidth * GameConstants.SCALE_X, gameHeight * GameConstants.SCALE_Y);
         int count = 1;
-        for(int i:scores) {
-            batcher.draw(AssetLoader.characters.get(count-1),
+//        for(int i:scores) {
+//            batcher.draw(AssetLoader.characters.get(count-1),
+//                    300 * GameConstants.SCALE_X,
+//                    (540-100*count) * GameConstants.SCALE_Y,
+//                    75 * GameConstants.SCALE_X,
+//                    75 * GameConstants.SCALE_Y);
+//
+//        }
+        for(Player player: GameWorld.players){
+            batcher.draw(AssetLoader.characters.get(player.getIndex()),
                     300 * GameConstants.SCALE_X,
                     (540-100*count) * GameConstants.SCALE_Y,
                     75 * GameConstants.SCALE_X,
                     75 * GameConstants.SCALE_Y);
-            scorefont.draw(batcher, Integer.toString(i), 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
+            scorefont.draw(batcher, Integer.toString(player.getCurrentValue())+player.isWinner, 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
             count +=1;
+        }
+        if(GameWorld.myself.isWinner){
+            //Congratulations!
+        }
+        else{
+            //You lose...
         }
 
         batcher.draw(AssetLoader.startOverButton,
