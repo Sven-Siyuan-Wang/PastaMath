@@ -194,11 +194,14 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     public void decreaseScoreUponKnock(){
         String penalty = GameWorld.collisionPenalty;
 
-        char operation = penalty.charAt(0);
-        int value = Integer.parseInt(penalty.substring(1));
+        if(penalty!=""){
+            char operation = penalty.charAt(0);
+            int value = Integer.parseInt(penalty.substring(1));
 
-        if(operation=='÷') currentValue /= value;
-        else currentValue -= value;
+            if(operation=='÷') currentValue /= value;
+            else currentValue -= value;
+        }
+
     }
 
 

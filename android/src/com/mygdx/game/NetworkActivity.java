@@ -64,6 +64,8 @@ public class NetworkActivity extends AppCompatActivity implements
     private static HashMap<String,Integer> playerMap = new HashMap<>();
     private  static HashMap<String, Item> itemMap = new HashMap<>();
 
+    private String serverID = null;
+
 
 
     @Override
@@ -561,6 +563,8 @@ public class NetworkActivity extends AppCompatActivity implements
 
                 playerMap.put(room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient())), 0);
 
+                serverID = getServerID();
+
                 startActivity(intent);
 
 
@@ -633,6 +637,7 @@ public class NetworkActivity extends AppCompatActivity implements
             Player player = GameWorld.players.get(playerMap.get(id));
             player.setX(x);
             player.setY(y);
+            if(id.equals(serverID)) GameWorld.gameTimer = Integer.parseInt(words[4]);
         }
 
 
@@ -737,7 +742,21 @@ public class NetworkActivity extends AppCompatActivity implements
             }
 
         }
+        else if(words[0].equals("GAMEOVER")){
+            GameWorld.gameover = true;
+        }
 
+
+    }
+
+    private String getServerID(){
+        String serverID = room.getCreatorId();
+        for(Participant p : mParticipants )
+        {
+            if(p.getParticipantId().compareTo(serverID)<0)
+                serverID = p.getParticipantId();
+        }
+        return serverID;
 
     }
 

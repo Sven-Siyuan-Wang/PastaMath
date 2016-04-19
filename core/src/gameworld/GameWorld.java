@@ -41,9 +41,9 @@ public class GameWorld {
     public static boolean win = false;
     public static int numberOfPlayers = 0;
     private static boolean allInitialized = false;
+    public static boolean gameover = false;
 
-    private int removalTimer;
-    private int penaltyTimer;
+    public static int gameTimer;
     public static String collisionPenalty = "";
     public static final int[] minusValues = new int[]{2, 5, 10, 20, 50};
 
@@ -98,8 +98,7 @@ public class GameWorld {
             simple_item_buffer = new Simple_Item_Buffer();
             items = simple_item_buffer.items_currently_appearing;
 
-            penaltyTimer = 0;
-            removalTimer = 0;
+            gameTimer = 0;
 
         }
 
@@ -110,8 +109,6 @@ public class GameWorld {
 
 
     public void update(float delta) {
-
-
 
         if(players.size()==numberOfPlayers && !allInitialized){
             ArrayList<Player> sortPlayers = new ArrayList<Player>(players);
@@ -130,35 +127,43 @@ public class GameWorld {
                 musicLooped = true;
             }
 
-
-
+            //check for winner
             for(Player player: players) {
-
                 if(player.getCurrentValue() > this.endScore) {
                     Gdx.app.log("World", "someone has won");
                     win = true;
                     player.isWinner = true;
                 }
             }
+            if(gameover){
+                getWinner().isWinner = true;
+                win = true;
+            }
 
             if(isOwner){
                 //Server code
 
-                // GENERATE ITEMS
-                if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
+
+                if(gameTimer>3600){
+                    MyGdxGame.playServices.sendToPlayer("GAMEOVER");
+                    MyGdxGame.playServices.sendToPlayer("GAMEOVER");
+                    Player winner = getWinner();
+                    winner.isWinner = true;
+                    win =true;
+                }
+                // GENERATE ITEMS every 1s
+                if(gameTimer%30==0 && simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
                     synchronized (items){
                         sendAddItem(simple_item_buffer.generate_random_Item());
                     }
                 }
 
-
                 // UPDATE COLLISION PENALTY
-                if(penaltyTimer>500 || penaltyTimer == 0) {
+                if(gameTimer%499 == 0) {
                     collisionPenalty = generateCollisionEffect();
-                    penaltyTimer = 0;
+
                     MyGdxGame.playServices.sendToPlayer("PENALTY " + collisionPenalty);
                 }
-                penaltyTimer += 1;
 
                 // PLAYER RESPONSES TO COLLISION
                 for(Player each_player: players){
@@ -205,11 +210,10 @@ public class GameWorld {
                 }
 
                 //sync item list every 5 seconds
-                if(removalTimer>300){
-                    removalTimer = 0;
+                if(gameTimer%301==0){
                     sendItemList();
                 }
-                removalTimer++;
+                gameTimer++;
 
             }
 
@@ -258,7 +262,12 @@ public class GameWorld {
 
     //PLAYER ID X Y
     public void sendMyLocation(){
-        MyGdxGame.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY());
+        if(isOwner){
+            MyGdxGame.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY()+" "+gameTimer);
+        }
+        else{
+            MyGdxGame.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY());
+        }
     }
 
     public void sendPlayerScore(Player player, String operation){
@@ -292,6 +301,18 @@ public class GameWorld {
             }
         }
         return operation + String.valueOf(value);
+    }
+
+    private Player getWinner(){
+        int min = endScore;
+        Player winner = null;
+        for(Player player: players){
+            if(Math.abs(player.getCurrentValue()-endScore)<min) {
+                winner = player;
+                min = Math.abs(player.getCurrentValue()-endScore);
+            }
+        }
+        return winner;
     }
 
 }

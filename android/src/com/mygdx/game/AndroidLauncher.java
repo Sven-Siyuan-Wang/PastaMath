@@ -390,6 +390,17 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		return true;
 	}
 
+	private String getServerID(){
+		String serverID = myId;
+		for(Participant p : mParticipants )
+		{
+			if(p.getParticipantId().compareTo(serverID)<0)
+				serverID = p.getParticipantId();
+		}
+		return serverID;
+
+	}
+
 
 }
 
