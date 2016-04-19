@@ -49,6 +49,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     public boolean frozen = false;
     private float contactTimer = 0;
 
+    public static Random soundRandomizer = new Random();
+
 
 
 
@@ -83,7 +85,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
     }
 
-    public void update(float delta) {
+    public void
+    update(float delta) {
 
         if(frozen){
             contactTimer += delta;
@@ -99,12 +102,12 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
                 }
             } else if(down) {
-                if(!(position.y >= 520)) {
+                if(!(position.y >= 520+720)) {
                     position.y += velocity*delta;
                 }
             }
             if(right) {
-                if(!(position.x >=930)) {
+                if(!(position.x >=930+1280)) {
                     position.x += velocity * delta;
                 }
             } else if(left) {
@@ -169,7 +172,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
             else{
 
                 if(this.equals(GameWorld.myself)) {
-                    GameWorld.multiplyUpPickupSound.play();
+                    int i = soundRandomizer.nextInt(4);
+                    GameWorld.catSounds[i].play();
                     contactTimer = 0;
                 }
                 decreaseScoreUponKnock();
@@ -256,7 +260,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
         }
         else  if(operation.equals("collision")){
             if(this.equals(GameWorld.myself)) {
-                GameWorld.multiplyUpPickupSound.play(); // only play when myself is in collision
+                int i = soundRandomizer.nextInt(4);
+                GameWorld.catSounds[i].play(); // only play when myself is in collision
                 contactTimer = 0;
             }
             frozen = true; // for any player, which is unfrozen by clearContact

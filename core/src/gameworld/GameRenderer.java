@@ -22,7 +22,7 @@ import gameobjects.Player;
 public class GameRenderer {
     //720*1280
     private GameWorld myWorld;
-    private OrthographicCamera cam;
+    public static OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
 
     public SpriteBatch batcher;
@@ -48,8 +48,9 @@ public class GameRenderer {
         this.batcher = new SpriteBatch();
 
         this.cam = new OrthographicCamera();
-        this.cam.setToOrtho(true, 1280, 720);
-        this.cam.update();
+        this.cam.setToOrtho(false, gameWidth*GameConstants.SCALE_X, gameHeight*GameConstants.SCALE_Y);
+        this.cam.position.set(gameWidth / 2 * GameConstants.SCALE_X, gameHeight / 2 *GameConstants.SCALE_X, 0);
+
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 
@@ -68,24 +69,23 @@ public class GameRenderer {
     }
 
     public void render(float runTime) {
+
         this.runTime = runTime;
-//        Gdx.app.log("GameRenderer", "render");
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        
 
-
-        //Todo: keep getting Players and Items
+        // keep getting Players and Items
         ArrayList<Player> players= myWorld.getPlayers();
-        //todo:use one hard-coded player for testing- remove later
-        
+
 
         //begin SpriteBatch
+        batcher.setProjectionMatrix(cam.combined);
         batcher.begin();
 
         batcher.enableBlending();
 
+
         //render background!
-        batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.gameBackground, 0, 0, 2*1280*GameConstants.SCALE_X, 2*720*GameConstants.SCALE_Y);
 
 
         String collisionPenalty = GameWorld.collisionPenalty;
@@ -94,7 +94,9 @@ public class GameRenderer {
 
         this.penaltyfont.draw(batcher, collisionPenalty + " points", 1030*GameConstants.SCALE_X, 700*GameConstants.SCALE_Y);
 
-        renderItems(new ArrayList<Item>(myWorld.items));
+        synchronized (GameWorld.items){
+            renderItems(myWorld.items);
+        }
         renderPlayers(players);
         renderSideBar(players);
 

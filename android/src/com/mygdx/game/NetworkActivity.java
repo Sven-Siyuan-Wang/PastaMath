@@ -646,7 +646,9 @@ public class NetworkActivity extends AppCompatActivity implements
                 try{
                     Item toRemove = itemMap.get(id);
                     itemMap.remove(id);
-                    toRemove.destroy();
+                    synchronized (GameWorld.items){
+                        toRemove.destroy();
+                    }
 
                     Log.d(TAG,"REMOVE ITEM");
                 }catch(NullPointerException e){
@@ -667,7 +669,9 @@ public class NetworkActivity extends AppCompatActivity implements
                     toAdd = new NumberAndOperand(operation,value,x,y);
                 }
                 itemMap.put(id, toAdd);
-                GameWorld.items.add(toAdd);
+                synchronized (GameWorld.items){
+                    GameWorld.items.add(toAdd);
+                }
                 Log.d(TAG,"RECEIVE: item added");
             }
 

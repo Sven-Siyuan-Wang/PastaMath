@@ -3,6 +3,7 @@ package gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
@@ -10,10 +11,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
+import gameconstants.GameConstants;
 import gameobjects.Item;
 import gameobjects.NumberAndOperand;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
+import screens.GameScreen;
 
 
 /**
@@ -52,6 +55,12 @@ public class GameWorld {
     public static Sound multiplyUpPickupSound;
     public static Sound shieldPickupSound;
     public static Sound speedUpPickupSound;
+    public static Sound[] catSounds = new Sound[4];
+
+    private float screenWidth = 1280;
+    private float screenHeight = 720;
+    public static final int mapWidth = 2*1280;
+    public static final int mapHeight = 2*720;
 
 
     public GameWorld(Player myself) {
@@ -61,6 +70,12 @@ public class GameWorld {
         multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
         shieldPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_shield.wav"));
         speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
+        catSounds[0] = Gdx.audio.newSound(Gdx.files.internal("data/cat1.wav"));
+        catSounds[1] = Gdx.audio.newSound(Gdx.files.internal("data/cat2.wav"));
+        catSounds[2] = Gdx.audio.newSound(Gdx.files.internal("data/cat3.wav"));
+        catSounds[3] = Gdx.audio.newSound(Gdx.files.internal("data/cat4.wav"));
+
+
 
         this.myself = myself;
 
@@ -89,6 +104,8 @@ public class GameWorld {
             removalTimer = 0;
 
         }
+
+
 
     }
 
@@ -136,7 +153,9 @@ public class GameWorld {
 
                 // GENERATE ITEMS
                 if(simple_item_buffer.items_currently_appearing.size() < Simple_Item_Buffer.max_items_capacity){
-                    sendAddItem(simple_item_buffer.generate_random_Item());
+                    synchronized (items){
+                        sendAddItem(simple_item_buffer.generate_random_Item());
+                    }
                 }
 
 
@@ -158,13 +177,17 @@ public class GameWorld {
                         Item item = iterator.next();
                         item.decreaseLife(delta);
                         if(item.expired()) {
-                            iterator.remove();
+                            synchronized (items){
+                                iterator.remove();
+                            }
                             sendRemoveItem(item);
                             simple_item_buffer.removeItemPos(item.getPosition());
                         }
                         else if(each_player.collides(item)){
                             Gdx.app.log("GameWorld", "Player-Item collision");
-                            iterator.remove();
+                            synchronized (items){
+                                iterator.remove();
+                            }
                             sendRemoveItem(item);
                             //remove corresponding coords
                             simple_item_buffer.removeItemPos(item.getPosition());
@@ -200,6 +223,27 @@ public class GameWorld {
             //my player update
             myself.update(delta);
             sendMyLocation();
+
+            //update gamecam
+
+            if(myself.getX() < screenWidth / 2)
+                GameRenderer.cam.position.x = screenWidth/2;
+            else if (myself.getX() > mapWidth - screenWidth/2)
+                GameRenderer.cam.position.x = mapWidth - screenWidth/2;
+            else
+                GameRenderer.cam.position.x = myself.getX();
+
+            if(myself.getY() < screenHeight / 2)
+                GameRenderer.cam.position.y = screenHeight/2;
+            else if(myself.getY() > mapHeight - screenHeight/2)
+                GameRenderer.cam.position.y = mapHeight - screenHeight/2;
+            else
+                GameRenderer.cam.position.y = myself.getY() ;
+
+            GameRenderer.cam.position.x *= GameConstants.SCALE_X;
+            GameRenderer.cam.position.y *= GameConstants.SCALE_Y;
+            GameRenderer.cam.update();
+
             Gdx.app.log("FrameRate ", Float.toString(1/delta));
 
         }

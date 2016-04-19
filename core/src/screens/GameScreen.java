@@ -27,6 +27,11 @@ public class GameScreen implements Screen {
     private boolean thisScreen = true;
 
     private int[] scoreForGameOver;
+
+    public static float screenWidth;
+    public static float screenHeight;
+
+
     
     public GameScreen(MyGdxGame game) throws InterruptedException {
         this.game = game;
@@ -37,11 +42,10 @@ public class GameScreen implements Screen {
         Gdx.app.log("GameScreen", "ScreenWidth is " + screenWidth + " and ScreenHeight is " + screenHeight);
         Gdx.gl.glViewport(0, 0, (int) screenWidth, (int) screenHeight);
 
-        this.stage = new Stage(new StretchViewport(1280, 720));
 
         world = new GameWorld(game.myPlayer); //initialize world
         renderer = new GameRenderer(world, (int) screenWidth, (int)screenHeight); //initialize renderer
-        myInput = new InputHandler(game.myPlayer, this.stage, renderer);
+        myInput = new InputHandler(game.myPlayer, renderer);
         Gdx.input.setInputProcessor(myInput);
 
         Gdx.app.log("GameScreen", "attached");
