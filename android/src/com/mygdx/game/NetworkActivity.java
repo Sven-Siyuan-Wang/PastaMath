@@ -1,7 +1,12 @@
 package com.mygdx.game;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Movie;
+import android.graphics.drawable.AnimationDrawable;
 import android.nfc.Tag;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroupOverlay;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.VideoView;
 
 import com.badlogic.gdx.Game;
 import com.google.android.gms.common.ConnectionResult;
@@ -34,6 +41,7 @@ import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -66,6 +74,10 @@ public class NetworkActivity extends AppCompatActivity implements
 
     private String serverID = null;
 
+    private static Runnable runnable;
+
+    private static ImageView loadinggif;
+
 
 
     @Override
@@ -86,6 +98,23 @@ public class NetworkActivity extends AppCompatActivity implements
             rule1.setClickable(false);
             rule2.setClickable(false);
             rule3.setClickable(false);
+
+//            VideoView loadinggif = (VideoView)findViewById(R.id.loadinggif);
+//            loadinggif.setVisibility(View.GONE);
+            loadinggif = (ImageView)findViewById(R.id.loadinggif);
+
+//            try{
+//                InputStream istr;
+//                istr = getAssets().open("data/loading screen images/loadinggif.gif");
+//                Bitmap bmp = BitmapFactory.decodeStream(istr);
+//                loadinggif.setImageBitmap(bmp);
+//                istr.close();
+//            }
+//            catch(Exception e){
+//                Log.e(TAG, ".gif encoding error");
+//            }
+            loadinggif.setVisibility(View.GONE);
+
 
             myApp = ((MyAppApplication)getApplicationContext());
 
@@ -128,6 +157,16 @@ public class NetworkActivity extends AppCompatActivity implements
         super.onStop();
 //        mGoogleApiClient.disconnect();
 //        Log.d(TAG, "onStop end, googleapiclient disconnect");
+    }
+
+    @Override
+    protected void onPause(){
+        Log.d(TAG, "onPause entered");
+        super.onPause();
+        //loadinggif = (ImageView)findViewById(R.id.loadinggif);
+        //loadinggif.removeCallbacks(runnable);
+        loadinggif.setVisibility(View.GONE);
+        Log.d(TAG, "onPause ended");
     }
 
     @Override
@@ -190,6 +229,15 @@ public class NetworkActivity extends AppCompatActivity implements
         rule3.setVisibility(View.GONE);
         rule3.setClickable(false);
 
+    }
+
+    public void loadingScreen(View view){
+        ImageView loadingAnimation = (ImageView)findViewById(R.id.loadinggif);
+        loadingAnimation.setVisibility(View.VISIBLE);
+
+
+//        is = context.getResources().openRawResource(R.drawable.loadinggif);
+//        movie = Movie.decodeStream(is);
     }
 
 
@@ -421,6 +469,59 @@ public class NetworkActivity extends AppCompatActivity implements
         final int minNumOfOpponents = 2;
         final int maxNumOfOpponents = 2;
         Bundle am = RoomConfig.createAutoMatchCriteria(minNumOfOpponents, maxNumOfOpponents, 0);
+
+        //loading screen stuff
+//        VideoView loadingAnimation = (VideoView)findViewById(R.id.loadinggif);
+//        loadingAnimation.setVisibility(View.VISIBLE);
+//        loadingAnimation.start();
+
+        //ImageView loadingAnimation = (ImageView)findViewById(R.id.loadinggif);
+
+        loadinggif = (ImageView)findViewById(R.id.loadinggif);
+        loadinggif.setVisibility(View.VISIBLE);
+
+//        try{
+//            Log.d(TAG, "gif try");
+//            InputStream istr;
+//            istr = getAssets().open("data/loading screen images/loadinggif.gif");
+//            Bitmap bmp = BitmapFactory.decodeStream(istr);
+//            loadinggif.setImageBitmap(bmp);
+//            //istr.close();
+//        }
+//        catch(Exception e){
+//            Log.d(TAG, ".gif encoding error");
+//        }
+//        loadinggif.setVisibility(View.VISIBLE);
+
+
+        loadinggif.setImageBitmap(null);
+        loadinggif.setBackgroundResource(R.drawable.loadinggifanim);
+
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                AnimationDrawable loadingAnim = (AnimationDrawable) loadinggif.getBackground();
+                if(!loadingAnim.isRunning()){
+                    loadingAnim.start();
+                }
+            }
+        };
+        loadinggif.post(runnable);
+
+//        loadinggif.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                AnimationDrawable loadingAnim = (AnimationDrawable) loadinggif.getBackground();
+//                if(!loadingAnim.isRunning()){
+//                    loadingAnim.start();
+//                }
+//            }
+//        });
+
+
+
+
 
 
         // build the room config:
