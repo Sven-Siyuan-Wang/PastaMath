@@ -47,14 +47,13 @@ public class GameWorld {
     public static String collisionPenalty = "";
     public static final int[] minusValues = new int[]{2, 5, 10, 20, 50};
 
-    public static int[] scoreForGameOver = new int[4];
 
-    public static Music music;
+    public static Music music =  Gdx.audio.newMusic(Gdx.files.internal("data/background.mp3"));
     public static boolean musicLooped = false;
-    public static Sound addPickupSound;
-    public static Sound multiplyUpPickupSound;
-    public static Sound shieldPickupSound;
-    public static Sound speedUpPickupSound;
+    public static Sound addPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_add.wav"));;
+    public static Sound multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
+    public static Sound shieldPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_shield.wav"));
+    public static Sound speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
     public static Sound[] catSounds = new Sound[4];
 
     private float screenWidth = 1280;
@@ -64,18 +63,10 @@ public class GameWorld {
 
 
     public GameWorld(Player myself) {
-
-        music =  Gdx.audio.newMusic(Gdx.files.internal("data/background.mp3"));
-        addPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_add.wav"));
-        multiplyUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_multiply.wav"));
-        shieldPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_shield.wav"));
-        speedUpPickupSound = Gdx.audio.newSound(Gdx.files.internal("data/pickup_speedup.wav"));
         catSounds[0] = Gdx.audio.newSound(Gdx.files.internal("data/cat1.wav"));
         catSounds[1] = Gdx.audio.newSound(Gdx.files.internal("data/cat2.wav"));
         catSounds[2] = Gdx.audio.newSound(Gdx.files.internal("data/cat3.wav"));
         catSounds[3] = Gdx.audio.newSound(Gdx.files.internal("data/cat4.wav"));
-
-
 
         this.myself = myself;
 
@@ -132,17 +123,10 @@ public class GameWorld {
                 musicLooped = true;
             }
 
-
-
+            //check for winning
             for(Player player: players) {
-                int count = 0;
-
-                if(player.getCurrentValue()==this.endScore) {
-                    for(Player player2: players) {
-                        scoreForGameOver[count] = player.getCurrentValue();
-                        count +=1;
-                        player2.resetCurrentValue();
-                    }
+                if(player.getCurrentValue() > this.endScore) {
+                    player.isWinner = true;
                     Gdx.app.log("World", "someone has won");
                     win = true;
                 }
@@ -245,8 +229,10 @@ public class GameWorld {
             GameRenderer.cam.update();
 
             Gdx.app.log("FrameRate ", Float.toString(1/delta));
-
         }
+
+
+
     }
 
 

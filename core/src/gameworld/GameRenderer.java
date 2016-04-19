@@ -32,6 +32,9 @@ public class GameRenderer {
     private int gameWidth;
     private float aspect_ratio;
 
+    public static final int mapWidth = 2*1280;
+    public static final int mapHeight = 2*720;
+
     private BitmapFont font, scorefont, penaltyfont;
 
     private float runTime;
@@ -255,20 +258,35 @@ public class GameRenderer {
         batcher.end();
     }
 
-    public void renderGameOverScreen(int[] scores) {
+    public void renderGameOverScreen() {
+        cam.position.set(gameWidth/2, gameHeight/2, 0);
         batcher.begin();
         batcher.enableBlending();
 
-        batcher.draw(AssetLoader.gameOverBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
+        batcher.draw(AssetLoader.gameOverBackground, 0, 0, gameWidth, gameHeight);
         int count = 1;
-        for(int i:scores) {
-            batcher.draw(AssetLoader.characters.get(count-1),
+//        for(int i:scores) {
+//            batcher.draw(AssetLoader.characters.get(count-1),
+//                    300 * GameConstants.SCALE_X,
+//                    (540-100*count) * GameConstants.SCALE_Y,
+//                    75 * GameConstants.SCALE_X,
+//                    75 * GameConstants.SCALE_Y);
+//
+//        }
+        for(Player player: GameWorld.players){
+            batcher.draw(AssetLoader.characters.get(player.getIndex()),
                     300 * GameConstants.SCALE_X,
                     (540-100*count) * GameConstants.SCALE_Y,
                     75 * GameConstants.SCALE_X,
                     75 * GameConstants.SCALE_Y);
-            scorefont.draw(batcher, Integer.toString(i), 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
+            scorefont.draw(batcher, Integer.toString(player.getCurrentValue())+player.isWinner, 400*GameConstants.SCALE_X, (600-100*count)*GameConstants.SCALE_Y);
             count +=1;
+        }
+        if(GameWorld.myself.isWinner){
+            //Congratulations!
+        }
+        else{
+            //You lose...
         }
 
         batcher.draw(AssetLoader.startOverButton,

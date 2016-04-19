@@ -49,7 +49,9 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     public boolean frozen = false;
     private float contactTimer = 0;
 
-    public static Random soundRandomizer = new Random();
+    public Random soundRandomizer = new Random();
+
+    public boolean isWinner = false;
 
 
 
