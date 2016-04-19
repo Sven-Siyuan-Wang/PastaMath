@@ -21,12 +21,9 @@ public class GameScreen implements Screen {
     private GameRenderer renderer;
     private float runTime;
     private MyGdxGame game;
-    private Stage stage;
     private InputHandler myInput;
 
     private boolean thisScreen = true;
-
-    private int[] scoreForGameOver;
 
     public static float screenWidth;
     public static float screenHeight;
@@ -63,7 +60,6 @@ public class GameScreen implements Screen {
         runTime += delta;
         if(world.win) {
             thisScreen = false;
-            this.scoreForGameOver= world.scoreForGameOver;
             changeScreen("game over");
         }
         System.out.println("thisScreen is " + thisScreen);
@@ -82,7 +78,7 @@ public class GameScreen implements Screen {
 
     public void changeScreen(String id) {
         if(id == "game over") {
-            game.setScreen(new GameOverScreen(renderer, game, this.scoreForGameOver));
+            game.setScreen(new GameOverScreen(renderer, game));
         }
     }
 

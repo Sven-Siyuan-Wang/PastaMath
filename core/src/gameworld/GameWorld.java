@@ -137,6 +137,7 @@ public class GameWorld {
                 if(player.getCurrentValue() > this.endScore) {
                     Gdx.app.log("World", "someone has won");
                     win = true;
+                    player.isWinner = true;
                 }
             }
 
@@ -281,7 +282,7 @@ public class GameWorld {
             operation= "-";
         }
         //overwrite value cos only need mul2 and mul3
-        if (operation.equals("/")){
+        if (operation.equals("÷")){
             int choose_2_or_3 = random.nextInt(3);
             if (choose_2_or_3<2){
                 value=2;
