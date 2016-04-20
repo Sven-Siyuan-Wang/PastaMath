@@ -226,11 +226,13 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     public void setSpeedUp(boolean speedUp){
         this.speedUp = speedUp;
 
-
-
         if(speedUp == true){
             if(this.equals(GameWorld.myself)) GameWorld.speedUpPickupSound.play();
             else GameWorld.speedUpPickupSound.play(0.3f);
+            velocity = 2 * speedValue;
+        }
+        else{
+            velocity = speedValue;
         }
 
     }
