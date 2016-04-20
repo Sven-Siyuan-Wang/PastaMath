@@ -266,7 +266,6 @@ public class GameRenderer {
     }
 
     public void renderTimeOverlay() {
-        batcher.begin();
         batcher.enableBlending();
 
         batcher.draw(AssetLoader.timeOverlayAnimation.getKeyFrame(runTime),
