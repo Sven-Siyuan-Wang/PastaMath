@@ -176,6 +176,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
                     int i = soundRandomizer.nextInt(4);
                     GameWorld.catSounds[i].play();
                     contactTimer = 0;
+                    Gdx.input.vibrate(100);
                 }
                 decreaseScoreUponKnock();
                 MyGdxGame.playServices.sendToPlayer("SCORE " + getId()+" "+ getCurrentValue() + " collision");
@@ -272,6 +273,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
                 int i = soundRandomizer.nextInt(4);
                 GameWorld.catSounds[i].play(); // only play when myself is in collision
                 contactTimer = 0;
+                Gdx.input.vibrate(100);
             }
             frozen = true; // for any player, which is unfrozen by clearContact
         }
