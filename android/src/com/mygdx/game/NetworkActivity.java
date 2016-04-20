@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Movie;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.Image;
 import android.nfc.Tag;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
@@ -150,7 +152,14 @@ public class NetworkActivity extends AppCompatActivity implements
     protected void onPause(){
         Log.d(TAG, "onPause entered");
         super.onPause();
+
+        //remove loading animation
         loadinggif.setVisibility(View.GONE);
+
+        //quickgamebutton is pressable again
+        ImageButton quickgamebutton = (ImageButton) findViewById(R.id.quickgamebutton);
+        quickgamebutton.setClickable(true);
+
         Log.d(TAG, "onPause ended");
     }
 
@@ -494,6 +503,11 @@ public class NetworkActivity extends AppCompatActivity implements
 
         // prevent screen from sleeping during handshake
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        //prevent button from being clicked again
+        ImageButton quickgamebutton = (ImageButton) findViewById(R.id.quickgamebutton);
+        quickgamebutton.setClickable(false);
+
         Log.d(TAG, "StartQuickGame run till end");
     }
 
