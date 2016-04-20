@@ -134,7 +134,8 @@ public class GameRenderer {
                 batcher.draw(AssetLoader.characterOverlay,
                         (player.getX()-5)*GameConstants.SCALE_X,
                         player.getY()*GameConstants.SCALE_Y,
-                        160, 150);
+                        160*GameConstants.SCALE_X,
+                        150*GameConstants.SCALE_Y);
             }
             if (player.frozen) {
                 batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+16).getKeyFrame(runTime),
