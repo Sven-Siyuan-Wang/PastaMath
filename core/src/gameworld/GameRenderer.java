@@ -86,6 +86,9 @@ public class GameRenderer {
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
+        if(GameWorld.gameTimer < 600) {
+            renderTimeOverlay();
+        }
 
         String collisionPenalty = GameWorld.collisionPenalty;
         String debugTag = GameWorld.isOwner ? "Server: " : "Player: " ;
@@ -260,6 +263,17 @@ public class GameRenderer {
         }
 
         batcher.end();
+    }
+
+    public void renderTimeOverlay() {
+        batcher.begin();
+        batcher.enableBlending();
+
+        batcher.draw(AssetLoader.timeOverlayAnimation.getKeyFrame(runTime),
+                566*GameConstants.SCALE_X,
+                620*GameConstants.SCALE_Y,
+                100*GameConstants.SCALE_X,
+                100*GameConstants.SCALE_Y);
     }
 
     public void renderGameOverScreen() {

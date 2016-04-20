@@ -24,6 +24,12 @@ public class AssetLoader {
     public static Texture spriteSheet;
     public static Texture characterOverlay;
 
+    public static Texture timeOverlay;
+
+    public static TextureRegion timeOverlay1, timeOverlay2;
+
+    public static Animation timeOverlayAnimation;
+
     public static TextureRegion char1_1, char1_2, char1_3, char1_4, char1_5, char1_6;
     public static TextureRegion char2_1, char2_2, char2_3, char2_4, char2_5, char2_6;
     public static TextureRegion char3_1, char3_2, char3_3, char3_4, char3_5, char3_6;
@@ -226,27 +232,17 @@ public class AssetLoader {
         characterAnimations.add(char3frozenAnimation);
         characterAnimations.add(char4frozenAnimation);
 
-        char1Animation.setPlayMode(Animation.PlayMode.LOOP);
-        char2Animation.setPlayMode(Animation.PlayMode.LOOP);
-        char3Animation.setPlayMode(Animation.PlayMode.LOOP);
-        char4Animation.setPlayMode(Animation.PlayMode.LOOP);
-        char1speedAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char2speedAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char3speedAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char4speedAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char1shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char2shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char3shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char4shieldAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char1ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char2ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char3ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char4ssAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char1frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char2frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char3frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        char4frozenAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        for(Animation a: characterAnimations) {
+            a.setPlayMode(Animation.PlayMode.LOOP);
+        }
 
+        timeOverlay = new Texture(Gdx.files.internal("data/Character/timeoverlay.png"));
+        timeOverlay1 = new TextureRegion(timeOverlay, 0, 0, 100, 100);
+        timeOverlay2 = new TextureRegion(timeOverlay, 100, 0, 100, 100);
+        TextureRegion[] timeOverlayArray = {timeOverlay1, timeOverlay2};
+
+        timeOverlayAnimation = new Animation(0.5f, timeOverlayArray);
+        timeOverlayAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
     }
 
