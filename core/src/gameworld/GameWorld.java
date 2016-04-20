@@ -56,8 +56,6 @@ public class GameWorld {
     public static Sound speedUpPickupSound;
     public static Sound[] catSounds = new Sound[4];
 
-    private float screenWidth = 1280;
-    private float screenHeight = 720;
 
 
 
