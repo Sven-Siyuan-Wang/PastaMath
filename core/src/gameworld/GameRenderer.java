@@ -134,8 +134,8 @@ public class GameRenderer {
                 batcher.draw(AssetLoader.characterOverlay,
                         (player.getX()-5)*GameConstants.SCALE_X,
                         player.getY()*GameConstants.SCALE_Y,
-                        160*GameConstants.SCALE_X,
-                        150*GameConstants.SCALE_Y);
+                        (player.getWidth()+10)*GameConstants.SCALE_X,
+                        (player.getHeight())*GameConstants.SCALE_Y);
             }
             if (player.frozen) {
                 batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+16).getKeyFrame(runTime),
@@ -275,21 +275,30 @@ public class GameRenderer {
                     (440-100*count) * GameConstants.SCALE_Y,
                     75 * GameConstants.SCALE_X,
                     75 * GameConstants.SCALE_Y);
+
             if(player.isWinner) {
-                scorefont.draw(batcher, Integer.toString(player.getCurrentValue())+" *WINNER!*", 400*GameConstants.SCALE_X, (500-100*count)*GameConstants.SCALE_Y);
+                scorefont.draw(batcher, Integer.toString(player.getCurrentValue())+" *WINNER!*",
+                        400*GameConstants.SCALE_X,
+                        (500-100*count)*GameConstants.SCALE_Y);
 
             } else {
-                scorefont.draw(batcher, Integer.toString(player.getCurrentValue()), 400 * GameConstants.SCALE_X, (500 - 100 * count) * GameConstants.SCALE_Y);
+                scorefont.draw(batcher, Integer.toString(player.getCurrentValue()),
+                        400 * GameConstants.SCALE_X,
+                        (500 - 100 * count) * GameConstants.SCALE_Y);
             }
                 count +=1;
         }
         if(GameWorld.myself.isWinner){
             //Congratulations!
-            scorefont.draw(batcher, "YOU WIN! :D", 400*GameConstants.SCALE_X, 500*GameConstants.SCALE_Y);
+            scorefont.draw(batcher, "YOU WIN! :D",
+                    400*GameConstants.SCALE_X,
+                    500*GameConstants.SCALE_Y);
         }
         else{
             //You lose...
-            scorefont.draw(batcher, "YOU LOSE...", 400*GameConstants.SCALE_X, 500*GameConstants.SCALE_Y);
+            scorefont.draw(batcher, "YOU LOSE...",
+                    400*GameConstants.SCALE_X,
+                    500*GameConstants.SCALE_Y);
         }
 
         batcher.draw(AssetLoader.startOverButton,

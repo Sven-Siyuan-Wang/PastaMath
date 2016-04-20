@@ -1,5 +1,6 @@
 package gamehelpers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
 import gameconstants.GameConstants;
@@ -35,14 +36,15 @@ public class GameOverInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("Clicked at " + screenX + ", " + screenY);
+        System.out.println("Clicked at " + screenX + ", " + screenY + " and game constants are " + GameConstants.SCALE_X + " and " + GameConstants.SCALE_Y);
         //x -> from 800 to to 1050, y -> 120 to 220
-        if(screenX <= 1050* GameConstants.SCALE_X && screenX >= 800*GameConstants.SCALE_X && screenY<=220*GameConstants.SCALE_Y && screenY>=120*GameConstants.SCALE_Y) {
-            try {
-                goscreen.changeScreen();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if(screenX <= 1050* GameConstants.SCALE_X && screenX >= 800*GameConstants.SCALE_X && screenY<=600*GameConstants.SCALE_Y && screenY>=(500)*GameConstants.SCALE_Y) {
+//            try {
+//                goscreen.changeScreen();
+                Gdx.app.exit();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
         return false;
     }
