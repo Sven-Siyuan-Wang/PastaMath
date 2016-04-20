@@ -85,8 +85,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
     }
 
-    public void
-    update(float delta) {
+    public void update(float delta) {
 
         if(frozen){
             contactTimer += delta;

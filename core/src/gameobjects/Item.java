@@ -46,7 +46,6 @@ public abstract class Item implements GameObject{
         width = 75;
         height = 75;
 
-
     }
 
     public Item(float x, float y){
@@ -82,12 +81,6 @@ public abstract class Item implements GameObject{
 
     }
 
-    public void update(float delta) {
-        destructionCounter -= (1*delta);
-        if(destructionCounter < 0) {
-            this.destroy();
-        }
-    }
 
     public float getX() {
         return position.x;

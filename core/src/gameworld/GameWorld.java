@@ -147,7 +147,7 @@ public class GameWorld {
 
         }
 
-        else{
+        else if(allInitialized){
             if(!musicLooped) {
                 music.setLooping(true);
                 music.play();
