@@ -56,13 +56,13 @@ public class GameRenderer {
         shapeRenderer.setProjectionMatrix(cam.combined);
 
         this.font = new BitmapFont(Gdx.files.internal("data/font.fnt"));
-        this.font.getData().setScale(GameConstants.SCALE_X, GameConstants.SCALE_Y);
+        this.font.getData().setScale(GameConstants.SCALE_X*(float)0.9, GameConstants.SCALE_Y*(float)0.9);
 
         this.scorefont = new BitmapFont(Gdx.files.internal("data/font.fnt"));
         this.scorefont.getData().setScale(GameConstants.SCALE_X*(float)0.8, GameConstants.SCALE_Y*(float)0.8);
 
         this.penaltyfont = new BitmapFont(Gdx.files.internal("data/font.fnt"));
-        this.scorefont.getData().setScale(GameConstants.SCALE_X*(float)0.6, GameConstants.SCALE_Y*(float)0.6);
+        this.penaltyfont.getData().setScale(GameConstants.SCALE_X*(float)0.7, GameConstants.SCALE_Y*(float)0.7);
     }
 
     public void setTouched(boolean touched) {
@@ -93,10 +93,10 @@ public class GameRenderer {
 
         String collisionPenalty = GameWorld.collisionPenalty;
         String debugTag = GameWorld.isOwner ? "Server: " : "Player: " ;
-        this.font.draw(batcher, debugTag + "Get " + myWorld.endScore + " points!", 10*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
-        this.penaltyfont.draw(batcher, ""+(120-(GameWorld.gameTimer/60)),950*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        this.font.draw(batcher, "Get " + myWorld.endScore + " points!", 10*GameConstants.SCALE_X, 700* GameConstants.SCALE_Y);
+        this.penaltyfont.draw(batcher, ""+(120-(GameWorld.gameTimer/60)),666*GameConstants.SCALE_X, 690* GameConstants.SCALE_Y);
 
-        this.penaltyfont.draw(batcher, collisionPenalty + " points", 1030 * GameConstants.SCALE_X, 700 * GameConstants.SCALE_Y);
+        this.penaltyfont.draw(batcher, collisionPenalty + " points", 985 * GameConstants.SCALE_X, 690 * GameConstants.SCALE_Y);
 
         synchronized (GameWorld.items){
             renderItems(myWorld.items);
@@ -271,7 +271,7 @@ public class GameRenderer {
         batcher.enableBlending();
 
         batcher.draw(AssetLoader.timeOverlayAnimation.getKeyFrame(runTime),
-                566*GameConstants.SCALE_X,
+                560*GameConstants.SCALE_X,
                 620*GameConstants.SCALE_Y,
                 100*GameConstants.SCALE_X,
                 100*GameConstants.SCALE_Y);
