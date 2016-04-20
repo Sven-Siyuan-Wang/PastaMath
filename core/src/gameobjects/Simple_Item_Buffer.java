@@ -26,8 +26,8 @@ public class Simple_Item_Buffer {
     //TODO: 2 ArrayList<float> values to choose x and y from to assign coords
     public ArrayList<Float> x_choices = new ArrayList<Float>(); //float objects, to be converted back into float primitives
     public ArrayList<Float> y_choices = new ArrayList<Float>();
-    public float min_x= 150f ;
-    public float min_y= 150f ;
+    public float min_x= 125f ;
+    public float min_y= 125f ;
     public float max_x= 1050f - 125f;
     public float max_y= 720f -125f;
     private Random randomizerX;

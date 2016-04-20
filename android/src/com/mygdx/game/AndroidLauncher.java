@@ -126,6 +126,9 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		super.onDestroy();
 		Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
 		Gdx.app.exit();
+		GameWorld.players = new ArrayList<>();
+		GameWorld.items = new ArrayList<>();
+		GameWorld.win = false;
 
 		//gameHelper.onStop();
 	}

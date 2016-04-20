@@ -40,7 +40,7 @@ public class GameWorld {
     public static boolean isOwner;
     public static boolean win = false;
     public static int numberOfPlayers = 0;
-    private static boolean allInitialized = false;
+    private static boolean allInitialized;
     public static boolean gameover = false;
 
     public static int gameTimer;
@@ -75,9 +75,8 @@ public class GameWorld {
         catSounds[2] = Gdx.audio.newSound(Gdx.files.internal("data/cat3.wav"));
         catSounds[3] = Gdx.audio.newSound(Gdx.files.internal("data/cat4.wav"));
 
-
-
         this.myself = myself;
+        allInitialized = false;
 
         synchronized (players){
             if(players.size()==0){
@@ -105,12 +104,12 @@ public class GameWorld {
         }
 
 
-
     }
 
 
-
     public void update(float delta) {
+
+        Gdx.app.log("Gameworld", "allInitialized: " + allInitialized);
 
         if(players.size()==numberOfPlayers && !allInitialized){
             ArrayList<Player> sortPlayers = new ArrayList<Player>(players);
@@ -120,27 +119,32 @@ public class GameWorld {
                 player.setIndex(index++);
             }
             allInitialized = true;
-            switch (myself.getIndex()){
-                case 0:
-                    myself.setX(0);
-                    myself.setY(0);
-                    break;
-                case 1:
-                    myself.setX(930);
-                    myself.setY(520);
-                    break;
-                case 2:
-                    myself.setX(0);
-                    myself.setY(520);
-                    break;
-                case 3:
-                    myself.setX(930);
-                    myself.setY(0);
-                    break;
+            // assign locations to my player
+            for(Player player: players){
+                switch (player.getIndex()){
+                    case 0:
+                        player.setX(0);
+                        player.setY(0);
+                        break;
+                    case 1:
+                        player.setX(930);
+                        player.setY(520);
+                        break;
+                    case 2:
+                        player.setX(0);
+                        player.setY(520);
+                        break;
+                    case 3:
+                        player.setX(930);
+                        player.setY(0);
+                        break;
+                }
+                player.updateBoundingCircle();
             }
+
         }
 
-        else{
+        else if(allInitialized){
             if(!musicLooped) {
                 music.setLooping(true);
                 music.play();
@@ -213,6 +217,8 @@ public class GameWorld {
                             item.update_player_situation(each_player);
                             if(item instanceof NumberAndOperand) {
                                 sendPlayerScore(each_player, ((NumberAndOperand) item).getOperation());
+                                //Send again if this update is critical
+                                if(each_player.getCurrentValue() == endScore) sendPlayerScore(each_player, ((NumberAndOperand) item).getOperation());
                             }
 
                         }
@@ -296,6 +302,7 @@ public class GameWorld {
     }
 
     private void sendEndScore(int endScore) {
+        MyGdxGame.playServices.sendToPlayer("ENDSCORE "+ endScore);
         MyGdxGame.playServices.sendToPlayer("ENDSCORE "+ endScore);
     }
 

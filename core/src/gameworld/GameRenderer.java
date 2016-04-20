@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
@@ -118,7 +119,8 @@ public class GameRenderer {
     //TODO: renderItems inside the item_buffer
     public void renderItems(ArrayList<Item> list){
         if(list!=null){
-            for(Item item: list){
+            for(Iterator<Item> iterator = list.iterator(); iterator.hasNext(); ){
+                Item item = iterator.next();
                 batcher.enableBlending();
                 //System.out.println("Rendering item: "+item.getName());
                 batcher.draw(AssetLoader.textures.get(item.getName()),
@@ -133,13 +135,13 @@ public class GameRenderer {
         
         for(Player player: players) {
             batcher.enableBlending();
-            if(player== GameWorld.myself) {
-                batcher.draw(AssetLoader.characterOverlay,
-                        (player.getX()-5)*GameConstants.SCALE_X,
-                        player.getY()*GameConstants.SCALE_Y,
-                        (player.getWidth()+10)*GameConstants.SCALE_X,
-                        (player.getHeight())*GameConstants.SCALE_Y);
-            }
+//            if(player.equals(GameWorld.myself)) {
+//                batcher.draw(AssetLoader.characterOverlay,
+//                        (player.getX()-5)*GameConstants.SCALE_X,
+//                        player.getY()*GameConstants.SCALE_Y,
+//                        (player.getWidth()+10)*GameConstants.SCALE_X,
+//                        (player.getHeight())*GameConstants.SCALE_Y);
+//            }
             if (player.frozen) {
                 batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+16).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,
