@@ -96,6 +96,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	@Override
 	protected void onStart()
 	{
+		Log.d(TAG, "onStart");
 		super.onStart();
 		//gameHelper.onStart(this);
 		mGoogleApiClient.connect();
@@ -104,7 +105,28 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 	@Override
 	protected void onStop()
 	{
+		Log.d(TAG, "onStop");
 		super.onStop();
+		//android.os.Process.killProcess(android.os.Process.myPid());
+		//gameHelper.onStop();
+	}
+
+	@Override
+	protected void onPause()
+	{
+		Log.d(TAG, "onPause");
+		super.onPause();
+		//gameHelper.onStop();
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		Log.d(TAG, "onDestroy");
+		super.onDestroy();
+		Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+		Gdx.app.exit();
+
 		//gameHelper.onStop();
 	}
 
