@@ -126,6 +126,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		super.onDestroy();
 		Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
 		Gdx.app.exit();
+		GameWorld.reset();
 
 		//gameHelper.onStop();
 	}
@@ -276,9 +277,19 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 			}
 		}
 
+	}
 
+	public void sendToPlayerReliable(String message){
+		Log.d(TAG, "SENDRELIABLE"+message);
+		byte[] mMsgBuf = message.getBytes();
 
-
+		if (mParticipants!=null){
+			for (Participant p:mParticipants){
+				if (!p.getParticipantId().equals(myId)){
+					Games.RealTimeMultiplayer.sendReliableMessage(mGoogleApiClient, null, mMsgBuf,mRoomId, p.getParticipantId());
+				}
+			}
+		}
 	}
 
 	@Override

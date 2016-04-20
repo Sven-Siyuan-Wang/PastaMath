@@ -58,8 +58,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     //constructor for Player class
     public Player(String id){
         this.id = id;
-        Random random = new Random();
-        position = new Vector2(random.nextInt(500), random.nextInt(500));
+        position = new Vector2(0, 0);
 
         this.width = 100;
         this.height = 100;
@@ -108,7 +107,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
                 }
             }
             if(right) {
-                if(!(position.x >=930)) {
+                if(!(position.x >=920)) {
                     position.x += velocity * delta;
                 }
             } else if(left) {

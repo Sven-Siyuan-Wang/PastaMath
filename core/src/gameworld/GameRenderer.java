@@ -86,7 +86,7 @@ public class GameRenderer {
         //render background!
         batcher.draw(AssetLoader.gameBackground, 0, 0, 1280*GameConstants.SCALE_X, 720*GameConstants.SCALE_Y);
 
-        if(GameWorld.gameTimer < 600) {
+        if(GameWorld.gameTimer > 7200 - 600) {
             renderTimeOverlay();
         }
 

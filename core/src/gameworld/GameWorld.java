@@ -40,8 +40,8 @@ public class GameWorld {
     public static boolean isOwner;
     public static boolean win = false;
     public static int numberOfPlayers = 0;
-    private static boolean allInitialized = false;
-    public static boolean gameover = false;
+    private static boolean allInitialized;
+    public static boolean gameover;
 
     public static int gameTimer;
     public static String collisionPenalty = "";
@@ -78,6 +78,8 @@ public class GameWorld {
 
 
         this.myself = myself;
+        allInitialized = false;
+        gameover = false;
 
         synchronized (players){
             if(players.size()==0){
@@ -90,6 +92,7 @@ public class GameWorld {
 
         //Send ready message to other players
 
+        MyGdxGame.playServices.sendToPlayer("INIT " + myself.getId());
         MyGdxGame.playServices.sendToPlayer("INIT " + myself.getId());
 
 
@@ -120,24 +123,28 @@ public class GameWorld {
                 player.setIndex(index++);
             }
             allInitialized = true;
-            switch (myself.getIndex()){
-                case 0:
-                    myself.setX(0);
-                    myself.setY(0);
-                    break;
-                case 1:
-                    myself.setX(930);
-                    myself.setY(520);
-                    break;
-                case 2:
-                    myself.setX(0);
-                    myself.setY(520);
-                    break;
-                case 3:
-                    myself.setX(930);
-                    myself.setY(0);
-                    break;
+            for(Player player: players){
+                switch (player.getIndex()){
+                    case 0:
+                        player.setX(0);
+                        player.setY(0);
+                        break;
+                    case 1:
+                        player.setX(930);
+                        player.setY(520);
+                        break;
+                    case 2:
+                        player.setX(0);
+                        player.setY(520);
+                        break;
+                    case 3:
+                        player.setX(930);
+                        player.setY(0);
+                        break;
+                }
+                player.updateBoundingCircle();
             }
+
         }
 
         else{
@@ -187,48 +194,51 @@ public class GameWorld {
                 }
 
                 // PLAYER RESPONSES TO COLLISION
-                for(Player each_player: players){
+                if(gameTimer > 30){  // to avoid collision at the beginning before initialization
+                    for(Player each_player: players){
 
-                    each_player.updateBoundingCircle();
+                        each_player.updateBoundingCircle();
 
-                    for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
+                        for(Iterator<Item> iterator =simple_item_buffer.items_currently_appearing.iterator(); iterator.hasNext(); ){
 
-                        Item item = iterator.next();
-                        item.decreaseLife(delta);
-                        if(item.expired()) {
-                            synchronized (items){
-                                iterator.remove();
+                            Item item = iterator.next();
+                            item.decreaseLife(delta);
+                            if(item.expired()) {
+                                synchronized (items){
+                                    iterator.remove();
+                                }
+                                sendRemoveItem(item);
+                                simple_item_buffer.removeItemPos(item.getPosition());
                             }
-                            sendRemoveItem(item);
-                            simple_item_buffer.removeItemPos(item.getPosition());
+                            else if(each_player.collides(item)){
+                                Gdx.app.log("GameWorld", "Player-Item collision");
+                                synchronized (items){
+                                    iterator.remove();
+                                }
+                                sendRemoveItem(item);
+                                //remove corresponding coords
+                                simple_item_buffer.removeItemPos(item.getPosition());
+                                item.update_player_situation(each_player);
+                                if(item instanceof NumberAndOperand) {
+                                    sendPlayerScore(each_player, ((NumberAndOperand) item).getOperation());
+                                }
+
+                            }
                         }
-                        else if(each_player.collides(item)){
-                            Gdx.app.log("GameWorld", "Player-Item collision");
-                            synchronized (items){
-                                iterator.remove();
+                        //check if a player collided into another player
+                        boolean inContact = false;
+                        for(Player other_player: players){
+                            if (!other_player.equals(each_player)){ //you can't knock into yourself
+                                if (each_player.knock_into(other_player)){
+                                    each_player.handleCollsion();
+                                    inContact = true;
+                                }
                             }
-                            sendRemoveItem(item);
-                            //remove corresponding coords
-                            simple_item_buffer.removeItemPos(item.getPosition());
-                            item.update_player_situation(each_player);
-                            if(item instanceof NumberAndOperand) {
-                                sendPlayerScore(each_player, ((NumberAndOperand) item).getOperation());
-                            }
-
                         }
+                        if(!inContact) each_player.clearContact();
                     }
-                    //check if a player collided into another player
-                    boolean inContact = false;
-                    for(Player other_player: players){
-                        if (!other_player.equals(each_player)){ //you can't knock into yourself
-                            if (each_player.knock_into(other_player)){
-                                each_player.handleCollsion();
-                                inContact = true;
-                            }
-                        }
-                    }
-                    if(!inContact) each_player.clearContact();
                 }
+
 
                 //sync item list every 5 seconds
                 if(gameTimer%301==0){
@@ -325,7 +335,7 @@ public class GameWorld {
     }
 
     private Player getWinner(){
-        int min = endScore;
+        int min = 999;
         Player winner = null;
         for(Player player: players){
             if(Math.abs(player.getCurrentValue()-endScore)<min) {
@@ -334,6 +344,13 @@ public class GameWorld {
             }
         }
         return winner;
+    }
+
+    public static void reset(){
+        players = new ArrayList<Player>();
+        items = new ArrayList<Item>();
+        win = false;
+
     }
 
 }

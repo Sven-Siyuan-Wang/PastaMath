@@ -26,10 +26,12 @@ public class Simple_Item_Buffer {
     //TODO: 2 ArrayList<float> values to choose x and y from to assign coords
     public ArrayList<Float> x_choices = new ArrayList<Float>(); //float objects, to be converted back into float primitives
     public ArrayList<Float> y_choices = new ArrayList<Float>();
-    public float min_x= 150f ;
-    public float min_y= 150f ;
-    public float max_x= 1050f - 125f;
-    public float max_y= 720f -125f;
+    public final int min_x= 100 ;
+    public final int min_y= 100 ;
+    public final int max_x= 900 ;
+    public final int max_y= 500 ;
+    public final int xgap = 125;
+    public final int ygap = 110;
     private Random randomizerX;
     private Random randomizerY;
     private boolean[][] itemPosGrid;
@@ -45,10 +47,10 @@ public class Simple_Item_Buffer {
 
         //TODO: GENERATE X Y WITH GAPS OF item TO ENSURE GOT SPACE FOR RECTANGLE
         //todo: use intervals based on 125 by 125, and then use random.nextInt(#intervals) to find corresponding x and y
-        for(float x= min_x; x < max_x; x+=125f){
+        for(float x= min_x; x < max_x; x+=xgap){
             x_choices.add(new Float(x));
         }
-        for (float y= min_y; y< max_y; y+=125f){
+        for (float y= min_y; y< max_y; y+=ygap){
             y_choices.add(new Float(y));
         }
 
@@ -90,6 +92,7 @@ public class Simple_Item_Buffer {
         do{
             x_index = randomizerX.nextInt(x_choices.size());
             y_index = randomizerY.nextInt(y_choices.size());
+            Gdx.app.log("Random", x_index+","+y_index);
         } while(itemPosGrid[y_index][x_index] || (x_index==preXindex && y_index==preYindex)); //regenerate position in grid if the position is taken
 
         preXindex = x_index;
@@ -130,8 +133,8 @@ public class Simple_Item_Buffer {
     public void removeItemPos(Vector2 position){
         int x = (int) position.x;
         int y = (int) position.y;
-        int x_index = (x-150) / 125;
-        int y_index = (y-150) / 125;
+        int x_index = (x-min_x) / xgap;
+        int y_index = (y-min_y) / ygap ;
         itemPosGrid[y_index][x_index] = false;
     }
 }

@@ -16,4 +16,5 @@ public interface PlayServices{
         public void sendToServer(String message);
         public void sendToPlayer(String message);
         public void sendToOnePlayer(String id, String message);
+        public void sendToPlayerReliable(String message);
 }

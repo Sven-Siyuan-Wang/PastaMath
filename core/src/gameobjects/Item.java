@@ -70,7 +70,7 @@ public abstract class Item implements GameObject{
     }
 
     public void setBoundingRect(){
-        boundingRect = new Rectangle(this.position.x-width/2, this.position.y-height/2, width, height); // DUNNO why x,y have to be shifted by half the dimension
+        boundingRect = new Rectangle(this.position.x-width*0.6f, this.position.y-height*0.6f, width, height); // DUNNO why x,y have to be shifted by half the dimension
     }
 
 
