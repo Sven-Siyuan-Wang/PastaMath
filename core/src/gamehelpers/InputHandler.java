@@ -28,6 +28,8 @@ public class InputHandler implements InputProcessor {
 
 
     public InputHandler(Player player, GameRenderer renderer) {
+        Gdx.input.setCatchBackKey(true);
+        Gdx.input.setCatchMenuKey(true);
         this.myPlayer = player;
         this.renderer = renderer;
 

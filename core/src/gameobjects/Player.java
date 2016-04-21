@@ -106,7 +106,7 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
                 }
             }
             if(right) {
-                if(!(position.x >=920)) {
+                if(!(position.x >=940)) {
                     position.x += velocity * delta;
                 }
             } else if(left) {

@@ -135,13 +135,13 @@ public class GameRenderer {
         
         for(Player player: players) {
             batcher.enableBlending();
-//            if(player.equals(GameWorld.myself)) {
-//                batcher.draw(AssetLoader.characterOverlay,
-//                        (player.getX()-5)*GameConstants.SCALE_X,
-//                        player.getY()*GameConstants.SCALE_Y,
-//                        (player.getWidth()+10)*GameConstants.SCALE_X,
-//                        (player.getHeight())*GameConstants.SCALE_Y);
-//            }
+            if(player.equals(GameWorld.myself)) {
+                batcher.draw(AssetLoader.characterOverlay,
+                        (player.getX()-5)*GameConstants.SCALE_X,
+                        player.getY()*GameConstants.SCALE_Y,
+                        (player.getWidth()+10)*GameConstants.SCALE_X,
+                        (player.getHeight())*GameConstants.SCALE_Y);
+            }
             if (player.frozen) {
                 batcher.draw(AssetLoader.characterAnimations.get(player.getIndex()+16).getKeyFrame(runTime),
                         player.getX() * GameConstants.SCALE_X,

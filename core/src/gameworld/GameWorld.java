@@ -97,7 +97,7 @@ public class GameWorld {
 
 
         if(isOwner) {
-            endScore = new Random().nextInt(100) + 50;
+            endScore = new Random().nextInt(100) + 100;
             sendEndScore(endScore);
 
             simple_item_buffer = new Simple_Item_Buffer();
