@@ -3,7 +3,6 @@ package gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.MyGdxGame;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
-import gameconstants.GameConstants;
 import gameobjects.Item;
 import gameobjects.NumberAndOperand;
 import gameobjects.Player;
