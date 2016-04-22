@@ -1,6 +1,5 @@
 package gameobjects;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -10,18 +9,13 @@ import com.mygdx.game.MyGdxGame;
 import java.io.Serializable;
 import java.util.Random;
 
-import gameworld.GameObject;
 import gameworld.GameWorld;
 
 /**
  * Created by Hazel on 28/2/2016.
  */
-public class Player implements GameObject, Serializable, Comparable<Player> {
-    /*Vector2 --> object that can hold 2 values: the x component and y component
-     * thus, position.x refers to x-coord, and position.y the y-coord
-     * velocity.x and velocity.y would correspond to the speed in either direction
-     * acceleration --> change in velocity
-     */
+public class Player implements Serializable, Comparable<Player> {
+
     private String id;
     private Vector2 position;
     private float velocity;
@@ -39,7 +33,6 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     float speedUpCounter = 0;
     public static final int speedValue = 200;
 
-    //todo: initialize booleans for other attributes(to change upon collision)
     private boolean shielded = false; //its score won't be affected
 
     private int currentValue;
@@ -123,7 +116,6 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
                 this.speedDown();
             } else {
                 this.speedUpCounter += 1*delta;
-//                Gdx.app.log("Player", "speedUpCounter is " + this.speedUpCounter + " and delta is " + delta);
             }
         }
 }
@@ -205,8 +197,6 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
 
     }
 
-
-
     //TODO: methods FOR ITEMS to change player's situation attributes
     public void setShielded(boolean shielded){
         this.shielded= shielded;
@@ -278,11 +268,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     }
 
 
+    public int getCurrentValue() { return this.currentValue; }
 
-
-    public void destroy() {
-
-    }
 
     public void setLeft(Boolean bool) {
         left = bool;
@@ -327,9 +314,6 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
         position.y = y;
     }
 
-    public float getVelocity() {
-        return this.velocity;
-    }
 
     public int getWidth() {
         return this.width;
@@ -340,21 +324,8 @@ public class Player implements GameObject, Serializable, Comparable<Player> {
     }
 
 
-    public Circle getCollider() { return this.boundingCircle; }
-
-    public int getCurrentValue() { return this.currentValue; }
-
-    public void resetCurrentValue() {
-        this.currentValue=0;
-    }
-
     public String getId(){
         return this.id;
-    }
-
-    //todo: get pos
-    public Vector2 getPosition(){
-        return this.position;
     }
 
     public boolean getSpeedUp() {

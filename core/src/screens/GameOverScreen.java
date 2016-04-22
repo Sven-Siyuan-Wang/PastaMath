@@ -19,7 +19,7 @@ public class GameOverScreen implements Screen {
     private GameRenderer renderer;
     private GameOverInput myInput;
     private MyGdxGame game;
-    private int[] scores;
+
 
     public GameOverScreen(GameRenderer renderer, MyGdxGame game) {
         float screenWidth = Gdx.graphics.getWidth();
@@ -36,9 +36,7 @@ public class GameOverScreen implements Screen {
         Gdx.app.log("GameOverScreen", "attached");
     }
 
-    public void changeScreen() throws InterruptedException {
-        game.setScreen(new GameScreen(game));
-    }
+
 
     @Override
     public void show() {

@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import gameworld.GameObject;
-
 /**
  * Created by Hazel on 29/2/2016.
  */

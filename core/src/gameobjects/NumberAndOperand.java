@@ -1,11 +1,6 @@
 package gameobjects;
 
-import com.badlogic.gdx.math.Vector2;
-
-import java.io.File;
 import java.util.Random;
-
-import gameworld.GameObject;
 
 /**
  * Created by valerie_tan on 3/19/2016.

@@ -5,19 +5,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
-import java.util.Vector;
 
-import gameconstants.GameConstants;
-import gameworld.GameObject;
-import gameworld.GameRenderer;
 import gameworld.GameWorld;
 
 /**
  * Created by WSY on 18/3/16.
  */
-public abstract class Item implements GameObject{
-
-
+public abstract class Item{
 
 
     public abstract void update_player_situation(Player player);
@@ -29,8 +23,6 @@ public abstract class Item implements GameObject{
     private int width;
     private int height;
 
-    private float destructionCounter = 10;
-
     private Rectangle boundingRect;
 
     private String ID;
@@ -40,7 +32,6 @@ public abstract class Item implements GameObject{
 
     public Item(){
         position = new Vector2();
-        //this.assign_random_coord(); - to be done in Buffer
         lifeTime = 10 + (new Random()).nextFloat()*10;
         this.ID = String.valueOf(itemID++);
         width = 75;

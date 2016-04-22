@@ -69,7 +69,6 @@
 
 
         <!-- NETWORK TEST GAME ACTIVITY. DELETE FOR REAL GAME -->
-        <activity android:name=".AndroidLauncherTest2"></activity>
     </application>
 
 </manifest><!--
