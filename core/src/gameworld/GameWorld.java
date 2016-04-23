@@ -348,6 +348,7 @@ public class GameWorld {
         players = new ArrayList<Player>();
         items = new ArrayList<Item>();
         win = false;
+        musicLooped = false;
 
     }
 

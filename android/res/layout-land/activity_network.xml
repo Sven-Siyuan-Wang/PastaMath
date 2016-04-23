@@ -55,26 +55,6 @@
         android:src="@drawable/rulesbutton"
         android:background="@android:color/transparent" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="InvitePlayers"
-        android:id="@+id/inviteplayersbutton"
-        android:layout_below="@+id/quickgamebutton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="invitePlayers" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show Invitations"
-        android:id="@+id/showinvitationsbutton"
-        android:layout_below="@+id/inviteplayersbutton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="showInvitations" />
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -114,8 +94,7 @@
         android:src="@drawable/rule3"
         android:onClick="closeRules"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/inviteplayersbutton" />
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="wrap_content"
