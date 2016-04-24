@@ -1,26 +1,21 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import gameconstants.GameConstants;
 import gamehelpers.AssetLoader;
 import gameobjects.Player;
-import javafx.stage.Screen;
 import screens.GameScreen;
 
-public class MyGdxGame extends Game {
+public class CatMath extends Game {
 	GameScreen myScreen;
 
 	public static PlayServices playServices;
 
 	public static Player myPlayer;
 
-	public MyGdxGame(PlayServices playServices, Player myself){
+	public CatMath(PlayServices playServices, Player myself){
 
 		this.playServices = playServices;
 		myPlayer =  myself;

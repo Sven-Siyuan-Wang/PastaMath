@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.CatMath;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -84,7 +84,7 @@ public class Player implements Serializable, Comparable<Player> {
             contactTimer += delta;
             if(contactTimer > 1) {
                 frozen = false;
-                MyGdxGame.playServices.sendToPlayer("UNFREEZE "+getId());
+                CatMath.playServices.sendToPlayer("UNFREEZE "+getId());
             }
         }
         else{
@@ -137,7 +137,7 @@ public class Player implements Serializable, Comparable<Player> {
             this.velocity = speedValue;
             Gdx.app.log("Player", "sped down");
             speedUp = false;
-            MyGdxGame.playServices.sendToPlayer("SPEEDUP "+getId()+" false");
+            CatMath.playServices.sendToPlayer("SPEEDUP "+getId()+" false");
         }
     }
 
@@ -158,7 +158,7 @@ public class Player implements Serializable, Comparable<Player> {
 
             if(getShielded()) {
                 shielded = false;
-                MyGdxGame.playServices.sendToPlayer("SHIELDED "+getId()+" false");
+                CatMath.playServices.sendToPlayer("SHIELDED "+getId()+" false");
             }
             else{
 
@@ -169,7 +169,7 @@ public class Player implements Serializable, Comparable<Player> {
                     Gdx.input.vibrate(100);
                 }
                 decreaseScoreUponKnock();
-                MyGdxGame.playServices.sendToPlayer("SCORE " + getId()+" "+ getCurrentValue() + " collision");
+                CatMath.playServices.sendToPlayer("SCORE " + getId()+" "+ getCurrentValue() + " collision");
                 frozen = true;
 
             }
@@ -178,7 +178,7 @@ public class Player implements Serializable, Comparable<Player> {
 
     public void clearContact(){
         inContact = false;
-        if(frozen) MyGdxGame.playServices.sendToPlayer("UNFREEZE "+getId());
+        if(frozen) CatMath.playServices.sendToPlayer("UNFREEZE "+getId());
         frozen = false;
 
     }

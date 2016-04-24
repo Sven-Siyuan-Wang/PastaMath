@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -15,23 +14,18 @@ import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
-import com.google.android.gms.games.multiplayer.realtime.RealTimeMultiplayer;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
 import com.google.example.games.basegameutils.BaseGameUtils;
-import com.google.example.games.basegameutils.GameHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import gameobjects.Item;
-import gameobjects.NumberAndOperand;
 import gameobjects.Player;
-import gameobjects.Shield;
-import gameobjects.SpeedUp;
 import gameworld.GameWorld;
 
 public class AndroidLauncher extends AndroidApplication implements PlayServices, RealTimeMessageReceivedListener,
@@ -77,7 +71,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices,
 		myself = (Player)i.getSerializableExtra("myself");
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new MyGdxGame(this,myself), config); // updated by siyuan
+		initialize(new CatMath(this,myself), config); // updated by siyuan
 
 		myId=room.getParticipantId(Games.Players.getCurrentPlayerId(myApp.getClient()));
 		GameWorld.isOwner = isServer();

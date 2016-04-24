@@ -3,7 +3,7 @@ package gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.CatMath;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +14,6 @@ import gameobjects.Item;
 import gameobjects.NumberAndOperand;
 import gameobjects.Player;
 import gameobjects.Simple_Item_Buffer;
-import screens.GameScreen;
 
 
 /**
@@ -88,8 +87,8 @@ public class GameWorld {
 
         //Send ready message to other players
 
-        MyGdxGame.playServices.sendToPlayer("INIT " + myself.getId());
-        MyGdxGame.playServices.sendToPlayer("INIT " + myself.getId());
+        CatMath.playServices.sendToPlayer("INIT " + myself.getId());
+        CatMath.playServices.sendToPlayer("INIT " + myself.getId());
 
 
         if(isOwner) {
@@ -169,8 +168,8 @@ public class GameWorld {
 
 
                 if(gameTimer>7200){
-                    MyGdxGame.playServices.sendToPlayer("GAMEOVER");
-                    MyGdxGame.playServices.sendToPlayer("GAMEOVER");
+                    CatMath.playServices.sendToPlayer("GAMEOVER");
+                    CatMath.playServices.sendToPlayer("GAMEOVER");
                     Player winner = getWinner();
                     winner.isWinner = true;
                     win =true;
@@ -186,7 +185,7 @@ public class GameWorld {
                 if(gameTimer%499 == 0) {
                     collisionPenalty = generateCollisionEffect();
 
-                    MyGdxGame.playServices.sendToPlayer("PENALTY " + collisionPenalty);
+                    CatMath.playServices.sendToPlayer("PENALTY " + collisionPenalty);
                 }
 
                 // PLAYER RESPONSES TO COLLISION
@@ -268,14 +267,14 @@ public class GameWorld {
     //TYPE: SHIELD, SPEEDUP, PLUS1, MUL2
     //ITEM ID RM
     public void sendAddItem(Item item){
-        MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID() + " " + item.getX() + " " + item.getY()+" "+item.getName());
+        CatMath.playServices.sendToPlayer("ITEM "+ item.getID() + " " + item.getX() + " " + item.getY()+" "+item.getName());
 
 
     }
 
     public void sendRemoveItem(Item item){
-        //MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
-        MyGdxGame.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
+        //CatMath.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
+        CatMath.playServices.sendToPlayer("ITEM "+ item.getID()+" "+ "RM");
 
     }
 
@@ -284,25 +283,25 @@ public class GameWorld {
         for(Item item: items){
             msg += " "+item.getID();
         }
-        MyGdxGame.playServices.sendToPlayer(msg);
+        CatMath.playServices.sendToPlayer(msg);
     }
 
     //PLAYER ID X Y
     public void sendMyLocation(){
         if(isOwner){
-            MyGdxGame.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY()+" "+gameTimer);
+            CatMath.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY()+" "+gameTimer);
         }
         else{
-            MyGdxGame.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY());
+            CatMath.playServices.sendToPlayer("PLAYER "+myself.getId()+" "+myself.getX()+" "+myself.getY());
         }
     }
 
     public void sendPlayerScore(Player player, String operation){
-        MyGdxGame.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue() + " "+ operation);
+        CatMath.playServices.sendToPlayer("SCORE " + player.getId()+" "+ player.getCurrentValue() + " "+ operation);
     }
 
     private void sendEndScore(int endScore) {
-        MyGdxGame.playServices.sendToPlayer("ENDSCORE "+ endScore);
+        CatMath.playServices.sendToPlayer("ENDSCORE "+ endScore);
     }
 
     private String generateCollisionEffect(){

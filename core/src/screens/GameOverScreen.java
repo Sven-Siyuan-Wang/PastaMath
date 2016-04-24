@@ -1,16 +1,11 @@
 package screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.CatMath;
 
 import gamehelpers.GameOverInput;
-import gamehelpers.InputHandler;
 import gameworld.GameRenderer;
-import gameworld.GameWorld;
 
 /**
  * Created by kisa on 2/4/2016.
@@ -18,10 +13,10 @@ import gameworld.GameWorld;
 public class GameOverScreen implements Screen {
     private GameRenderer renderer;
     private GameOverInput myInput;
-    private MyGdxGame game;
+    private CatMath game;
 
 
-    public GameOverScreen(GameRenderer renderer, MyGdxGame game) {
+    public GameOverScreen(GameRenderer renderer, CatMath game) {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
